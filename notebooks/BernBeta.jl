@@ -112,7 +112,7 @@ md"""
 # ╔═╡ 1f03b924-359c-11eb-0e7a-41c84b5dc313
 md"""
 ---
-Notebook for the book: Villani, M. (2020). [Bayesian Learning]()."""
+Notebook for the book: Villani, M. (2021). [Bayesian Learning](https://github.com/mattiasvillani/BayesianLearningBook/blob/main/notebooks/BernBeta.jl)."""
 
 # ╔═╡ Cell order:
 # ╟─2ea253b6-358a-11eb-10c9-6d257cbca066

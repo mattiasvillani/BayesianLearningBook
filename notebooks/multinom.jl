@@ -4,10 +4,19 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        el
+    end
+end
+
 # ╔═╡ 91f7ce64-2fef-11eb-1148-e7facd9b65e4
 begin
 	# Load packages
-	using Plots, Distributions, LaTeXStrings, Random
+	using Plots, Distributions, LaTeXStrings, Random, PlutoUI
 	import ColorSchemes.Paired_12; colors = Paired_12[[1,2,7,8,3,4,5,6,9,10]]
 	nothing
 end
@@ -81,16 +90,34 @@ The marginal posteriors are shown in the figure below, both obtained by simulati
 
 """
 
+# ╔═╡ 62aa95e2-3616-11eb-3c23-91af7ffcd8df
+md"""
+**Experiment by changing prior hyperparameters**:
+
+\$\alpha\_1 = \$ $(@bind α1 Slider(eps():100; default=15, show_value=true))
+
+\$\alpha\_2 = \$ $(@bind α2 Slider(eps():100; default=15, show_value=true))
+
+\$\alpha\_3 = \$ $(@bind α3 Slider(eps():100; default=10, show_value=true))
+
+\$\alpha\_4 = \$ $(@bind α4 Slider(eps():100; default=10, show_value=true))
+
+
+"""
+
 # ╔═╡ eeed4602-2ff5-11eb-3a8e-9749a63f8601
 begin
 	gr(legend = nothing, grid = false, yaxis = false)
-	nDraws = 1000        # Number of posterior draws
+	nDraws = 10000        # Number of posterior draws
 	Random.seed!(123)    # Set the seed for reproducibility
 	y = [180,230,62,41]  # The cell phone survey data
-	α = [15,15,10,10]    # Dirichlet prior hyperparameters
+	α = [α1,α2,α3,α4]    # Dirichlet prior hyperparameters
 	C = length(y)
 	titles = ["iPhone", "Android", "Windows", "Other"]
-	xlimits = [0.25 0.45; 0.35 0.5; 0.075 0.18; 0.05 0.14]
+	xlimits = zeros(C,2)#[0.25 0.45; 0.35 0.5; 0.075 0.18; 0.05 0.14]
+	for c ∈ 1:C
+		xlimits[c,:] = quantile.(Beta(α[c]+y[c], sum(y+α)-(α[c]+y[c])), [0.001, 0.999])
+	end
 	θGrid = range(0, 1, step = 0.001)
 	θPost = zeros(nDraws,C)
 	for i ∈ 1:nDraws
@@ -105,7 +132,6 @@ begin
 	end
 	l = @layout [a b;c d]
 	plot(p..., layout = l)
-	
 end
 
 # ╔═╡ ffe7b542-35c1-11eb-3e9b-73daa2f53c3d
@@ -118,6 +144,12 @@ begin
 		"""
 end
 
+# ╔═╡ f1b39660-3615-11eb-2e5a-0befed42e650
+md"""
+---
+Notebook for the book Villani. M. (2021) [Bayesian Learning](https://github.com/mattiasvillani/BayesianLearningBook/blob/main/notebooks/BernBeta.jl).
+"""
+
 # ╔═╡ Cell order:
 # ╟─3cfb8c20-2fef-11eb-09c1-05434669bc4f
 # ╟─91f7ce64-2fef-11eb-1148-e7facd9b65e4
@@ -128,4 +160,6 @@ end
 # ╟─a491956c-2ff3-11eb-072d-89f581341233
 # ╟─b8133978-2ff5-11eb-056d-c53f28462190
 # ╟─eeed4602-2ff5-11eb-3a8e-9749a63f8601
+# ╟─62aa95e2-3616-11eb-3c23-91af7ffcd8df
 # ╟─ffe7b542-35c1-11eb-3e9b-73daa2f53c3d
+# ╟─f1b39660-3615-11eb-2e5a-0befed42e650

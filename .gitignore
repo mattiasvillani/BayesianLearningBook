@@ -33,3 +33,7 @@
 
 ## R
 *.rds
+
+# Jupyter
+*-checkpoint.ipynb
+*-checkpoint.jl

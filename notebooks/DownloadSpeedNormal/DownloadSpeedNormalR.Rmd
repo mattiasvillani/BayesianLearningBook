@@ -1,18 +1,17 @@
 ---
-title: "Analyzing internet download speeds using an iid Gaussian model with known variance"
+title: "Analyzing internet download speeds with a Gaussian model"
 output:
   html_document: default
   pdf_document: default
 ---
 
 First, some housekeeping: loading libraries and setting up colors.
-
 ```{r}
 options(repr.plot.width=8, repr.plot.height=6, lwd = 4)
 library("RColorBrewer") # for pretty colors
 library("tidyverse")    # for string interpolation to print variables in plots.
 library("latex2exp")    # the TeX() function makes it possible to print latex math
-colors = brewer.pal(12, "Paired")[c(1,2,7,8,3,4,5,6,9,10)]
+colors = brewer.pal(12, "Paired")[c(1,2,7,8,3,4,5,6,9,10)]; 
 ```
 
 # Analyzing internet download speeds using an iid Gaussian model with known variance
@@ -87,10 +86,13 @@ postGaussianIID <- function(x, mu_0, tau2_0, sigma2, thetaGrid, areaPoint){
     lines(thetaGrid, postPDF, lwd = 4, col = colors[4])
     legend(x = "topright", inset=.05, cex = c(1,1,1,1), 
            legend = c("Prior", "Likelihood (normalized)", "Posterior", 
-           TeX(sprintf("$Pr(\\theta \\geq %2.0f | \\mathbf{x}) =  %0.3f$", areaPoint, postProbAbovePoint))),  
+           TeX(sprintf("$Pr(\\theta \\geq %2.0f | \\mathbf{x}) =  %0.3f$", 
+           areaPoint, postProbAbovePoint))),  
            lty = c(1, 1, 1, 1), pt.lwd = c(3, 3, 3, 3), 
            col = c(colors[6], colors[2], colors[4], adjustcolor(colors[4],alpha.f=0.3)))
-    
+    cat("Posterior mean is ", round(mu_n,3), "\n")
+    cat("Posterior standard deviation is ", round(sqrt(tau2_n),3), "\n")
+    cat("The weight on the sample mean is ", round(w,3))
     return(list("mu_n" = mu_n, "tau2_n" = tau2_n, "w" = w))
 }
 ```
@@ -102,7 +104,6 @@ thetaGrid = seq(0, 40, length = 1000) # Some suitable grid of values to plot ove
 areaPoint = 20 # shade the region where theta>= areaPoint (20 in my example)
 n = 1
 post = postGaussianIID(x[1:n], mu_0, tau2_0, sigma2, thetaGrid, areaPoint)
-post
 ```
 
 We see that the prior and data information happen to get the same weight (w) in the posterior. That is a coincidence from the fact that the prior variance $\tau_0^2$ is the same as the data variance $\sigma^2$.
@@ -112,7 +113,6 @@ Moving on, let's add the next measurement to the analysis:
 ```{r}
 n = 2
 post = postGaussianIID(x[1:n], mu_0, tau2_0, sigma2, thetaGrid, areaPoint)
-post
 ```
 
 We now see that the posterior is more affected by the data information than the prior information (w = 0.666).
@@ -122,6 +122,5 @@ Finally, adding all $n=5$ data points gives:
 ```{r}
 n = 5
 post = postGaussianIID(x[1:n], mu_0, tau2_0, sigma2, thetaGrid, areaPoint)
-post
 ```
 

@@ -1,15 +1,17 @@
 ---
-title: An R Markdown document converted from "DownloadSpeedNormalR.ipynb"
-output: html_document
+title: "Analyzing internet download speeds using an iid Gaussian model with known variance"
+output:
+  html_document: default
+  pdf_document: default
 ---
-
-# Analyzing internet download speeds using an iid Gaussian model with known variance
 
 First, some housekeeping: loading libraries and setting up colors.
 
 ```{r}
 options(repr.plot.width=8, repr.plot.height=6, lwd = 4)
-library("RColorBrewer")
+library("RColorBrewer") # for pretty colors
+library("tidyverse")    # for string interpolation to print variables in plots.
+library("latex2exp")    # the TeX() function makes it possible to print latex math
 colors = brewer.pal(12, "Paired")[c(1,2,7,8,3,4,5,6,9,10)]
 ```
 
@@ -60,7 +62,7 @@ $$ w = \frac{n/\sigma^2}{n/\sigma^2 + 1/\tau_0^2}$$
 Let's write a small function that computes the posterior mean and variance, and plots the prior, likelihood and posterior.
 
 ```{r}
-postGaussianIID <- function(x, mu_0, tau2_0, sigma2, thetaGrid){
+postGaussianIID <- function(x, mu_0, tau2_0, sigma2, thetaGrid, areaPoint){
     
     # compute posterior mean and variance
     n = length(x)
@@ -68,15 +70,26 @@ postGaussianIID <- function(x, mu_0, tau2_0, sigma2, thetaGrid){
     w = (n/sigma2)/(n/sigma2 + 1/tau2_0)
     mu_n = w*mean(x) + (1-w)*mu_0
     
-    # plot pdfs
+    # plot PDFs. Likelihood is normalized.
     priorPDF = dnorm(thetaGrid, mean = mu_0, sd = sqrt(tau2_0))
     postPDF = dnorm(thetaGrid, mean = mu_n, sd = sqrt(tau2_n))
-    normLikePDF = dnorm(thetaGrid, mean = mean(x[1:n]), sd = sqrt(sigma2/n)) # This is the likelihood, normalized to be a PDF (from plotting purposes)
-    plot(thetaGrid, priorPDF, type = "l", lwd = 4, col = colors[6], xlab = expression(theta), ylab = "density", ylim = c(0,max(priorPDF,postPDF,normLikePDF)))
+    postProbAbovePoint = 1-pnorm(areaPoint, mean = mu_n, sd = sqrt(tau2_n))
+    normLikePDF = dnorm(thetaGrid, mean = mean(x[1:n]), sd = sqrt(sigma2/n))
+    plot(1, type="n", axes=FALSE, xlab = expression(theta), ylab = "", 
+         xlim=c(min(thetaGrid),max(thetaGrid)), 
+         ylim = c(0,max(priorPDF,postPDF,normLikePDF)))
+    axis(side = 1)
+    polygon(c(thetaGrid[thetaGrid>=areaPoint], max(thetaGrid), areaPoint), 
+            c(postPDF[thetaGrid>=areaPoint], 0, 0), 
+            col=adjustcolor(colors[4],alpha.f=0.3), border=NA)
+    lines(thetaGrid, priorPDF, type = "l", lwd = 4, col = colors[6])
     lines(thetaGrid, normLikePDF, lwd = 4, col = colors[2])
     lines(thetaGrid, postPDF, lwd = 4, col = colors[4])
-    legend(x = "topright", inset=.05, legend = c("Prior", "Likelihood (normalized)", "Posterior"), cex = c(1,1,1),
-       lty = c(1, 1, 1), pt.lwd = c(3, 3, 3), col = c(colors[6], colors[2], colors[4]))
+    legend(x = "topright", inset=.05, cex = c(1,1,1,1), 
+           legend = c("Prior", "Likelihood (normalized)", "Posterior", 
+           TeX(sprintf("$Pr(\\theta \\geq %2.0f | \\mathbf{x}) =  %0.3f$", areaPoint, postProbAbovePoint))),  
+           lty = c(1, 1, 1, 1), pt.lwd = c(3, 3, 3, 3), 
+           col = c(colors[6], colors[2], colors[4], adjustcolor(colors[4],alpha.f=0.3)))
     
     return(list("mu_n" = mu_n, "tau2_n" = tau2_n, "w" = w))
 }
@@ -86,8 +99,9 @@ Let us start by analyzing just the first observation $x_1=15.77$ using this func
 
 ```{r}
 thetaGrid = seq(0, 40, length = 1000) # Some suitable grid of values to plot over
+areaPoint = 20 # shade the region where theta>= areaPoint (20 in my example)
 n = 1
-post = postGaussianIID(x[1:n], mu_0, tau2_0, sigma2, thetaGrid)
+post = postGaussianIID(x[1:n], mu_0, tau2_0, sigma2, thetaGrid, areaPoint)
 post
 ```
 
@@ -97,7 +111,7 @@ Moving on, let's add the next measurement to the analysis:
 
 ```{r}
 n = 2
-post = postGaussianIID(x[1:n], mu_0, tau2_0, sigma2, thetaGrid)
+post = postGaussianIID(x[1:n], mu_0, tau2_0, sigma2, thetaGrid, areaPoint)
 post
 ```
 
@@ -107,7 +121,7 @@ Finally, adding all $n=5$ data points gives:
 
 ```{r}
 n = 5
-post = postGaussianIID(x[1:n], mu_0, tau2_0, sigma2, thetaGrid)
+post = postGaussianIID(x[1:n], mu_0, tau2_0, sigma2, thetaGrid, areaPoint)
 post
 ```
 

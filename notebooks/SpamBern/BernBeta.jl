@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.20
+# v0.17.0
 
 using Markdown
 using InteractiveUtils
@@ -20,13 +20,6 @@ begin
 	import ColorSchemes.Paired_12;
 	colors = Paired_12[[1,2,7,8,3,4,5,6,9,10]]
 	nothing
-end
-
-# ╔═╡ cadbed9e-899c-11eb-041a-a3ce6ca37efa
-begin
-	import Pkg
-    Pkg.activate(".")
-    Pkg.add(["LaTeXStrings","Distributions", "ColorSchemes"])
 end
 
 # ╔═╡ 2ea253b6-358a-11eb-10c9-6d257cbca066
@@ -122,12 +115,11 @@ md"""
 Notebook for the book: Villani, M. (2020). [Bayesian Learning]()."""
 
 # ╔═╡ Cell order:
-# ╠═cadbed9e-899c-11eb-041a-a3ce6ca37efa
 # ╟─2ea253b6-358a-11eb-10c9-6d257cbca066
 # ╠═3f3dbc34-3593-11eb-2250-13fc496e403e
 # ╟─5d6396b0-358a-11eb-2995-eb061a2476aa
 # ╟─b7b9303e-358a-11eb-067d-fd0020d579a3
-# ╟─da5f2ce0-358a-11eb-2522-81165870626e
+# ╠═da5f2ce0-358a-11eb-2522-81165870626e
 # ╟─d39a7b72-358b-11eb-1d11-dfdcf238a7f4
 # ╟─698e86b0-3590-11eb-185b-df426ce40664
 # ╟─ca4114a4-3591-11eb-1777-4593b8760a68

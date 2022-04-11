@@ -14,7 +14,7 @@ include(bookFolder*"Code/Linreg.jl") # Functions for Bayesian linear regression
 giturl = "https://github.com/mattiasvillani/BayesianLearningBook/raw/main/"
 gr(legend = nothing, grid = false, color = colors[2], lw = 2, legendfontsize=12,
 	xtickfontsize=12, ytickfontsize=12, xguidefontsize=14, yguidefontsize=14, 
-	markersize = 4, markerstrokecolor = nothing)
+	markersize = 4, markerstrokecolor = :auto)
 
 
 # Read data from the book repository, and rename some variables so we understand what they measure.
@@ -31,7 +31,7 @@ savefig(figFolder*"biketimeseries.pdf")
 
 # Scatterplot against feeltemp"
 scatter(bike[!,:feeltemp], bike[!,:nrides], color = colors[6], xlab ="feeltemp", 	
-	ylab = "Number of daily rides")
+	ylab = "Number of daily rides", markerstrokecolor = :auto)
 savefig(figFolder*"bikefeeltemp.pdf")
 
 # The data look rather unpredictable with a large variance. 
@@ -51,9 +51,9 @@ plot()
 tmpcolors = colors[[2,1,4,3]]
 for seasonCount ∈ 1:4
 	selDays = bike[!,:season].==seasonCount
-	scatter!(bike[selDays,:feeltemp], bike[selDays,:nrides], color = tmpcolors[seasonCount], 
-		xlab ="feeltemp", ylab = "Number of rides", label = "season = "*string(seasonCount), 
-		markerstrokecolor = tmpcolors[seasonCount], legend = :topleft)
+	scatter!(bike[selDays,:feeltemp], bike[selDays,:nrides], 
+	color = tmpcolors[seasonCount], xlab ="feeltemp", ylab = "Number of rides", 
+	label = "season = "*string(seasonCount), markerstrokecolor = tmpcolors[seasonCount], legend = :topleft)
 end
 savefig(figFolder*"bikefeeltempbyseason.pdf")
 

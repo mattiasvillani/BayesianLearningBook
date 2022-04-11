@@ -23,11 +23,11 @@ data = [0,1,1,0,0,1,1,0,1,1]
 niter = 10000
 nburn = 1000
 ϵ = 0.1
-τ = 10
+τ = 2
 
 # Sample the posterior using HMC
 postdraws = sample(iidbern(data, 1, 2), HMC(ϵ, τ), niter, discard_initial = nburn)
-plot(postdraws)
+postdraws = sample(iidbern(data, 1, 2), NUTS(0.65), niter, discard_initial = nburn)
 
 # Print an plot results
 display(postdraws)

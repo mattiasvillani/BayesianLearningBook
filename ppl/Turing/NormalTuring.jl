@@ -28,13 +28,18 @@ x = [15.77,20.5,8.26,14.37,21.09]
 # Settings of the Hamiltonian Monte Carlo (HMC) sampler.
 niter = 10000
 nburn = 1000
-α = 0.65 # target acceptance probability in No U-Turn sampler
-       
-# Sample the posterior using HMC
-postdraws = sample(iidnormal(x, μ₀, κ₀, ν₀, σ²₀), NUTS(α), niter, discard_initial = nburn)
+ϵ = 0.1
+τ = 50
+postdraws = sample(iidnormal(x, μ₀, κ₀, ν₀, σ²₀), HMC(ϵ, τ), niter, discard_initial = nburn)
 
 # Print an plot results
 display(postdraws)
 plot(postdraws)
 
+# Sample the posterior using HMC with NUTS
+α = 0.65 # target acceptance probability in No U-Turn sampler
+postdraws = sample(iidnormal(x, μ₀, κ₀, ν₀, σ²₀), NUTS(α), niter, discard_initial = nburn)
 
+# Print an plot results
+display(postdraws)
+plot(postdraws)

@@ -37,3 +37,4 @@
 # Jupyter
 *-checkpoint.ipynb
 *-checkpoint.jl
+.Rproj.user

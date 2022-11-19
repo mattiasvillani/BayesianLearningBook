@@ -1,0 +1,11 @@
+---
+title: "Bayesian Learning - the book"
+---
+
+This the home for my book **Bayesian Learning - a gentle introduction**, which is still work in progress.
+
+Here is a [pdf](../pdf/BayesBook.pdf) of the book.
+
+See the [Notebooks](notebooks.qmd) tab for a set of notebooks for the chapters in the book.
+
+Thanks to [all](../misc/halloferrors.md) who found typos and error in the book.

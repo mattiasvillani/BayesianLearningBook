@@ -1,5 +1,5 @@
 
-# BayesianLearningBook
+# Bayesian Learning Book
 Home for my book-in-progress 'Bayesian Learning'. 
 
 Here is a [pdf](https://github.com/mattiasvillani/BayesianLearningBook/raw/main/pdf/BayesBook.pdf) of the book.

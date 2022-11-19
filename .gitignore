@@ -1,3 +1,6 @@
+/webpage/.quarto/
+/webpage/_site/
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

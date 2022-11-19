@@ -2,10 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks.html</loc>
-    <lastmod>2022-11-19T19:18:25.940Z</lastmod>
+    <lastmod>2022-11-19T19:28:31.452Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/index.html</loc>
-    <lastmod>2022-11-19T19:18:26.292Z</lastmod>
+    <lastmod>2022-11-19T19:28:31.772Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mattiasvillani.github.io/BayesianLearningBook/halloferrors.html</loc>
+    <lastmod>2022-11-19T19:28:32.080Z</lastmod>
   </url>
 </urlset>

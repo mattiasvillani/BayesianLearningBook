@@ -6,7 +6,7 @@ output:
   html_notebook: default
   pdf_document: default
 ---
-
+ 
 
 Prepared for the course: Bayesian Learning
 Author: Mattias Villani, Stockholm and Linköping University, http://mattiasvillani.com

@@ -4,7 +4,7 @@
     "href": "notebooks.html",
     "title": "Notebooks",
     "section": "",
-    "text": "Chapter\nTopic\nLanguage\n\n\n\n\nOne-parameter models\nBernoulli model for spam data\nR  Python  Julia/Pluto\n\n\nMulti-parameter models\nMultinomial model for survey data\nR  Julia/Pluto"
+    "text": "Chapter\nTopic\nLanguage\n\n\n\n\nOne-parameter models\nBernoulli model for spam data\nR\nPython\nJulia/Pluto\n\n\nOne-parameter models\nNormal model for internet download speed data\nR\n\n\nOne-parameter models\nPoisson for number of eBay bidders\nR\nPython\n\n\nMulti-parameter models\nMultinomial model for survey data\nR\nJulia/Pluto\n\n\nClassification\nLogistic regression for spam data\nR"
   },
   {
     "objectID": "index.html",

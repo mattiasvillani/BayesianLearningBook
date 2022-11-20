@@ -1,5 +1,6 @@
-/webpage/.quarto/
-/webpage/_site/
+# quarto
+/.quarto/
+/_site/
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -36,8 +37,11 @@
 
 ## R
 *.rds
+*.Rproj
 
 # Jupyter
 *-checkpoint.ipynb
 *-checkpoint.jl
 .Rproj.user
+
+

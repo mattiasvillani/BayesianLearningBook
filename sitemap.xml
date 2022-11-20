@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/SpamBern/SpamBernR.html</loc>
+    <lastmod>2022-11-20T12:44:18.526Z</lastmod>
+  </url>
+  <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/SurveyMultinomial/multinomial.html</loc>
-    <lastmod>2022-11-20T12:36:02.982Z</lastmod>
+    <lastmod>2022-11-20T12:44:20.298Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/SpamLogisticReg/SpamLogisticReg.html</loc>
-    <lastmod>2022-11-20T12:36:06.086Z</lastmod>
+    <lastmod>2022-11-20T12:44:23.374Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/ebayPoissonOneParam/eBayPoissonR.html</loc>
-    <lastmod>2022-11-20T12:36:06.562Z</lastmod>
+    <lastmod>2022-11-20T12:44:23.854Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/ebayPoissonOneParam/eBayPoissonPython.html</loc>
-    <lastmod>2022-11-20T12:36:06.918Z</lastmod>
+    <lastmod>2022-11-20T12:44:24.210Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/DownloadSpeedNormal/DownloadSpeedNormalR.html</loc>
-    <lastmod>2022-11-20T12:36:07.370Z</lastmod>
+    <lastmod>2022-11-20T12:44:24.698Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks.html</loc>
-    <lastmod>2022-11-20T12:36:07.638Z</lastmod>
+    <lastmod>2022-11-20T12:44:24.962Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/index.html</loc>
-    <lastmod>2022-11-20T12:36:07.914Z</lastmod>
+    <lastmod>2022-11-20T12:44:25.230Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/halloferrors.html</loc>
-    <lastmod>2022-11-20T12:36:08.186Z</lastmod>
+    <lastmod>2022-11-20T12:44:25.498Z</lastmod>
   </url>
 </urlset>

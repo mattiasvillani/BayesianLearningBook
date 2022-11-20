@@ -46,7 +46,7 @@
     "href": "index.html",
     "title": "Bayesian Learning - the book",
     "section": "",
-    "text": "This is the home for my book Bayesian Learning - a gentle introduction, which is still work in progress. The book is currently used for the course Bayesian Learning at Stockholm University.\nHere is a pdf of the book, which will always be available, even after the book gets published.\nSee the Notebooks tab for a set of notebooks for the chapters in the book.\nThanks to all who found typos and error in the book."
+    "text": "This is the home for the book Bayesian Learning - a gentle introduction, which is still work in progress. The book is currently used for the course Bayesian Learning at Stockholm University.\nA pdf of the book will always be available, even after the book gets published.\nThe notebooks tab contains notebooks for the chapters in the book.\n\nContents\n\nThe Bayesics\nSingle-parameter models\nMulti-parameter models\nPriors\nRegression\nPrediction and Decision making\nNormal posterior approximation\nClassification\nPosterior simulation\nVariational inference\nRegularization\nModel comparison\nVariable selection\nGaussian processes\nInteraction models\nMixture models\nDynamic models and sequential inference Appendix: Some Mathematical results\n\nThanks to all who found typos and error in the book."
   },
   {
     "objectID": "halloferrors.html",

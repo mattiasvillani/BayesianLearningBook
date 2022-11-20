@@ -46,7 +46,7 @@
     "href": "notebooks.html",
     "title": "Notebooks",
     "section": "",
-    "text": "This page contains a set of notebooks in Julia, R and Python for some of the data analyses presented in the book.\n\n\n\nChapter\nOne-parameter models\nTopic\nBernoulli model for spam data\nLanguage | =================================================================+ R\nJulia/Pluto |\n\n\n\n\n\n\n\n\n\nOne-parameter models\nNormal model for internet download speed data\nR\n\n\n\nOne-parameter models\nPoisson for number of eBay bidders\nR\nPython |\n\n\n\nMulti-parameter models\nMultinomial model for survey data\nR\nJulia/Pluto\n\n\n\nClassification\nLogistic regression for spam data\nR"
+    "text": "This page contains a set of notebooks in Julia, R and Python for some of the data analyses presented in the book.\n\n\n\nChapter\nTopic\nLanguage\n\n\n\n\nOne-parameter models\nBernoulli model for spam data\nR\nJulia/Pluto\n\n\nOne-parameter models\nNormal model for internet download speed data\nR\n\n\nOne-parameter models\nPoisson for number of eBay bidders\nR\nPython\n\n\nMulti-parameter models\nMultinomial model for survey data\nR\nJulia/Pluto\n\n\nClassification\nLogistic regression for spam data\nR"
   },
   {
     "objectID": "index.html",

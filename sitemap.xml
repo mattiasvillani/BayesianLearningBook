@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/SurveyMultinomial/multinomial.html</loc>
+    <lastmod>2022-11-20T12:10:35.584Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/SpamLogisticReg/SpamLogisticReg.html</loc>
+    <lastmod>2022-11-20T12:10:38.464Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/ebayPoissonOneParam/eBayPoissonR.html</loc>
+    <lastmod>2022-11-20T12:10:38.960Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/ebayPoissonOneParam/eBayPoissonPython.html</loc>
+    <lastmod>2022-11-20T12:10:39.300Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/DownloadSpeedNormal/DownloadSpeedNormalR.html</loc>
+    <lastmod>2022-11-20T12:10:39.780Z</lastmod>
+  </url>
+  <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks.html</loc>
-    <lastmod>2022-11-19T19:55:05.564Z</lastmod>
+    <lastmod>2022-11-20T12:10:40.076Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/index.html</loc>
-    <lastmod>2022-11-19T19:55:05.908Z</lastmod>
+    <lastmod>2022-11-20T12:10:40.344Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/halloferrors.html</loc>
-    <lastmod>2022-11-19T19:55:06.200Z</lastmod>
+    <lastmod>2022-11-20T12:10:40.612Z</lastmod>
   </url>
 </urlset>

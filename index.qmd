@@ -1,0 +1,12 @@
+---
+title: "Bayesian Learning - the book"
+title-block-banner: figs/flashytimeseries.jpg
+---
+
+This is the home for my book **Bayesian Learning - a gentle introduction**, which is still work in progress. The book is currently used for the course [Bayesian Learning](https://github.com/mattiasvillani/BayesLearnCourse) at Stockholm University.
+
+Here is a [pdf](pdf/BayesBook.pdf) of the book, which will always be available, even after the book gets published.
+
+See the [Notebooks](notebooks.qmd) tab for a set of notebooks for the chapters in the book.
+
+Thanks to [all](halloferrors.qmd) who found typos and error in the book.

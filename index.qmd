@@ -1,12 +1,34 @@
 ---
 title: "Bayesian Learning - the book"
 title-block-banner: figs/flashytimeseries.jpg
+toc: false
 ---
 
-This is the home for my book **Bayesian Learning - a gentle introduction**, which is still work in progress. The book is currently used for the course [Bayesian Learning](https://github.com/mattiasvillani/BayesLearnCourse) at Stockholm University.
+This is the home for the book ``Bayesian Learning - a gentle introduction``, which is still work in progress. 
+The book is currently used for the course [Bayesian Learning](https://github.com/mattiasvillani/BayesLearnCourse) at Stockholm University.
 
-Here is a [pdf](pdf/BayesBook.pdf) of the book, which will always be available, even after the book gets published.
+A [pdf](pdf/BayesBook.pdf) of the book will always be available, even after the book gets published.
 
-See the [Notebooks](notebooks.qmd) tab for a set of notebooks for the chapters in the book.
+The [notebooks](notebooks.qmd) tab contains notebooks for the chapters in the book.
+
+### Contents
+1. The Bayesics
+2. Single-parameter models
+3. Multi-parameter models
+4. Priors
+5. Regression
+6. Prediction and Decision making
+7. Normal posterior approximation
+8. Classification
+9. Posterior simulation
+10. Variational inference
+11. Regularization
+12. Model comparison
+13. Variable selection
+14. Gaussian processes
+15. Interaction models
+16. Mixture models
+17. Dynamic models and sequential inference\
+Appendix: Some Mathematical results
 
 Thanks to [all](halloferrors.qmd) who found typos and error in the book.

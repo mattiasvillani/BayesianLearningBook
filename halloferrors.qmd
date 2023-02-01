@@ -5,8 +5,9 @@ format: html
 
 The following people 🙏 have kindly reported typos and errors in the book (ordered by the number of typos found):
 
--   Alice Jonason
--   Michael Sederlin
--   Tea Unnebäck
+-   Alice Jonason, Stockholm University
+-   Michael Sederlin, KTH Royal Institute of Technology
+-   Tea Unnebäck, Stockholm University
+-   Federico M. Stefanini, University of Milan
 
 Please email me any typos and errors at my obvious gmail address. Thanks!

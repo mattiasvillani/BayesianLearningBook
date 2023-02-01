@@ -1,6 +1,7 @@
 # quarto
 /.quarto/
 /_site/
+.Rhistory
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

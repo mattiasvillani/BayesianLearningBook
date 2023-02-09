@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Bayesian Learning Book - Bayesian Learning - the book</title>
+<title>Bayesian Learning Book - Interactive applications</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,7 +65,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -82,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page">
+    <a class="nav-link" href="./index.html">
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -90,7 +90,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Notebooks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./interactive.html">
+    <a class="nav-link active" href="./interactive.html" aria-current="page">
  <span class="menu-text">Interactive</span></a>
   </li>  
   <li class="nav-item">
@@ -107,59 +107,64 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Bayesian Learning - the book</h1>
-                      </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#chapter-2---one-parameter-models" id="toc-chapter-2---one-parameter-models" class="nav-link active" data-scroll-target="#chapter-2---one-parameter-models">Chapter 2 - One-parameter models</a></li>
+  <li><a href="#chapter-6---prediction-and-decision-making" id="toc-chapter-6---prediction-and-decision-making" class="nav-link" data-scroll-target="#chapter-6---prediction-and-decision-making">Chapter 6 - Prediction and Decision making</a></li>
+  <li><a href="#distributions" id="toc-distributions" class="nav-link" data-scroll-target="#distributions">Distributions</a></li>
+  <li><a href="#collection-on-observablehq" id="toc-collection-on-observablehq" class="nav-link" data-scroll-target="#collection-on-observablehq">Collection on ObservableHQ</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Interactive applications</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<p>This is the home for the book <strong>Bayesian Learning - a gentle introduction</strong>, which is still work in progress. The book is currently used for the course <a href="https://github.com/mattiasvillani/BayesLearnCourse">Bayesian Learning</a> at Stockholm University.</p>
-<p>A <a href="pdf/BayesBook.pdf">pdf</a> of the book will always be available, even after the book gets published.</p>
-<p>The <a href="./notebooks.html">Notebooks</a> tab contains Quarto/Jupyter/Pluto notebooks for the chapters in the book.</p>
-<p>The <a href="./interactive.html">Interactive</a> tab contains interactive Observable widgets.</p>
-<section id="contents" class="level3">
-<h3 class="anchored" data-anchor-id="contents">Contents</h3>
-<ol type="1">
-<li>The Bayesics</li>
-<li>Single-parameter models</li>
-<li>Multi-parameter models</li>
-<li>Priors</li>
-<li>Regression</li>
-<li>Prediction and Decision making</li>
-<li>Normal posterior approximation</li>
-<li>Classification</li>
-<li>Posterior simulation</li>
-<li>Variational inference</li>
-<li>Regularization</li>
-<li>Model comparison</li>
-<li>Variable selection</li>
-<li>Gaussian processes</li>
-<li>Interaction models</li>
-<li>Mixture models</li>
-<li>Dynamic models and sequential inference<br>
-Appendix: Some Mathematical results</li>
-</ol>
-<p>Thanks to <a href="./halloferrors.html">all</a> who found typos and error in the book.</p>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="chapter-2---one-parameter-models" class="level3">
+<h3 class="anchored" data-anchor-id="chapter-2---one-parameter-models">Chapter 2 - One-parameter models</h3>
+<ul>
+<li><p><strong>Prior-Posterior Gaussian data with known variance</strong><br>
+<a href="./observable/gaussian_knownvariance.html">html widget</a> | <a href="https://observablehq.com/@mattiasvillani/bayes-iid-gaussian-known-var">notebook on observablehq</a></p></li>
+<li><p><strong>Sequential updating - Gaussian data with known variance</strong><br>
+<a href="./observable/gaussian_knownvariance_sequential.html">html widget</a> | <a href="https://observablehq.com/@mattiasvillani/bayes-iid-gaussian-known-var">notebook on observablehq</a></p></li>
+</ul>
+</section>
+<section id="chapter-6---prediction-and-decision-making" class="level3">
+<h3 class="anchored" data-anchor-id="chapter-6---prediction-and-decision-making">Chapter 6 - Prediction and Decision making</h3>
+<ul>
+<li><strong>Predictive distribution - Gaussian data with known variance</strong><br>
+<a href="./observable/pred_gaussian_knownvariance.html">html widget</a> | <a href="https://observablehq.com/@mattiasvillani/bayes-iid-gaussian-known-var">notebook on observablehq</a></li>
+</ul>
+</section>
+<section id="distributions" class="level3">
+<h3 class="anchored" data-anchor-id="distributions">Distributions</h3>
+<p><a href="./observable/distributions.html">all distributions</a></p>
+</section>
+<section id="collection-on-observablehq" class="level3">
+<h3 class="anchored" data-anchor-id="collection-on-observablehq">Collection on ObservableHQ</h3>
+<p>The whole collection of interactive Observable notebooks for the book can be found <a href="https://observablehq.com/collection/@mattiasvillani/bayesian-learning">here</a>.</p>
 
 
 </section>

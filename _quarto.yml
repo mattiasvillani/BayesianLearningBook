@@ -9,14 +9,16 @@ website:
         text: Home
       - href: notebooks.qmd
         text: Notebooks
+      - href: interactive.qmd
+        text: Interactive 
       - href: halloferrors.qmd
         text: Hall of Typos
 
 format:
   html:
     theme:
-      dark: superhero # litera, lumen, superhero, united
       light: lumen
+      dark: superhero # litera, lumen, superhero, united
     css: styles.css
     toc: true
     #monobackgroundcolor: #c3d0e6

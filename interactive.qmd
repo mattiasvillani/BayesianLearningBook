@@ -1,0 +1,14 @@
+
+---
+title: "Interactive applications"
+toc: true
+---
+
+### Chapter 2 - One-parameter models
+
+- **Gaussian data with known variance**\
+[html widget](observable/gaussian_knownvariance.qmd) | [notebook on observablehq](https://observablehq.com/@mattiasvillani/bayes-iid-gaussian-known-var)
+
+
+### Collection on ObservableHQ
+The whole collection of interactive Observable notebooks for the book can be found [here](https://observablehq.com/collection/@mattiasvillani/bayesian-learning).

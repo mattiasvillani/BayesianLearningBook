@@ -56,11 +56,25 @@
     "text": "Binomial distribution"
   },
   {
+    "objectID": "observable/distributions.html#multivariate-normal-distribution",
+    "href": "observable/distributions.html#multivariate-normal-distribution",
+    "title": "Distributions",
+    "section": "Multivariate normal distribution",
+    "text": "Multivariate normal distribution"
+  },
+  {
     "objectID": "observable/distributions.html#poisson-distribution",
     "href": "observable/distributions.html#poisson-distribution",
     "title": "Distributions",
     "section": "Poisson distribution",
     "text": "Poisson distribution"
+  },
+  {
+    "objectID": "observable/distributions.html#scaled-inverse-chi2-distribution",
+    "href": "observable/distributions.html#scaled-inverse-chi2-distribution",
+    "title": "Distributions",
+    "section": "Scaled inverse chi2 distribution",
+    "text": "Scaled inverse chi2 distribution"
   },
   {
     "objectID": "observable/distributions.html#student-t-distribution",

@@ -28,6 +28,11 @@ toc: true
 <iframe width="100%" height="770" frameborder="0"
   src="https://observablehq.com/embed/@mattiasvillani/poisson-distribution@791?cells=disttext%2Cviewof+params%2Cdist_quantile%2Cmoments%2Cplt_pdf"></iframe>
 
+## Scaled inverse chi2 distribution
+
+<iframe width="100%" height="820" frameborder="0"
+  src="https://observablehq.com/embed/@mattiasvillani/scaled-inverse-chi-2-distribution?cells=disttext%2Cviewof+params%2Cdist_quantile%2Cmoments%2Cplt_pdf"></iframe>
+
 ## Student-t distribution 
 
 <iframe width="100%" height="901" frameborder="0"

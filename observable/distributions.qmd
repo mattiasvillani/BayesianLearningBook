@@ -18,7 +18,17 @@ toc: true
 <iframe width="100%" height="789" frameborder="0"
   src="https://observablehq.com/embed/@mattiasvillani/binomial-distribution@843?cells=textdist%2Cviewof+params%2Cviewof+kvantil%2Cdist_quantile%2Cmoments%2Ccdfs%2Cplt_pdf"></iframe>
 
+## Multivariate normal distribution
+
+<iframe width="100%" height="987" frameborder="0"
+  src="https://observablehq.com/embed/@mattiasvillani/multivariate-normal-distribution@180?cells=textdist%2Cmoments%2Cviewof+param%2Ccontourplot"></iframe>
+
 ## Poisson distribution
 
 <iframe width="100%" height="770" frameborder="0"
   src="https://observablehq.com/embed/@mattiasvillani/poisson-distribution@791?cells=disttext%2Cviewof+params%2Cdist_quantile%2Cmoments%2Cplt_pdf"></iframe>
+
+## Student-t distribution 
+
+<iframe width="100%" height="901" frameborder="0"
+  src="https://observablehq.com/embed/4594bdcee9954fb1@504?cells=moments%2Cviewof+myinputs%2Cviewof+shownormal%2Ctailprobs%2Cplt"></iframe>

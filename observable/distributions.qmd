@@ -20,8 +20,8 @@ toc: true
 
 ## Multivariate normal distribution
 
-<iframe width="100%" height="987" frameborder="0"
-  src="https://observablehq.com/embed/@mattiasvillani/multivariate-normal-distribution@180?cells=textdist%2Cmoments%2Cviewof+param%2Ccontourplot"></iframe>
+<iframe width="100%" height="986" frameborder="0"
+  src="https://observablehq.com/embed/@mattiasvillani/multivariate-normal-distribution@213?cells=textdist%2Cmoments%2Cviewof+param%2Ccontourplot"></iframe>
 
 ## Poisson distribution
 

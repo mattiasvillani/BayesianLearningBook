@@ -31,7 +31,7 @@ toc: true
 
 [Scaled-inv-chi2](observable/distributions/#scaled-inverse-chi2-distribution)
 
-[Student-t](observable/distributions/#student-t-distribution-)
+[Student-t](observable/distributions/#student-t-distribution)
 
 
 ### Collection on ObservableHQ

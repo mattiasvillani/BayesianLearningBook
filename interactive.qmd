@@ -19,7 +19,20 @@ toc: true
 
 ### Distributions
 
-[all distributions](observable/distributions.qmd)
+[Bernoulli](observable/distributions/#bernoulli-distribution)
+
+[Beta](observable/distributions/#beta-distribution)
+
+[Binomial](observable/distributions/#binomial-distribution)
+
+[Multivariate normal](observable/distributions/#multivariate-normal-distribution)
+
+[Poisson](observable/distributions/#poisson-distribution)
+
+[Scaled-inv-chi2](observable/distributions/#scaled-inverse-chi2-distribution)
+
+[Student-t](observable/distributions/#student-t-distribution-)
+
 
 ### Collection on ObservableHQ
 The whole collection of interactive Observable notebooks for the book can be found [here](https://observablehq.com/collection/@mattiasvillani/bayesian-learning).

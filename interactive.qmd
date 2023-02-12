@@ -19,19 +19,19 @@ toc: true
 
 ### Distributions
 
-- [Bernoulli](observable/distributions/#bernoulli-distribution)
+- [Bernoulli](observable/distributions#bernoulli-distribution)
 
-- [Beta](observable/distributions/#beta-distribution)
+- [Beta](observable/distributions#beta-distribution)
 
-- [Binomial](observable/distributions/#binomial-distribution)
+- [Binomial](observable/distributions#binomial-distribution)
 
-- [Multivariate normal](observable/distributions/#multivariate-normal-distribution)
+- [Multivariate normal](observable/distributions#multivariate-normal-distribution)
 
-- [Poisson](observable/distributions/#poisson-distribution)
+- [Poisson](observable/distributions#poisson-distribution)
 
-- [Scaled-inv-chi2](observable/distributions/#scaled-inverse-chi2-distribution)
+- [Scaled-inv-chi2](observable/distributions#scaled-inverse-chi2-distribution)
 
-- [Student-t](observable/distributions/#student-t-distribution)
+- [Student-t](observable/distributions#student-t-distribution)
 
 
 ### Collection on ObservableHQ

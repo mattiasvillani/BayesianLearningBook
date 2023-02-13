@@ -1,6 +1,6 @@
 ---
-title: "Bayesian Learning - the book"
-title-block-banner: true
+title: "Bayesian Learning - a gentle introduction"
+title-block-banner: false
 toc: false
 ---
 

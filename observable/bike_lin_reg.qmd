@@ -1,0 +1,7 @@
+---
+title: "Gaussian linear regression for the bike data"
+format: html
+---
+
+<iframe width="100%" height="1218" frameborder="0"
+  src="https://observablehq.com/embed/@mattiasvillani/bayesian-linear-regression-bike-share-data?cells=priormath%2Czellnermath%2Cviewof+settings%2Cplt_first_panel%2Cplt_second_panel"></iframe>

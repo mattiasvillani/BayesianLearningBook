@@ -12,6 +12,13 @@ toc: true
 - **Sequential updating - Gaussian data with known variance**\
 [html widget](observable/gaussian_knownvariance_sequential.qmd) | [notebook on observablehq](https://observablehq.com/@mattiasvillani/bayes-iid-gaussian-known-var)
 
+### Chapter 5 - Regression
+
+- **Linear regression for bike share data**\
+[html widget](observable/bike_lin_reg.qmd) | [notebook on observablehq](https://observablehq.com/@mattiasvillani/bayesian-linear-regression-bike-share-data)
+
+observable/bike_lin_reg.qmd
+
 ### Chapter 6 - Prediction and Decision making
 
 - **Predictive distribution - Gaussian data with known variance**\

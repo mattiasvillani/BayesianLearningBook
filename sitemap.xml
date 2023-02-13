@@ -2,58 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/SpamBern/SpamBernR.html</loc>
-    <lastmod>2023-02-12T12:49:51.059Z</lastmod>
+    <lastmod>2023-02-13T19:16:53.564Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/SurveyMultinomial/multinomial.html</loc>
-    <lastmod>2023-02-12T12:49:52.955Z</lastmod>
+    <lastmod>2023-02-13T19:16:55.488Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/SpamLogisticReg/SpamLogisticReg.html</loc>
-    <lastmod>2023-02-12T12:49:56.343Z</lastmod>
+    <lastmod>2023-02-13T19:16:58.936Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/ebayPoissonOneParam/eBayPoissonR.html</loc>
-    <lastmod>2023-02-12T12:49:56.803Z</lastmod>
+    <lastmod>2023-02-13T19:16:59.436Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/ebayPoissonOneParam/eBayPoissonPython.html</loc>
-    <lastmod>2023-02-12T12:49:57.151Z</lastmod>
+    <lastmod>2023-02-13T19:16:59.792Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks/DownloadSpeedNormal/DownloadSpeedNormalR.html</loc>
-    <lastmod>2023-02-12T12:49:57.623Z</lastmod>
+    <lastmod>2023-02-13T19:17:00.296Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/observable/gaussian_knownvariance_sequential.html</loc>
-    <lastmod>2023-02-12T12:49:57.879Z</lastmod>
+    <lastmod>2023-02-13T19:17:00.556Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mattiasvillani.github.io/BayesianLearningBook/observable/bike_lin_reg.html</loc>
+    <lastmod>2023-02-13T19:17:00.824Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/observable/gaussian_knownvariance.html</loc>
-    <lastmod>2023-02-12T12:49:58.159Z</lastmod>
+    <lastmod>2023-02-13T19:17:01.088Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/observable/pred_gaussian_knownvariance.html</loc>
-    <lastmod>2023-02-12T12:49:58.423Z</lastmod>
+    <lastmod>2023-02-13T19:17:01.364Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/observable/distributions.html</loc>
-    <lastmod>2023-02-12T12:49:58.679Z</lastmod>
+    <lastmod>2023-02-13T19:17:01.684Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/notebooks.html</loc>
-    <lastmod>2023-02-12T12:49:58.971Z</lastmod>
+    <lastmod>2023-02-13T19:17:01.948Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/index.html</loc>
-    <lastmod>2023-02-12T12:49:59.251Z</lastmod>
+    <lastmod>2023-02-13T19:17:02.224Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/interactive.html</loc>
-    <lastmod>2023-02-12T12:49:59.543Z</lastmod>
+    <lastmod>2023-02-13T19:17:02.516Z</lastmod>
   </url>
   <url>
     <loc>https://mattiasvillani.github.io/BayesianLearningBook/halloferrors.html</loc>
-    <lastmod>2023-02-12T12:49:59.803Z</lastmod>
+    <lastmod>2023-02-13T19:17:02.796Z</lastmod>
   </url>
 </urlset>

@@ -93,7 +93,7 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Bayesian Learning - the book",
+    "title": "Bayesian Learning - a gentle introduction",
     "section": "",
     "text": "This is the home for the book Bayesian Learning - a gentle introduction, which is still work in progress. The book is currently used for the course Bayesian Learning at Stockholm University.\nA pdf of the book will always be available, even after the book gets published.\nThe Notebooks tab contains Quarto/Jupyter/Pluto notebooks for the chapters in the book.\nThe Interactive tab contains interactive Observable widgets.\n\nContents\n\nThe Bayesics\nSingle-parameter models\nMulti-parameter models\nPriors\nRegression\nPrediction and Decision making\nNormal posterior approximation\nClassification\nPosterior simulation\nVariational inference\nRegularization\nModel comparison\nVariable selection\nGaussian processes\nInteraction models\nMixture models\nDynamic models and sequential inference\nAppendix: Some Mathematical results\n\nThanks to all who found typos and error in the book."
   },
@@ -102,7 +102,7 @@
     "href": "interactive.html",
     "title": "Interactive applications",
     "section": "",
-    "text": "Chapter 2 - One-parameter models\n\nPrior-Posterior Gaussian data with known variance\nhtml widget | notebook on observablehq\nSequential updating - Gaussian data with known variance\nhtml widget | notebook on observablehq\n\n\n\nChapter 6 - Prediction and Decision making\n\nPredictive distribution - Gaussian data with known variance\nhtml widget | notebook on observablehq\n\n\n\nDistributions\n\nBernoulli\nBeta\nBinomial\nMultivariate normal\nPoisson\nScaled-inv-chi2\nStudent-t\n\n\n\nCollection on ObservableHQ\nThe whole collection of interactive Observable notebooks for the book can be found here."
+    "text": "Chapter 2 - One-parameter models\n\nPrior-Posterior Gaussian data with known variance\nhtml widget | notebook on observablehq\nSequential updating - Gaussian data with known variance\nhtml widget | notebook on observablehq\n\n\n\nChapter 5 - Regression\n\nLinear regression for bike share data\nhtml widget | notebook on observablehq\n\nobservable/bike_lin_reg.qmd\n\n\nChapter 6 - Prediction and Decision making\n\nPredictive distribution - Gaussian data with known variance\nhtml widget | notebook on observablehq\n\n\n\nDistributions\n\nBernoulli\nBeta\nBinomial\nMultivariate normal\nPoisson\nScaled-inv-chi2\nStudent-t\n\n\n\nCollection on ObservableHQ\nThe whole collection of interactive Observable notebooks for the book can be found here."
   },
   {
     "objectID": "halloferrors.html",

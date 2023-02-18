@@ -3,5 +3,5 @@ title: "Prior-Posterior - Gaussian data with known variance"
 format: html
 ---
 
-<iframe width="100%" height="771" frameborder="0"
+<iframe width="100%" height="775" frameborder="0"
   src="https://observablehq.com/embed/@mattiasvillani/bayes-iid-gaussian-known-var?cells=viewof+datasettings%2Cviewof+priorsettings%2Cviewof+post_quantile%2Cpostresultstext%2Cplt_pdf"></iframe>

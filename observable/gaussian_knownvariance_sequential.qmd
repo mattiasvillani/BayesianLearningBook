@@ -4,4 +4,4 @@ format: html
 ---
 
 <iframe width="100%" height="613" frameborder="0"
-  src="https://observablehq.com/embed/@mattiasvillani/bayes-iid-gaussian-known-var@1293?cells=viewof+priorsettings%2Cplt_seq"></iframe>
+  src="https://observablehq.com/embed/@mattiasvillani/bayes-iid-gaussian-known-var@1334?cells=viewof+priorsettings%2Cplt_seq"></iframe>

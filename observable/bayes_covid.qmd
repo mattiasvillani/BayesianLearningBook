@@ -1,0 +1,7 @@
+---
+title: "Bayes' theorem for events"
+format: html
+---
+
+<iframe width="100%" height="268" frameborder="0"
+  src="https://observablehq.com/embed/@mattiasvillani/bayes-theorem-for-events@251?cells=viewof+Labels%2Cviewof+probs%2Cresult_printout"></iframe>

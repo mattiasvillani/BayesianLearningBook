@@ -4,6 +4,12 @@ title: "Interactive applications"
 toc: true
 ---
 
+### Chapter 1 - The Bayesics
+
+- **Bayes' theorem for events**\
+[html widget](observable/bayes_covid.qmd) | [notebook on observablehq](https://observablehq.com/@mattiasvillani/bayes-theorem-for-events)
+
+
 ### Chapter 2 - One-parameter models
 
 - **Prior-Posterior Gaussian data with known variance**\
@@ -16,8 +22,6 @@ toc: true
 
 - **Linear regression for bike share data**\
 [html widget](observable/bike_lin_reg.qmd) | [notebook on observablehq](https://observablehq.com/@mattiasvillani/bayesian-linear-regression-bike-share-data)
-
-observable/bike_lin_reg.qmd
 
 ### Chapter 6 - Prediction and Decision making
 

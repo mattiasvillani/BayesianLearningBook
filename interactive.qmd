@@ -44,6 +44,7 @@ toc: true
 
 - [Student-t](observable/distributions#student-t-distribution)
 
+- [von Mises](https://observablehq.com/@mattiasvillani/von-mises-distribution)
 
 ### Collection on ObservableHQ
 The whole collection of interactive Observable notebooks for the book can be found [here](https://observablehq.com/collection/@mattiasvillani/bayesian-learning).

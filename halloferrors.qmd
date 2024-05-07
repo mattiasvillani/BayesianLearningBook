@@ -9,5 +9,6 @@ The following people 🙏 have kindly reported typos and errors in the book (ord
 -   Michael Sederlin, KTH Royal Institute of Technology
 -   Tea Unnebäck, Stockholm University
 -   Federico M. Stefanini, University of Milan
+-   Dagmar Kallenberg, Stockholm University
 
 Please email me any typos and errors at my obvious gmail address. Thanks!

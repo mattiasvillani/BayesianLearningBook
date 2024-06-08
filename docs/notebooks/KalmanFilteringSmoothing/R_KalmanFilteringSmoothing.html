@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Mattias Villani">
+
+<title>Bayesian Learning Book - State-space models - filtering, smoothing and forecasting</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Bayesian Learning Book</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../notebooks.html" rel="" target="">
+ <span class="menu-text">Notebooks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../code.html" rel="" target="">
+ <span class="menu-text">code</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../interactive.html" rel="" target="">
+ <span class="menu-text">Interactive</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../halloferrors.html" rel="" target="">
+ <span class="menu-text">Hall of Typos</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#piecewise-constant-model" id="toc-piecewise-constant-model" class="nav-link active" data-scroll-target="#piecewise-constant-model">Piecewise constant model</a></li>
+  <li><a href="#local-level-model" id="toc-local-level-model" class="nav-link" data-scroll-target="#local-level-model">Local level model</a></li>
+  <li><a href="#regression-with-time-varying-parameters" id="toc-regression-with-time-varying-parameters" class="nav-link" data-scroll-target="#regression-with-time-varying-parameters">Regression with time-varying parameters</a></li>
+  <li><a href="#state-space-model---filtering-smoothing-and-forecasting" id="toc-state-space-model---filtering-smoothing-and-forecasting" class="nav-link" data-scroll-target="#state-space-model---filtering-smoothing-and-forecasting">State-space model - filtering, smoothing and forecasting</a>
+  <ul>
+  <li><a href="#the-state-space-model" id="toc-the-state-space-model" class="nav-link" data-scroll-target="#the-state-space-model">The state space model</a></li>
+  <li><a href="#filtering-and-smoothing" id="toc-filtering-and-smoothing" class="nav-link" data-scroll-target="#filtering-and-smoothing">Filtering and smoothing</a></li>
+  </ul></li>
+  <li><a href="#the-dlm-package-in-r" id="toc-the-dlm-package-in-r" class="nav-link" data-scroll-target="#the-dlm-package-in-r">The <code>dlm</code> package in R</a>
+  <ul>
+  <li><a href="#filtering" id="toc-filtering" class="nav-link" data-scroll-target="#filtering">Filtering</a></li>
+  <li><a href="#parameter-estimation-by-maximum-likelihood" id="toc-parameter-estimation-by-maximum-likelihood" class="nav-link" data-scroll-target="#parameter-estimation-by-maximum-likelihood">Parameter estimation by maximum likelihood</a></li>
+  <li><a href="#smoothing" id="toc-smoothing" class="nav-link" data-scroll-target="#smoothing">Smoothing</a></li>
+  <li><a href="#forecasting" id="toc-forecasting" class="nav-link" data-scroll-target="#forecasting">Forecasting</a></li>
+  </ul></li>
+  <li><a href="#non-gaussian-state-space-models" id="toc-non-gaussian-state-space-models" class="nav-link" data-scroll-target="#non-gaussian-state-space-models">Non-Gaussian state-space models</a>
+  <ul>
+  <li><a href="#poisson-time-series-model" id="toc-poisson-time-series-model" class="nav-link" data-scroll-target="#poisson-time-series-model">Poisson time series model</a></li>
+  <li><a href="#stochastic-volatility-models" id="toc-stochastic-volatility-models" class="nav-link" data-scroll-target="#stochastic-volatility-models">Stochastic volatility models</a></li>
+  </ul></li>
+  <li><a href="#bonus-implementing-the-kalman-filter-from-scratch" id="toc-bonus-implementing-the-kalman-filter-from-scratch" class="nav-link" data-scroll-target="#bonus-implementing-the-kalman-filter-from-scratch">Bonus: Implementing the Kalman filter from scratch</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">State-space models - filtering, smoothing and forecasting</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Mattias Villani </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p>This tutorial gives a very brief introduction to state-space models, along with inference methods like Kalman filtering, smoothing and forecasting. The methods are illustrated using the R package <code>dlm</code> , exemplified with the local level model fitted to the well-known Nile river data. The tutorial is also sprinkled with some cool interactivity in Javascript.</p>
+</blockquote>
+<section id="piecewise-constant-model" class="level2">
+<h2 class="anchored" data-anchor-id="piecewise-constant-model">Piecewise constant model</h2>
+<p>An extremely simple model for a time series is to treat the observations as independent normally distributed with the same mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma_\varepsilon\)</span></p>
+<p><span class="math display">\[
+y_t = \mu + \varepsilon_t, \quad \varepsilon_t \sim N(0, \sigma_\varepsilon^2)
+\]</span></p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("latex2exp")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(latex2exp)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">200</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>sigma_eps <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> mu, <span class="at">sd =</span> sigma_eps)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">seq</span>(<span class="dv">1</span>,n), y, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">xlab =</span> <span class="st">"time, t"</span>, <span class="at">ylab =</span> <span class="st">"y_t"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">main =</span> <span class="st">"Simulated data from the naive iid model"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">seq</span>(<span class="dv">1</span>,n), <span class="fu">rep</span>(mu,n), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"orange"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="fu">TeX</span>(<span class="st">"$y_t$"</span>), <span class="fu">TeX</span>(<span class="st">"$</span><span class="sc">\\</span><span class="st">mu$"</span>)), <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>, </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"orange"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R_KalmanFilteringSmoothing_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This model is of course not something to write home about, it basically ignores the time series nature of the data. Let us start to make it a little more interesting by allowing the mean to vary of time. This means that we will have a <strong>time-varying parameter model</strong> where the mean <span class="math inline">\(\mu_t\)</span> changes (abruptly) at certain time points <span class="math inline">\(t_1, t_2, \dots, t_K\)</span>:</p>
+<p><span class="math display">\[
+y_t = \mu_t + \varepsilon_t, \quad \varepsilon_t \sim N(0, \sigma_\varepsilon^2)
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}   
+\mu_t &amp;=
+\begin{cases}            
+  \mu_1 &amp; \text{if $1 \leq t \leq t_1$} \\
+  \mu_2 &amp; \text{if $t_1 &lt; t \leq t_2$} \\            
+  \vdots &amp; \vdots \\
+  \mu_K &amp; \text{if $t_{K-1} &lt; t \leq T$}. \\          
+\end{cases}
+\end{align}
+\]</span></p>
+<p>Here is a widget that lets you simulate data from the piecewise constant model<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<iframe width="100%" height="772" frameborder="0" src="https://observablehq.com/embed/@mattiasvillani/piecewise-constant-model?cells=viewof+input%2Cviewof+mu_vect%2Cviewof+sigmaeps%2Cviewof+simulatebutton%2Ctimeplot"></iframe>
+</section>
+<section id="local-level-model" class="level2">
+<h2 class="anchored" data-anchor-id="local-level-model">Local level model</h2>
+<p>The piecewise constant model has a few abrupt changes in the mean, but what if the mean changes more gradually? The <strong>local level</strong> model has a constantly changing mean following a random walk model:</p>
+<p><span class="math display">\[y_t = \mu_t + \varepsilon_t,\qquad \varepsilon_t \sim N(0,\sigma_\varepsilon^2)\]</span></p>
+<p><span class="math display">\[\mu_t = \mu_{t-1} + \eta_t,\qquad \eta_t \sim N(0,\sigma_\eta^2)\]</span></p>
+<p>which models the observed time series <span class="math inline">\(y_t\)</span> as a mean <span class="math inline">\(\mu_t\)</span> plus a random <strong>measurement error</strong> or disturbance <span class="math inline">\(\varepsilon_t\)</span>. The mean <span class="math inline">\(\mu_t\)</span> evolves over time as a random walk driven by <strong>innovations</strong> <span class="math inline">\(\eta_t\)</span>.</p>
+<p>Here is a widget that simulates data from the model. Go ahead, experiment with the measurement/noise <span class="math inline">\(\sigma_\varepsilon\)</span> and the standard deviation of the innovations to the mean process, <span class="math inline">\(\sigma_\eta\)</span>. For example, drive <span class="math inline">\(\sigma_\eta\)</span> toward zero and note how the mean becomes close to constant over time.</p>
+<iframe width="100%" height="696" frameborder="0" src="https://observablehq.com/embed/@mattiasvillani/local-level-model@1184?cells=viewof+input%2Cviewof+simulatebutton%2Ctimeplot"></iframe>
+</section>
+<section id="regression-with-time-varying-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="regression-with-time-varying-parameters">Regression with time-varying parameters</h2>
+<p>The usual simple linear time series regression model is</p>
+<p><span class="math display">\[
+y_t = \alpha + \beta x_t  + \varepsilon_t, \quad \varepsilon_t \sim N(0, \sigma_\varepsilon^2) \qquad t=1,\ldots,T
+\]</span></p>
+<p>where <span class="math inline">\(y_t\)</span> is a time series response variable (for example electricity price) that is being explained by the explanatory variable <span class="math inline">\(x_t\)</span> (for example temperature). This model assumes that the parameters <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma_\varepsilon\)</span> are <em>constant</em> in time, that the relationship between electricity price and temperature has remained the same throughout the whole observed time period.</p>
+<p>It sometimes makes sense to let the parameters vary with time. Here is one such model, the <strong>time-varying regression</strong> model:</p>
+<p><span class="math display">\[
+\begin{align}  
+y_t &amp;= \alpha_{t} + \beta_{t} x_t  + \varepsilon_t, \quad \varepsilon_t \sim N(0, \sigma_\varepsilon^2)  \\  
+\alpha_{t} &amp;= \alpha_{t-1} + \eta_t, \qquad \quad \eta_t \sim N(0, \sigma_\alpha^2)   \\  
+\beta_{t} &amp;= \beta_{t-1} + \nu_t, \qquad \quad \nu_t \sim N(0, \sigma_\beta^2)
+\end{align}
+\]</span></p>
+<p>where the intercept <span class="math inline">\(\alpha\)</span> now has a time <span class="math inline">\(t\)</span> subscript and evolves in time following a random walk process</p>
+<p><span class="math display">\[\alpha_{t} = \alpha_{t-1} + \eta_t, \qquad \quad \eta_t \sim N(0, \sigma_\alpha^2)\]</span></p>
+<p>so that in every time period, the intercept changes by adding on an innovation <span class="math inline">\(\eta_t\)</span> drawn from a normal distribution with standard deviation <span class="math inline">\(\sigma_\alpha\)</span>. This standard deviation therefore controls how much the intercept changes over time. The slope <span class="math inline">\(\beta\)</span> changes over time in a similar fashion, with the speed of change determined by <span class="math inline">\(\sigma_\beta\)</span>.</p>
+<p>Here is a widget that simulates data from the time-varying regression above. By moving the slider (<em>show regline at time</em>) you can plot the regression line <span class="math inline">\(\alpha_t + \beta_t x_t\)</span> at any time period <span class="math inline">\(t\)</span>. The plot highlights (darker blue) data points that are closer in time to the time chosen by the slider. To the left you can see the whole time path of the simulated <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> with the current parameters highlighted by dots.</p>
+<iframe width="100%" height="1186" frameborder="0" src="https://observablehq.com/embed/@mattiasvillani/time-varying-regression-model@1524?cells=viewof+input%2Cviewof+obsnumber%2Cviewof+simulatebutton%2Cscatterplot%2Cparamevolplot"></iframe>
+</section>
+<section id="state-space-model---filtering-smoothing-and-forecasting" class="level2">
+<h2 class="anchored" data-anchor-id="state-space-model---filtering-smoothing-and-forecasting">State-space model - filtering, smoothing and forecasting</h2>
+<section id="the-state-space-model" class="level4">
+<h4 class="anchored" data-anchor-id="the-state-space-model">The state space model</h4>
+<p>All of the models above, and many, many, many more can be written as a so called state-space model. A <strong>state-space model</strong> for a univariate time series <span class="math inline">\(y_t\)</span> with a <em>state</em> vector <span class="math inline">\(\boldsymbol{\theta}_t\)</span> can be written as</p>
+<p><span class="math display">\[
+\begin{align}
+y_t &amp;= \boldsymbol{F} \boldsymbol{\theta}_t + v_t,\hspace{1.5cm} v_t \sim N(\boldsymbol{0},\boldsymbol{V})  \\
+\boldsymbol{\theta}_t &amp;= \boldsymbol{G} \boldsymbol{\theta}_{t-1} + \boldsymbol{w}_t, \qquad \boldsymbol{w}_t \sim N(\boldsymbol{0},\boldsymbol{W})
+\end{align}
+\]</span> where we have written the multivariate distribution <span class="math inline">\(N(\boldsymbol{0},\boldsymbol{V})\)</span> for <span class="math inline">\(v_t\)</span>, even though it is actually a scalar here, to be consistent with the notation used later.</p>
+<p>For example, the local level model is a state-space model with a single scalar state variable <span class="math inline">\(\boldsymbol{\theta}_t = \mu_t\)</span> and parameters</p>
+<p><span class="math display">\[
+\begin{align}
+\boldsymbol{F} &amp;= 1 \\
+\boldsymbol{G} &amp;= 1  \\
+\boldsymbol{V} &amp;= \sigma_\varepsilon^2 \\
+\boldsymbol{W} &amp;= \sigma_\nu^2
+\end{align}
+\]</span></p>
+<p>We learn about the state <span class="math inline">\(\mu_t\)</span> from the observed time series <span class="math inline">\(y_t\)</span> . The first equation is often called the observation or <strong>measurement model</strong> since it gives the connection between the unobserved state and the observed measurements. The measurements can also be a vector, but we will use a single measurement in this tutorial. The second equation is called the <strong>state transition model</strong> since it determines how the state evolves over time.</p>
+<p>We can even let the state-space parameters <span class="math inline">\(\boldsymbol{F}, \boldsymbol{G}, \boldsymbol{V}, \boldsymbol{W}\)</span> be different in every time period. This is in fact needed if we want to write the time-varying regression model in state-space form. Recall the time varying regression model</p>
+<p><span class="math display">\[
+\begin{align}  
+y_t &amp;= \alpha_{t} + \beta_{t} x_t  + \varepsilon_t, \quad \varepsilon_t \sim N(0, \sigma_\varepsilon^2)  \\  
+\alpha_{t} &amp;= \alpha_{t-1} + \eta_t, \qquad \quad \eta_t \sim N(0, \sigma_\alpha^2)   \\  
+\beta_{t} &amp;= \beta_{t-1} + \nu_t, \qquad \quad \nu_t \sim N(0, \sigma_\beta^2)
+\end{align}
+\]</span></p>
+<p>We can tuck the two time-varying parameters in a vector <span class="math inline">\(\boldsymbol{\beta}=(\alpha_t,\beta_t)^\top\)</span> and also write the models as</p>
+<p><span class="math display">\[
+\begin{align}  
+y_t &amp;= \boldsymbol{x}_t^\top\boldsymbol{\beta}_{t}   + \varepsilon_t, \hspace{0.8cm} \varepsilon_t \sim N(0, \sigma_\varepsilon^2)  \\    
+\boldsymbol{\beta}_{t} &amp;= \boldsymbol{\beta}_{t-1} + \boldsymbol{w}_t, \quad \quad \nu_t \sim N(0, \boldsymbol{W})
+\end{align}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\begin{align}  
+\boldsymbol{x}_t &amp;= (1,x_t)^\top  \\    
+\boldsymbol{w}_t &amp;= (\eta_t,\nu_t)^\top  \\
+\boldsymbol{W} &amp;=
+\begin{pmatrix}
+\sigma_\alpha^2 &amp; 0 \\
+0               &amp; \sigma_\eta^2
+\end{pmatrix}
+\end{align}
+\]</span></p>
+<p>Note that this is a state-space model with</p>
+<p><span class="math display">\[
+\begin{align}
+\boldsymbol{F}_t &amp;= \boldsymbol{x}_t\\
+\boldsymbol{G} &amp;=
+\begin{pmatrix}
+1 &amp; 0 \\
+0 &amp; 1
+\end{pmatrix} \\
+\boldsymbol{V} &amp;= \sigma_\varepsilon^2 \\
+\boldsymbol{W} &amp;=
+\begin{pmatrix}
+\sigma_\alpha^2 &amp; 0 \\
+0               &amp; \sigma_\beta^2
+\end{pmatrix}
+\end{align}
+\]</span></p>
+<p>and note now that <span class="math inline">\(\boldsymbol{F}\)</span> changes in every time period, hence the subscript <span class="math inline">\(t\)</span>.</p>
+<p>Finally, we can also have multivariate response vector <span class="math inline">\(\boldsymbol{y}_t\)</span></p>
+<p>as</p>
+<p><span class="math display">\[
+\begin{align}
+\boldsymbol{y}_t &amp;= \boldsymbol{F} \boldsymbol{\theta}_t + \boldsymbol{v}_t,\hspace{1.5cm} \boldsymbol{v}_t \sim N(\boldsymbol{0},\boldsymbol{V})  \\
+\boldsymbol{\theta}_t &amp;= \boldsymbol{G} \boldsymbol{\theta}_{t-1} + \boldsymbol{w}_t, \qquad \boldsymbol{w}_t \sim N(\boldsymbol{0},\boldsymbol{W})
+\end{align}
+\]</span></p>
+</section>
+<section id="filtering-and-smoothing" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-and-smoothing">Filtering and smoothing</h4>
+<p>There are two different types of relevant inferences in state-space models: filtering and smoothing:</p>
+<ul>
+<li><p>The <strong>filtered</strong> estimate <span class="math inline">\(\hat{\boldsymbol{\theta}}_{t|t}\)</span> of the state <span class="math inline">\(\boldsymbol{\theta}_t\)</span> uses <strong>data up to time</strong> <span class="math inline">\(t\)</span>.</p></li>
+<li><p>The <strong>smoothed</strong> estimate <span class="math inline">\(\hat{\boldsymbol{\theta}}_{t|T}\)</span> of the state <span class="math inline">\(\boldsymbol{\theta}_t\)</span> uses <strong>data up to time</strong> <span class="math inline">\(T\)</span>, the end of the time series.</p></li>
+</ul>
+<p>The filtered estimate is therefore the <strong>instantaneous</strong> estimate, giving the best estimate of the current state. The smoothed estimate is the <strong>retrospective</strong> estimate that looks back in time and gives us the best estimate using all the data.</p>
+<p>Filtering means to compute the sequence of instantaneous estimates of the unobserved state at every time point <span class="math inline">\(t=1,2,\ldots,T\)</span></p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\theta}}_{1|1},\hat{\boldsymbol{\theta}}_{2|2},\ldots,\hat{\boldsymbol{\theta}}_{T|T}
+\]</span></p>
+<p>We will take a time series and compute the filtered estimates for the whole time series, but it is important to understand that filtering is often done in <strong>real-time</strong>, which means it is a continuously ongoing process that returns filtered estimates of the state <span class="math inline">\(\boldsymbol{\theta}_t\)</span> as time progresses and new measurements <span class="math inline">\(y_t\)</span> come in. Think about a self-driving car that is continuously trying to understand the environment (people, other cars, the road conditions etc). The environment is the state and the car uses its sensors to collect measurements. The filtering estimates tells the car about the best guess for the environment at every point in time.</p>
+<p>For state-space models of the type discussed here (linear measurement equation and linear evolution of the state, with independent Normal measurement errors and state innovations), the filtered estimates can be computed with one of the most famous algorithms in statistics: the <strong>Kalman filter</strong>.</p>
+<p>The Kalman filter is a little messy to write up if you are shaky on vectors and matrices, but we will do it for completeness. We will however use a package for it so don’t worry if the linear algebra is intidimating. We will use the notation $<span class="math inline">\(\boldsymbol{\mu}_{t|t}\)</span> instead of <span class="math inline">\(\hat{\boldsymbol{\theta}}_{t|t}\)</span>, but they really mean the same.</p>
+<ul>
+<li><strong>time</strong> <span class="math inline">\(t = 0\)</span>. The Kalman filter starts with mean <span class="math inline">\(\boldsymbol{\mu}_{0|0}\)</span> and covariance matrix <span class="math inline">\(\boldsymbol{\Omega}_{0|0}\)</span> for the state at time <span class="math inline">\(t=0\)</span>. Think about <span class="math inline">\(\boldsymbol{\mu}_{0|0}\)</span> as the best guess <span class="math inline">\(\boldsymbol{\theta}_0\)</span> of the state vector at time <span class="math inline">\(t=0\)</span> and <span class="math inline">\(\boldsymbol{\Omega}_{0|0}\)</span> representing how sure we can be about this guess<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</li>
+<li><strong>time</strong> <span class="math inline">\(t = 1\)</span>. The Kalman filter then uses the first measurement <span class="math inline">\(y_1\)</span> to update <span class="math inline">\(\boldsymbol{\mu}_{0|0} \rightarrow \boldsymbol{\mu}_{1|1}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}_{0|0} \rightarrow \boldsymbol{\Omega}_{1|1}\)</span> to represent the estimate and the uncertainty for <span class="math inline">\(\boldsymbol{\theta}_1\)</span>, the state at time <span class="math inline">\(t=1\)</span>.</li>
+<li><strong>time</strong> <span class="math inline">\(t = 2,...,T\)</span>. It then continues in this fashion using the next measurement <span class="math inline">\(y_2\)</span> to compute <span class="math inline">\(\boldsymbol{\mu}_{2|2}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}_{2|2}\)</span> and so on all the way to the end of the time series to finally get <span class="math inline">\(\boldsymbol{\mu}_{T|T}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}_{T|T}\)</span>.</li>
+</ul>
+<p>Here is the <strong>Kalman filter algorithm</strong>:</p>
+<hr>
+<ul>
+<li><p>Initialization: set <span class="math inline">\(\boldsymbol{\mu}_{0|0}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}_{0|0}\)</span></p></li>
+<li><p>for <span class="math inline">\(t=1,\ldots,T\)</span> do</p>
+<ul>
+<li><p><strong>Prediction update</strong><span class="math display">\[
+\begin{align}
+\boldsymbol{\mu}_{t|t-1} &amp;= \boldsymbol{G} \boldsymbol{\mu}_{t-1|t-1} \\  
+\boldsymbol{\Omega}_{t|t-1} &amp;= \boldsymbol{G}\boldsymbol{\Omega}_{t-1|t-1}  \boldsymbol{G}^\top + \boldsymbol{W}
+\end{align}
+\]</span></p></li>
+<li><p><strong>Measurement update</strong><span class="math display">\[
+\begin{align}
+\boldsymbol{\mu}_{t|t} &amp;= \boldsymbol{\mu}_{t|t-1} + \boldsymbol{K}_t ( y_t - \boldsymbol{F} \boldsymbol{\mu}_{t|t-1}  )  \\  
+\boldsymbol{\Omega}_{t|t} &amp;= (\boldsymbol{I} - \boldsymbol{K}_t \boldsymbol{F} )\boldsymbol{\Omega}_{t|t-1}
+\end{align}
+\]</span></p></li>
+</ul></li>
+</ul>
+<p>where <span class="math display">\[\boldsymbol{K}_t = \boldsymbol{\Omega}_{t|t-1}\boldsymbol{F}^\top ( \boldsymbol{F} \boldsymbol{\Omega}_{t|t-1}\boldsymbol{F}^\top + \boldsymbol{V})^{-1}\]</span> is the <strong>Kalman Gain</strong>.</p>
+<hr>
+<p>The widget below lets you experiment with the Kalman filter for the local level model fitted to the <a href="https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/Nile.html">Nile river data</a>. In the widget we infer (filter) the local levels <span class="math inline">\(\mu_1,\mu_2,\ldots,\mu_T\)</span> and can experiment with the measurement standard deviation <span class="math inline">\(\sigma_\varepsilon\)</span>, the standard deviation of the innovations to the local mean <span class="math inline">\(\sigma_\eta\)</span>, and also the initial guess for <span class="math inline">\(\mu_0\)</span> and the standard deviation <span class="math inline">\(\sigma_0\)</span> of that guess.</p>
+<p>Here are few things to try out in the widget below:</p>
+<ul>
+<li><p>Increase the measurement standard deviation <span class="math inline">\(\sigma_\varepsilon\)</span> and note how the filtered mean pays less and less attention to changes in the data (because the model believes that the data is very poor quality (noisy) and tells us basically nothing about the level). Then move <span class="math inline">\(\sigma_\varepsilon\)</span> to smaller values and note how the filtered mean starts chasing the data (because the model believes that the data are super informative about the level).</p></li>
+<li><p>Make the standard deviation for the initial level <span class="math inline">\(\sigma_0\)</span> very small and then change the initial mean <span class="math inline">\(\mu_0\)</span> to see how this affects the filtered mean at the first part of the time series.</p></li>
+<li><p>Move the standard deviation of the innovations to the level <span class="math inline">\(\sigma_\eta\)</span> small and note how the filtered mean becomes smoother and smoother over time.</p></li>
+</ul>
+<iframe width="100%" height="682" frameborder="0" src="https://observablehq.com/embed/@mattiasvillani/kalman-filtering-nile-river-data@1797?cells=viewof+input_filt%2Cviewof+plotselector%2Cplotfilter"></iframe>
+</section>
+</section>
+<section id="the-dlm-package-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="the-dlm-package-in-r">The <code>dlm</code> package in R</h2>
+<p>The dlm package is a user-friendly R package for analyzing some state-space models. The package has a nice <a href="https://cran.r-project.org/web/packages/dlm/vignettes/dlm.pdf">vignette</a> that is worth reading if you plan to use the package more seriously.</p>
+<section id="filtering" class="level4">
+<h4 class="anchored" data-anchor-id="filtering">Filtering</h4>
+<p>Let’s first do some filtering in the <code>dlm</code> package. Start by loading the <code>dlm</code> package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("dlm") # uncomment the first time to install.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dlm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We now need to tell the <code>dlm</code> package what kind of state-space model we want to estimate. The means setting up the matrices <span class="math inline">\(\boldsymbol{F}\)</span>, <span class="math inline">\(\boldsymbol{G}\)</span>, <span class="math inline">\(\boldsymbol{V}\)</span> and <span class="math inline">\(\boldsymbol{W}\)</span>. We will keep it simple and use the local level model as example, where all parameter matrices <span class="math inline">\(\boldsymbol{F}\)</span>, <span class="math inline">\(\boldsymbol{G}\)</span>, <span class="math inline">\(\boldsymbol{V}\)</span> and <span class="math inline">\(\boldsymbol{W}\)</span> are scalars (single numbers). As we have seen above, the local level model corresponds to a state-space model with parameters</p>
+<p><span class="math display">\[
+\begin{align}
+\boldsymbol{\theta}_t &amp;= \mu_t \\
+\boldsymbol{F} &amp;= 1 \\
+\boldsymbol{G} &amp;= 1  \\
+\boldsymbol{V} &amp;= \sigma_\varepsilon^2 \\
+\boldsymbol{W} &amp;= \sigma_\eta^2
+\end{align}
+\]</span></p>
+<p>So we only need to set <span class="math inline">\(\sigma_\varepsilon^2\)</span> and <span class="math inline">\(\sigma_\eta^2\)</span> to start the fun. We will for now set <span class="math inline">\(\sigma_\varepsilon^2 = 100^2\)</span> and <span class="math inline">\(\sigma_\eta^2 = 100^2\)</span>, and return to this when we learn how the <code>dlm</code> package can find maximum likelihood estimates for these parameters. Here is how you setup the local level model in the <code>dlm</code> package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">dlm</span>(<span class="at">FF =</span> <span class="dv">1</span>, <span class="at">V =</span> <span class="dv">100</span><span class="sc">^</span><span class="dv">2</span>, <span class="at">GG =</span> <span class="dv">1</span>, <span class="at">W =</span> <span class="dv">100</span><span class="sc">^</span><span class="dv">2</span>, <span class="at">m0 =</span> <span class="dv">1000</span>, <span class="at">C0 =</span> <span class="dv">1000</span><span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Compute the filtering estimate using the Kalman filter and plot the result</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>nileFilter <span class="ot">&lt;-</span> <span class="fu">dlmFilter</span>(Nile, model)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Nile, <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">col =</span> <span class="st">"steelblue"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">dropFirst</span>(nileFilter<span class="sc">$</span>m), <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">col =</span> <span class="st">"orange"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Observed"</span>, <span class="st">"Filtered"</span>), <span class="at">lty =</span> <span class="dv">1</span>, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"orange"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="R_KalmanFilteringSmoothing_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="parameter-estimation-by-maximum-likelihood" class="level3">
+<h3 class="anchored" data-anchor-id="parameter-estimation-by-maximum-likelihood">Parameter estimation by maximum likelihood</h3>
+<p>The parameters <span class="math inline">\(\sigma_\varepsilon^2\)</span> and <span class="math inline">\(\sigma_\eta^2\)</span> were just set to some values above. Let’s instead estimate them by maximum likelihood. The function <code>dlmMLE</code> does this for us, but we need to set up a model build object so the <code>dlm</code> package knows which parameter to estimate. We reparameterize the two variances using the exponential function to ensure that the estimated variances are positive.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a> modelBuild <span class="ot">&lt;-</span> <span class="cf">function</span>(param) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">dlm</span>(<span class="at">FF =</span> <span class="dv">1</span>, <span class="at">V =</span> <span class="fu">exp</span>(param[<span class="dv">1</span>]), <span class="at">GG =</span> <span class="dv">1</span>, <span class="at">W =</span> <span class="fu">exp</span>(param[<span class="dv">2</span>]), <span class="at">m0 =</span> <span class="dv">1000</span>, <span class="at">C0 =</span> <span class="dv">1000</span><span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a> fit <span class="ot">&lt;-</span> <span class="fu">dlmMLE</span>(Nile, <span class="at">parm =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">10</span>), <span class="at">build =</span> modelBuild)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We need to take the exponential of the estimates to get the estimated variance parameters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">exp</span>(fit<span class="sc">$</span>par)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15101.488  1467.014</code></pre>
+</div>
+</div>
+<p>or the square roots, to get the maximum likelihood estimates of the standard deviations</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">exp</span>(fit<span class="sc">$</span>par))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 122.88811  38.30162</code></pre>
+</div>
+</div>
+<p>We can redo the filter, this time using the maximum likelihood estimates of the parameters:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model_mle <span class="ot">=</span> <span class="fu">dlm</span>(<span class="at">FF =</span> <span class="dv">1</span>, <span class="at">V =</span> <span class="fu">exp</span>(fit<span class="sc">$</span>par[<span class="dv">1</span>]), <span class="at">GG =</span> <span class="dv">1</span>, <span class="at">W =</span> <span class="fu">exp</span>(fit<span class="sc">$</span>par[<span class="dv">2</span>]), <span class="at">m0 =</span> <span class="dv">1000</span>, <span class="at">C0 =</span> <span class="dv">1000</span><span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>nileFilter <span class="ot">&lt;-</span> <span class="fu">dlmFilter</span>(Nile, model_mle)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Nile, <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">dropFirst</span>(nileFilter<span class="sc">$</span>m), <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Observed"</span>, <span class="st">"Filtered"</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">lty =</span> <span class="dv">1</span>, </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"orange"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="R_KalmanFilteringSmoothing_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="smoothing" class="level3">
+<h3 class="anchored" data-anchor-id="smoothing">Smoothing</h3>
+<p>We can also use the <code>dlm</code> package to compute the smoothed retrospective estimates of the local level <span class="math inline">\(\mu_t\)</span> at time <span class="math inline">\(t\)</span> using all the data from <span class="math inline">\(t=1\)</span> until the end of the time series <span class="math inline">\(T\)</span>. We haven’t showed the mathematical algorithm for smoothing, but you can look it up in many books. Anyway, here is the smoothing results for the Nile data, using the function <code>dlmSmooth</code> from the <code>dlm</code> package. The filtered estimates are also shown.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>nileSmooth <span class="ot">&lt;-</span> <span class="fu">dlmSmooth</span>(Nile, model_mle)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Nile, <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">dropFirst</span>(nileFilter<span class="sc">$</span>m), <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">dropFirst</span>(nileSmooth<span class="sc">$</span>s), <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Observed"</span>, <span class="st">"Filtered"</span>,<span class="st">"Smoothed"</span>), <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="R_KalmanFilteringSmoothing_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="forecasting" class="level3">
+<h3 class="anchored" data-anchor-id="forecasting">Forecasting</h3>
+<p>We can also use state-space models for forecasting. Here is how it is done in the <code>dlm</code> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nileFore <span class="ot">&lt;-</span> <span class="fu">dlmForecast</span>(nileFilter, <span class="at">nAhead =</span> <span class="dv">5</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sqrtR <span class="ot">&lt;-</span> <span class="fu">sapply</span>(nileFore<span class="sc">$</span>R, <span class="cf">function</span>(x) <span class="fu">sqrt</span>(x))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>pl <span class="ot">&lt;-</span> nileFore<span class="sc">$</span>a[,<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.05</span>, <span class="at">sd =</span> sqrtR)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>pu <span class="ot">&lt;-</span> nileFore<span class="sc">$</span>a[,<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.95</span>, <span class="at">sd =</span> sqrtR)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">ts.union</span>(<span class="fu">window</span>(Nile, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1900</span>, <span class="dv">1</span>)),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">window</span>(nileSmooth<span class="sc">$</span>s, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1900</span>, <span class="dv">1</span>)), </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>              nileFore<span class="sc">$</span>a, pl, pu)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="at">plot.type =</span> <span class="st">"single"</span>, <span class="at">type =</span> <span class="st">'o'</span>, <span class="at">pch =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"red"</span>, <span class="st">"brown"</span>, <span class="st">"gray"</span>, <span class="st">"gray"</span>),</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"River flow"</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Observed"</span>, <span class="st">"Smoothed"</span>, <span class="st">"Forecast"</span>, </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"90% probability limit"</span>), <span class="at">bty =</span> <span class="st">'n'</span>, <span class="at">pch =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>), <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"red"</span>, <span class="st">"brown"</span>, <span class="st">"gray"</span>, <span class="st">"gray"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="R_KalmanFilteringSmoothing_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="non-gaussian-state-space-models" class="level2">
+<h2 class="anchored" data-anchor-id="non-gaussian-state-space-models">Non-Gaussian state-space models</h2>
+<section id="poisson-time-series-model" class="level5">
+<h5 class="anchored" data-anchor-id="poisson-time-series-model">Poisson time series model</h5>
+<p>A useful model for time series of counts <span class="math inline">\(Y \in \{0,1,2,\ldots \}\)</span> is a Poisson distribution with time-varying intensity <span class="math inline">\(\lambda_t = \exp(z_t)\)</span>, where <span class="math inline">\(z_t\)</span> is some continuous stochastic process with autocorrelation, most commonly a random walk:</p>
+<p><span class="math display">\[
+\begin{align} y_t \vert z_t &amp;\overset{\mathrm{indep}}{\sim} \mathrm{Pois}(\exp(z_t)) \\  
+z_t &amp;= z_{t-1} + \eta_t, \qquad \eta_t \sim N(0, \sigma^2_\eta)
+\end{align}
+\]</span></p>
+<p>Note that because of the exponential function <span class="math inline">\(\lambda_t = \exp(z_t)\)</span> is guaranteed to be positive for all <span class="math inline">\(t\)</span>, as required for the Poisson distribution. It is easily to simulate data from the Poisson time series model:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up the simulation function, starting the z_t process at zero.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>simPoisTimeSeries <span class="ot">&lt;-</span> <span class="cf">function</span>(T, sigma_eta){</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simulate the z_t process</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,T<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>(T<span class="sc">+</span><span class="dv">1</span>)){</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    z[t] <span class="ot">=</span> z[t<span class="dv">-1</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma_eta)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simulate the Poisson variables with different intensities, lambda_t = exp(z_t) for each time</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  lambda <span class="ot">=</span> <span class="fu">exp</span>(z)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (<span class="fu">rpois</span>(T, <span class="at">lambda =</span> lambda[<span class="dv">2</span><span class="sc">:</span>(T<span class="sc">+</span><span class="dv">1</span>)]))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate and plot the time series</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>) </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>T <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>sigma_eta <span class="ot">=</span> <span class="fl">0.1</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">simPoisTimeSeries</span>(T, sigma_eta)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y, <span class="at">type =</span> <span class="st">"o"</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">yaxt =</span> <span class="st">"n"</span>, <span class="at">xlab =</span> <span class="st">"time, t"</span>, <span class="at">ylab =</span> <span class="st">"counts, y"</span>, </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"A simulated Poisson time series with sigma_eta ="</span>, sigma_eta))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">2</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="fu">max</span>(y)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R_KalmanFilteringSmoothing_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>What’s life without widgets? Here is one for a slightly more general Poisson time series model where the random walk is replaced by an autoregressive process of order 1:</p>
+<p><span class="math display">\[
+\begin{align}
+y_t \vert z_t &amp;\overset{\mathrm{indep}}{\sim} \mathrm{Pois}(\exp(z_t)) \\  
+z_t &amp;= \mu + \phi(z_{t-1} -\mu) + \eta_t, \qquad \eta_t \sim N(0, \sigma^2_\eta)
+\end{align}
+\]</span></p>
+<iframe width="100%" height="724" frameborder="0" src="https://observablehq.com/embed/@mattiasvillani/poisson-time-series-model?cells=viewof+input%2Cviewof+plotintensity%2Cviewof+simulatebutton%2Ctimeplot"></iframe>
+<p>The Poisson time series model is an example of a non-linear (the observations are not linear functions of the state) and non-Gaussian (well, Poisson is not Gaussian) and can therefore <strong>not</strong> be analyzed with the Kalman filter. There are (approximate) extensions of the Kalman filter and also purely simulation based filtering methods called particle methods. But that is stuff for another day.</p>
+</section>
+<section id="stochastic-volatility-models" class="level5">
+<h5 class="anchored" data-anchor-id="stochastic-volatility-models">Stochastic volatility models</h5>
+<p>Many time series, particularly in the finance, has a variance that is changing over time. Furthermore, it is common to find <strong>volatility clustering</strong> in the data, meaning that once the the variance is high (turbulent stock market) it tends to remain high for a while and vice versa. The basic stochastic volatility (SV) model tries to capture this:</p>
+<p><span class="math display">\[
+\begin{align}
+y_t &amp;= \mu + \varepsilon_t, \hspace{0.8cm} \varepsilon_t \overset{\mathrm{indep}}{\sim}N(0,\exp(z_t)), \\
+z_t &amp;= z_{t-1} + \eta_t, \quad \eta_t \overset{\mathrm{iid}}{\sim}N(0, \sigma^2_\eta)
+\end{align}
+\]</span></p>
+<p>where we have for simplicity assumed just a constant mean <span class="math inline">\(\mu\)</span>, but we can extend this with and autoregressive process, or basically any model of your preference. The thing that set the SV model apart from the other model presented so far is that the variance of the measurement errors <span class="math inline">\(Var(y_t)=Var(\varepsilon_t) = \exp(z_t)\)</span> is <strong>heteroscedastic</strong>, that is, it varies over time. The variance is driven by the <span class="math inline">\(z_t\)</span> process, which here is modeled as a random walk, which will induce volatility clustering. Note again that we use the exponential function to ensure that the variance is positive for all <span class="math inline">\(t\)</span>. The model is Gaussian (only normal distributions), but non-Gaussian (the variance is an exponential of the state) so the Kalman filter can not be used, and we would to resort to other methods for the filtering and smoothing. Here is code to simulate from this basic stochastic volatility model:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up the simulation function, starting the z_t process at zero.</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>simStochVol <span class="ot">&lt;-</span> <span class="cf">function</span>(T, mu, sigma_eta){</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simulate the z_t process</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,T<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>(T<span class="sc">+</span><span class="dv">1</span>)){</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    z[t] <span class="ot">=</span> z[t<span class="dv">-1</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma_eta)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simulate the y_T with a different variance in for each sigma²_t = exp(z_t) for each t</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  sigma2eps <span class="ot">=</span> <span class="fu">exp</span>(z)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">=</span> <span class="fu">rnorm</span>(T<span class="sc">+</span><span class="dv">1</span>, <span class="at">mean =</span> mu, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma2eps))</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> ( <span class="fu">list</span>(<span class="at">y =</span> y[<span class="dv">2</span><span class="sc">:</span>(T<span class="sc">+</span><span class="dv">1</span>)], <span class="at">sigmaeps =</span> <span class="fu">sqrt</span>(sigma2eps)[<span class="dv">2</span><span class="sc">:</span>(T<span class="sc">+</span><span class="dv">1</span>)])  )</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s use that function to simulate a time series and plot it:</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate and plot the time series</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>) </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>T <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>sigma_eta <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>simuldata <span class="ot">=</span> <span class="fu">simStochVol</span>(T, mu, sigma_eta)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(simuldata<span class="sc">$</span>y, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">xlab =</span> <span class="st">"time, t"</span>, <span class="at">ylab =</span> <span class="st">"y"</span>, </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"A simulated stochastic volatility process with sigma_eta ="</span>, sigma_eta),</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(simuldata<span class="sc">$</span>y,simuldata<span class="sc">$</span>sigmaeps), <span class="fu">max</span>(simuldata<span class="sc">$</span>y,simuldata<span class="sc">$</span>sigmaeps)), <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(simuldata<span class="sc">$</span>sigmaeps, <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"time series"</span>, <span class="st">"standard deviation"</span>), <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"orange"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R_KalmanFilteringSmoothing_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can replace the random walk for the <span class="math inline">\(z_t\)</span> with a more well-behaved AR(1) process:</p>
+<p><span class="math display">\[
+\begin{align}
+y_t &amp;= \mu_y + \varepsilon_t, \hspace{0.8cm} \varepsilon_t \overset{\mathrm{indep}}{\sim}N(0,\exp(z_t)), \\
+z_t &amp;= \mu_z + \phi(z_{t-1} - \mu_z) + \eta_t, \quad \eta_t \overset{\mathrm{iid}}{\sim}N(0, \sigma^2_\eta)
+\end{align}
+\]</span></p>
+<p>where <span class="math inline">\(\mu_y\)</span> is the mean of the time series <span class="math inline">\(y\)</span> and <span class="math inline">\(\mu_z\)</span> is the mean of the (log) variance process <span class="math inline">\(z_t\)</span>. The parameter <span class="math inline">\(\mu_z\)</span> therefore determines how much variance <span class="math inline">\(y_t\)</span> has on average and <span class="math inline">\(\phi\)</span> determines how much volatility clustering there is. A <span class="math inline">\(\phi\)</span> close to 1 gives long periods of persistently large or small variance. Here is the code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up the simulation function, starting the z_t process at zero.</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>simStochVolAR <span class="ot">&lt;-</span> <span class="cf">function</span>(T, mu_y, mu_z, phi, sigma_eta){</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simulate the z_t process</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,T<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>(T<span class="sc">+</span><span class="dv">1</span>)){</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    z[t] <span class="ot">=</span> mu_z <span class="sc">+</span> phi<span class="sc">*</span>(z[t<span class="dv">-1</span>] <span class="sc">-</span> mu_z) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma_eta)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simulate the y_T with a different variance in for each sigma²_t = exp(z_t) for each t</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  sigma2eps <span class="ot">=</span> <span class="fu">exp</span>(z)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">=</span> <span class="fu">rnorm</span>(T<span class="sc">+</span><span class="dv">1</span>, <span class="at">mean =</span> mu_y, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma2eps))</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> ( <span class="fu">list</span>(<span class="at">y =</span> y[<span class="dv">2</span><span class="sc">:</span>(T<span class="sc">+</span><span class="dv">1</span>)], <span class="at">sigmaeps =</span> <span class="fu">sqrt</span>(sigma2eps)[<span class="dv">2</span><span class="sc">:</span>(T<span class="sc">+</span><span class="dv">1</span>)])  )</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate and plot the time series</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>T <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>mu_y <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>mu_z <span class="ot">=</span> <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>phi <span class="ot">=</span> <span class="fl">0.95</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>sigma_eta <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>simuldata <span class="ot">=</span> <span class="fu">simStochVolAR</span>(T, mu_y, mu_z, phi, sigma_eta)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(simuldata<span class="sc">$</span>y, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">xlab =</span> <span class="st">"time, t"</span>, <span class="at">ylab =</span> <span class="st">"y"</span>, </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"A simulated stochastic volatility process with sigma_eta ="</span>, sigma_eta),</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(simuldata<span class="sc">$</span>y,simuldata<span class="sc">$</span>sigmaeps), <span class="fu">max</span>(simuldata<span class="sc">$</span>y,simuldata<span class="sc">$</span>sigmaeps)), <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(simuldata<span class="sc">$</span>sigmaeps, <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"time series"</span>, <span class="st">"standard deviation"</span>), <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>),</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"orange"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="R_KalmanFilteringSmoothing_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Widget time!</p>
+<iframe width="100%" height="707" frameborder="0" src="https://observablehq.com/embed/@mattiasvillani/stochastic-volatility-time-series-model@1252?cells=viewof+input%2Cviewof+simulatebutton%2Ctimeplot"></iframe>
+</section>
+</section>
+<section id="bonus-implementing-the-kalman-filter-from-scratch" class="level2">
+<h2 class="anchored" data-anchor-id="bonus-implementing-the-kalman-filter-from-scratch">Bonus: Implementing the Kalman filter from scratch</h2>
+<p>For the curious, the code below implements the Kalman filter from scratch in R. Let us first implement a function <code>kalmanfilter_update</code> that does the update for a single time step:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>kalmanfilter_update <span class="ot">&lt;-</span> <span class="cf">function</span>(mu, Omega, y, G, C, V, W) {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Prediction step - moving state forward without new measurement</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  muPred <span class="ot">&lt;-</span> G <span class="sc">%*%</span> mu</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  omegaPred <span class="ot">&lt;-</span> G <span class="sc">%*%</span> Omega <span class="sc">%*%</span> <span class="fu">t</span>(G) <span class="sc">+</span> W</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Measurement update - updating the N(muPred, omegaPred) prior with the new data point</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  K <span class="ot">&lt;-</span> omegaPred <span class="sc">%*%</span> <span class="fu">t</span>(F) <span class="sc">/</span> (F <span class="sc">%*%</span> omegaPred <span class="sc">%*%</span> <span class="fu">t</span>(F) <span class="sc">+</span> V) <span class="co"># Kalman Gain</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> muPred <span class="sc">+</span> K <span class="sc">%*%</span> (y <span class="sc">-</span> F <span class="sc">%*%</span> muPred)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  Omega <span class="ot">&lt;-</span> (<span class="fu">diag</span>(<span class="fu">length</span>(mu)) <span class="sc">-</span> K <span class="sc">%*%</span> F) <span class="sc">%*%</span> omegaPred</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(mu, Omega))</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we implement a function that does all the Kalman iterations, using the <code>kalmanfilter_update</code> function above:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>kalmanfilter <span class="ot">&lt;-</span> <span class="cf">function</span>(Y, G, F, V, W, mu0, Sigma0) {</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  T <span class="ot">&lt;-</span> <span class="fu">dim</span>(Y)[<span class="dv">1</span>]  <span class="co"># Number of time steps</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(mu0)  <span class="co"># Dimension of the state vector</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Storage for the mean and covariance state vector trajectory over time</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  mu_filter <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> T, <span class="at">ncol =</span> n)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  Sigma_filter <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(n, n, T))</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The Kalman iterations</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> mu0</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  Sigma <span class="ot">&lt;-</span> Sigma0</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>T) {</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">kalmanfilter_update</span>(mu, Sigma, <span class="fu">t</span>(Y[t, ]), G, F, V, W)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    mu <span class="ot">&lt;-</span> result[[<span class="dv">1</span>]]</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    Sigma <span class="ot">&lt;-</span> result[[<span class="dv">2</span>]]</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    mu_filter[t, ] <span class="ot">&lt;-</span> mu</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    Sigma_filter[,,t] <span class="ot">&lt;-</span> Sigma</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(mu_filter, Sigma_filter))</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s try it out on the Nile river data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyzing the Nile river data</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>prettycolors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"#6C8EBF"</span>, <span class="st">"#c0a34d"</span>, <span class="st">"#780000"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">as.vector</span>(Nile)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>V <span class="ot">=</span> <span class="dv">100</span><span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>W <span class="ot">=</span> <span class="dv">100</span><span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>mu0 <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>Sigma0 <span class="ot">=</span> <span class="dv">1000</span><span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up state-space model for local level model</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>T <span class="ot">=</span> <span class="fu">length</span>(y)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>G <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>F <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>,T,<span class="dv">1</span>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>Y[,<span class="dv">1</span>] <span class="ot">=</span> y</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>filterRes <span class="ot">=</span> <span class="fu">kalmanfilter</span>(Y, G, F, V, W, mu0, Sigma0)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>meanFilter <span class="ot">=</span> filterRes[[<span class="dv">1</span>]]</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>std_filter <span class="ot">=</span> <span class="fu">sqrt</span>(filterRes[[<span class="dv">2</span>]][,,, <span class="at">drop =</span><span class="cn">TRUE</span>])</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>T), y, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> prettycolors[<span class="dv">1</span>], <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">xlab =</span> <span class="st">"time, t"</span>)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(<span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>T), <span class="fu">rev</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>T))), </span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">c</span>(meanFilter <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>std_filter, <span class="fu">rev</span>(meanFilter <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>std_filter)), </span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="st">"#F0F0F0"</span>, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>T), y, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> prettycolors[<span class="dv">1</span>], <span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">xlab =</span> <span class="st">"time, t"</span>)</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>T), meanFilter, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> prettycolors[<span class="dv">3</span>], <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"time series"</span>, <span class="st">"filter mean"</span>, <span class="st">"95% intervals"</span>), <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>,</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="fu">c</span>(prettycolors[<span class="dv">1</span>], prettycolors[<span class="dv">3</span>], <span class="st">"#F0F0F0"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="R_KalmanFilteringSmoothing_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Clicking on the <img src="piecewiseObservable.png" width="184" height="27"> below the widget will take you to the Observable notebook of the widget where you can also change the locations of the thresholds, <span class="math inline">\(t_1,t_2,\ldots,t_{K-1}\)</span>, if you are really into that sort of thing.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><h2 id="its-all-about-that-bayes" class="anchored">Its all about that Bayes</h2>
+<p>The Kalman filter is often presented from a frequentist point of view in statistics, where the Kalman filtered estimates are the optimal estimates in the mean square error sense.<br>
+<br>
+The Kalman filter can also be derived as simple Bayesian updating, using Bayes’ theorem to update the information about the state as a new measurement comes in. The <span class="math inline">\(\boldsymbol{\mu_{0|0}}\)</span> and <span class="math inline">\(\boldsymbol{\Omega_{0|0}}\)</span> can be seen as the prior mean and prior covariance matrix summarizing your prior information about the state before collecting any measurements.<br>
+<br>
+The Kalman filter is great. When something is great, Bayes usually lurks in the background! 😜<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

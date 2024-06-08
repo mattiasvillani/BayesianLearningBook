@@ -2,6 +2,8 @@
 title: "Notebooks"
 ---
 
+![](figs/linocoumixturemountain.png)
+
 This page contains a set of notebooks in Julia, R and Python for some of the data analyses presented in the book.
 
 #### Chapter 1 - The Bayesics

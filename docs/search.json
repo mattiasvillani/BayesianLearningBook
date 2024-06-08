@@ -205,7 +205,7 @@
   {
     "objectID": "interactive.html",
     "href": "interactive.html",
-    "title": "Code",
+    "title": "Interactive",
     "section": "",
     "text": "This page contains interactive widgets for the book.\n\nChapter 1 - The Bayesics\n\n\n\n\nThe Bernoulli distribution\n\n\n\n\n\nMaximum likelihood iid Bernoulli data\n\n\n\n\n\nBayes’ theorem for events\n\n\n\n\n\n\n\n\nChapter 2 - One-parameter models\n\n\n\n\nBayesian inference for iid Bernoulli data\n\n\n\n\n\n\n\n\nChapter 3 - Multi-parameter models\n\n\nChapter 4 - Priors\n\n\nChapter 5 - Regression\n\n\nChapter 6 - Prediction and Decision making\n\n\nChapter 7 - Normal posterior approximation\n\n\nChapter 8 - Classification\n\n\nChapter 9 - Gibbs sampling\n\n\nChapter 10 - Markov Chain Monte Carlo simulation\n\n\nChapter 11 - Variational inference\n\n\nChapter 12 - Regularization\n\n\nChapter 13 - Mixture models and Bayesian nonparametrics\n\n\nChapter 14 - Model comparison and variable selection\n\n\nChapter 15 - Gaussian processes\n\n\nChapter 16 - Interaction models\n\n\nChapter 17 - Dynamic models and sequential inference\n\n\n\n\nKalman filter and parameter estimation"
   },

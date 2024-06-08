@@ -3,6 +3,8 @@ title: "Code"
 toc: true
 ---
 
+![](figs/linocut_mountaintops.png)
+
 This page contains code snippets for algorithms in the book, sometimes in multiple languages. Click on the language icons to view and download the code.
 
 #### Chapter 1 - The Bayesics
@@ -24,7 +26,7 @@ This page contains code snippets for algorithms in the book, sometimes in multip
 #### Chapter 9 - Gibbs sampling
 
 |                                             |                                                                                                                                                                                                              |                                                                                                                                                                                          |     |
-|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----|
+|---------------------|-----------------|-----------------|-----------------|
 | Gibbs sampling from a multivariate normal   | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/e10f75403abbd992e28d6427777fbb03) |                                                                                                                                                                                          |     |
 | Gibbs sampling for mixture of normals       | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling for mixture of normals - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/92e82ca32b6c5334983eef3fe95b8045)     | [![R](figs/Rlogo.png){alt="R" fig-alt="Gibbs sampling for mixture of normals - R" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/27187865da917ba7fe29170c03a367c6) |     |
 | Gibbs sampling for mixture of Poissons      | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling for mixture of Poissons - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/d71fbadc3a431109e82f1f843a09fa7b)    |                                                                                                                                                                                          |     |
@@ -51,7 +53,7 @@ This page contains code snippets for algorithms in the book, sometimes in multip
 #### Chapter 17 - Dynamic models and sequential inference
 
 |                                        |                                                                                                                                                                                                              |     |     |
-|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----|-----|
+|--------------------|------------------|------------------|------------------|
 | Kalman filter and parameter estimation | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/4a461587c037d257d7099b7675aa0ddf) |     |     |
 
 : {.striped }

@@ -3,6 +3,8 @@ title: "Hall of Typos"
 format: html
 ---
 
+![](figs/linocut_water.png)
+
 The following people 🙏 have kindly reported typos and errors in the book (ordered by the number of typos found):
 
 -   Alice Jonason, Stockholm University

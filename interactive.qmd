@@ -1,7 +1,9 @@
 ---
-title: "Code"
+title: "Interactive"
 toc: true
 ---
+
+![](figs/linocut_forest.png)
 
 This page contains interactive widgets for the book.
 

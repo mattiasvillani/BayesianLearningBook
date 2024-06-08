@@ -4,10 +4,11 @@ title-block-banner: false
 toc: false
 ---
 
-This is the home for the book **Bayesian Learning**, which is still work in progress. 
-The book is currently used for the course [Bayesian Learning](https://github.com/mattiasvillani/BayesLearnCourse) at Stockholm University.
+![](figs/linocutMixturePerson.png)
 
-A [pdf]([pdf/BayesBook.pdf](https://github.com/mattiasvillani/BayesianLearningBook/raw/main/pdf/BayesBook.pdf)) of the book will always be available, even after the book gets published.
+This is the home for the book **Bayesian Learning**, which is still work in progress. The book is currently used for the course [Bayesian Learning](https://github.com/mattiasvillani/BayesLearnCourse) at Stockholm University.
+
+A [pdf](https://github.com/mattiasvillani/BayesianLearningBook/raw/main/pdf/BayesBook.pdf) of the book will always be available, even after the book gets published.
 
 The [Notebooks](notebooks.qmd) tab contains Quarto/Jupyter/Pluto notebooks for the chapters in the book.
 
@@ -16,15 +17,16 @@ The [Code](code.qmd) tab contains code for some algorithms used in the book.
 The [Interactive](interactive.qmd) tab contains interactive Observable widgets.
 
 ### Contents
-1. The Bayesics
-2. Single-parameter models
-3. Multi-parameter models
-4. Priors
-5. Regression
-6. Prediction and Decision making
-7. Normal posterior approximation
-8. Classification
-9. Posterior simulation
+
+1.  The Bayesics
+2.  Single-parameter models
+3.  Multi-parameter models
+4.  Priors
+5.  Regression
+6.  Prediction and Decision making
+7.  Normal posterior approximation
+8.  Classification
+9.  Posterior simulation
 10. Variational inference
 11. Regularization
 12. Model comparison
@@ -33,6 +35,6 @@ The [Interactive](interactive.qmd) tab contains interactive Observable widgets.
 15. Interaction models
 16. Mixture models
 17. Dynamic models and sequential inference\
-Appendix: Some Mathematical results
+    Appendix: Some Mathematical results
 
 Thanks to [all](halloferrors.qmd) who found typos and error in the book.

@@ -1,0 +1,27 @@
+---
+title: "Code"
+toc: true
+---
+
+This page contains code snippets for algorithms in the book, sometimes in multiple languages. Click on the language icons to view and download the code.
+
+### Chapter 1 - The Bayesics
+
+### Chapter 2 - One-parameter models
+
+### Chapter 5 - Regression
+
+### Chapter 6 - Prediction and Decision making
+
+### Chapter 9 - Gibbs sampling
+
+- **Gibbs sampling for mixture of normals**
+[![Julia](figs/julialogo.svg){fig-alt="Gibbs sampling for mixture of normals - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/92e82ca32b6c5334983eef3fe95b8045)
+- **Gibbs sampling for mixture of Poissons**
+[![Julia](figs/julialogo.svg){fig-alt="Gibbs sampling for mixture of Poissons - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/d71fbadc3a431109e82f1f843a09fa7b)
+- **Gibbs sampling for probit regression**
+[![Julia](figs/julialogo.svg){fig-alt="Gibbs sampling for probit regression - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/09eeda1231e85e59ea3b22d22be1e181)
+- **Gibbs sampling for logistic regression**
+[![Julia](figs/julialogo.svg){fig-alt="Gibbs sampling for logistic regression - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/05df2e1657b336e049de683b394a6577)
+- **Gibbs sampling for autoregressive processes**
+[![Julia](figs/julialogo.svg){fig-alt="Gibbs sampling for AR processes - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/aed206ee2f6166b75b4361628615f7a1) 

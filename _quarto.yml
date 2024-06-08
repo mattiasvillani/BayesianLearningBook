@@ -9,8 +9,10 @@ website:
         text: Home
       - href: notebooks.qmd
         text: Notebooks
+      - href: code.qmd
+        text: code
       - href: interactive.qmd
-        text: Interactive 
+        text: Interactive
       - href: halloferrors.qmd
         text: Hall of Typos
 

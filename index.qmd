@@ -11,6 +11,8 @@ A [pdf]([pdf/BayesBook.pdf](https://github.com/mattiasvillani/BayesianLearningBo
 
 The [Notebooks](notebooks.qmd) tab contains Quarto/Jupyter/Pluto notebooks for the chapters in the book.
 
+The [Code](code.qmd) tab contains code for some algorithms used in the book.
+
 The [Interactive](interactive.qmd) tab contains interactive Observable widgets.
 
 ### Contents

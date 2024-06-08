@@ -1,50 +1,60 @@
-
 ---
-title: "Interactive applications"
+title: "Code"
 toc: true
 ---
 
-### Chapter 1 - The Bayesics
+This page contains interactive widgets for the book.
 
-- **Bayes' theorem for events**\
-[html widget](observable/bayes_covid.qmd) | [notebook on observablehq](https://observablehq.com/@mattiasvillani/bayes-theorem-for-events)
+#### Chapter 1 - The Bayesics
 
+|                                       |                                                                                                                                                                                                               |     |     |
+|-------------------|------------------|------------------|------------------|
+| The Bernoulli distribution            | [![Bernoulli distribution](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/bernoulli-distribution)               |     |     |
+| Maximum likelihood iid Bernoulli data | [![ML for iid Bernoulli data](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/maximum-likelihood-bernoulli-data) |     |     |
+| Bayes' theorem for events             | [![Bayes theorem for events](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/bayes-theorem-for-events)           |     |     |
 
-### Chapter 2 - One-parameter models
+: {.striped}
 
-- **Prior-Posterior Gaussian data with known variance**\
-[html widget](observable/gaussian_knownvariance.qmd) | [notebook on observablehq](https://observablehq.com/@mattiasvillani/bayes-iid-gaussian-known-var)
+#### Chapter 2 - One-parameter models
 
-- **Sequential updating - Gaussian data with known variance**\
-[html widget](observable/gaussian_knownvariance_sequential.qmd) | [notebook on observablehq](https://observablehq.com/@mattiasvillani/bayes-iid-gaussian-known-var)
+|                                           |                                                                                                                   |     |     |
+|-------------------|------------------|------------------|------------------|
+| Bayesian inference for iid Bernoulli data | [![Julia](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](#0) |     |     |
 
-### Chapter 5 - Regression
+: {.striped}
 
-- **Linear regression for bike share data**\
-[html widget](observable/bike_lin_reg.qmd) | [notebook on observablehq](https://observablehq.com/@mattiasvillani/bayesian-linear-regression-bike-share-data)
+#### Chapter 3 - Multi-parameter models
 
-### Chapter 6 - Prediction and Decision making
+#### Chapter 4 - Priors
 
-- **Predictive distribution - Gaussian data with known variance**\
-[html widget](observable/pred_gaussian_knownvariance.qmd) | [notebook on observablehq](https://observablehq.com/@mattiasvillani/bayes-iid-gaussian-known-var)
+#### Chapter 5 - Regression
 
-### Distributions
+#### Chapter 6 - Prediction and Decision making
 
-- [Bernoulli](observable/distributions#bernoulli-distribution)
+#### Chapter 7 - Normal posterior approximation
 
-- [Beta](observable/distributions#beta-distribution)
+#### Chapter 8 - Classification
 
-- [Binomial](observable/distributions#binomial-distribution)
+#### Chapter 9 - Gibbs sampling
 
-- [Multivariate normal](observable/distributions#multivariate-normal-distribution)
+#### Chapter 10 - Markov Chain Monte Carlo simulation
 
-- [Poisson](observable/distributions#poisson-distribution)
+#### Chapter 11 - Variational inference
 
-- [Scaled-inv-chi2](observable/distributions#scaled-inverse-chi2-distribution)
+#### Chapter 12 - Regularization
 
-- [Student-t](observable/distributions#student-t-distribution)
+#### Chapter 13 - Mixture models and Bayesian nonparametrics
 
-- [von Mises](https://observablehq.com/@mattiasvillani/von-mises-distribution)
+#### Chapter 14 - Model comparison and variable selection
 
-### Collection on ObservableHQ
-The whole collection of interactive Observable notebooks for the book can be found [here](https://observablehq.com/collection/@mattiasvillani/bayesian-learning).
+#### Chapter 15 - Gaussian processes
+
+#### Chapter 16 - Interaction models
+
+#### Chapter 17 - Dynamic models and sequential inference
+
+|                                        |                                                                                                                                                                                                               |     |     |
+|-------------------|------------------|------------------|------------------|
+| Kalman filter and parameter estimation | [![Julia](figs/Observable.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="25"}](https://gist.github.com/mattiasvillani/4a461587c037d257d7099b7675aa0ddf) |     |     |
+
+: {.striped}

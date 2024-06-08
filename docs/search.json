@@ -4,7 +4,7 @@
     "href": "code.html",
     "title": "Code",
     "section": "",
-    "text": "This page contains code snippets for algorithms in the book, sometimes in multiple languages. Click on the language icons to view and download the code.\n\nChapter 1 - The Bayesics\n\n\nChapter 2 - One-parameter models\n\n\nChapter 5 - Regression\n\n\nChapter 6 - Prediction and Decision making\n\n\nChapter 9 - Gibbs sampling\n\nGibbs sampling for mixture of normals \nGibbs sampling for mixture of Poissons \nGibbs sampling for probit regression \nGibbs sampling for logistic regression \nGibbs sampling for autoregressive processes"
+    "text": "This page contains code snippets for algorithms in the book, sometimes in multiple languages. Click on the language icons to view and download the code.\n\nChapter 1 - The Bayesics\n\n\nChapter 2 - One-parameter models\n\n\nChapter 3 - Multi-parameter models\n\n\nChapter 4 - Priors\n\n\nChapter 5 - Regression\n\n\nChapter 6 - Prediction and Decision making\n\n\nChapter 7 - Normal posterior approximation\n\n\nChapter 8 - Classification\n\n\nChapter 9 - Gibbs sampling\n\n\n\n\nGibbs sampling from a multivariate normal\n\n\n\n\n\nGibbs sampling for mixture of normals\n\n\n\n\n\nGibbs sampling for mixture of Poissons\n\n\n\n\n\nGibbs sampling for probit regression\n\n\n\n\n\nGibbs sampling for logistic regression\n\n\n\n\n\nGibbs sampling for autoregressive processes\n\n\n\n\n\n\n\n\nChapter 10 - Markov Chain Monte Carlo simulation\n\n\nChapter 11 - Variational inference\n\n\nChapter 12 - Regularization\n\n\nChapter 13 - Mixture models and Bayesian nonparametrics\n\n\nChapter 14 - Model comparison and variable selection\n\n\nChapter 15 - Gaussian processes\n\n\nChapter 16 - Interaction models\n\n\nChapter 17 - Dynamic models and sequential inference\n\n\n\n\nKalman filter and parameter estimation"
   },
   {
     "objectID": "halloferrors.html",
@@ -18,7 +18,7 @@
     "href": "notebooks.html",
     "title": "Notebooks",
     "section": "",
-    "text": "This page contains a set of notebooks in Julia, R and Python for some of the data analyses presented in the book.\n\n\n\nChapter\nTopic\nLanguage\n\n\n\n\nSingle-parameter models\nBernoulli model for spam data\nR\nJulia/Pluto\n\n\nSingle-parameter models\nNormal model for internet download speed data\nR\n\n\nSingle-parameter models\nPoisson for number of eBay bidders\nR\nPython\n\n\nMulti-parameter models\nMultinomial model for survey data\nR\nJulia/Pluto\n\n\nClassification\nLogistic regression for spam data\nR\n\n\nSequential inference\nFiltering and smoothing of the Nile river data\nJulia"
+    "text": "This page contains a set of notebooks in Julia, R and Python for some of the data analyses presented in the book.\n\nChapter 1 - The Bayesics\n\n\nChapter 2 - One-parameter models\n\n\n\n\nBernoulli model for spam data\n\n\n\n\n\nNormal model for internet download speed data\n\n\n\n\n\nPoisson for number of eBay bidders\n\n\n\n\n\n\n\n\nChapter 3 - Multi-parameter models\n\n\n\n\nMultinomial model for survey data\n\n\n\n\n\n\n\n\n\n\n\nChapter 4 - Priors\n\n\nChapter 5 - Regression\n\n\nChapter 6 - Prediction and Decision making\n\n\nChapter 7 - Normal posterior approximation\n\n\nChapter 8 - Classification\n\n\n\n\nLogistic regression for spam data\n\n\n\n\n\n\n\n\nChapter 9 - Gibbs sampling\n\n\nChapter 10 - Markov Chain Monte Carlo simulation\n\n\nChapter 11 - Variational inference\n\n\nChapter 12 - Regularization\n\n\nChapter 13 - Mixture models and Bayesian nonparametrics\n\n\nChapter 14 - Model comparison and variable selection\n\n\nChapter 15 - Gaussian processes\n\n\nChapter 16 - Interaction models\n\n\nChapter 17 - Dynamic models and sequential inference\n\n\n\n\nFiltering and smoothing of the Nile river data"
   },
   {
     "objectID": "observable/distributions.html#beta-distribution",
@@ -205,9 +205,9 @@
   {
     "objectID": "interactive.html",
     "href": "interactive.html",
-    "title": "Interactive applications",
+    "title": "Code",
     "section": "",
-    "text": "Chapter 1 - The Bayesics\n\nBayes’ theorem for events\nhtml widget | notebook on observablehq\n\n\n\nChapter 2 - One-parameter models\n\nPrior-Posterior Gaussian data with known variance\nhtml widget | notebook on observablehq\nSequential updating - Gaussian data with known variance\nhtml widget | notebook on observablehq\n\n\n\nChapter 5 - Regression\n\nLinear regression for bike share data\nhtml widget | notebook on observablehq\n\n\n\nChapter 6 - Prediction and Decision making\n\nPredictive distribution - Gaussian data with known variance\nhtml widget | notebook on observablehq\n\n\n\nDistributions\n\nBernoulli\nBeta\nBinomial\nMultivariate normal\nPoisson\nScaled-inv-chi2\nStudent-t\nvon Mises\n\n\n\nCollection on ObservableHQ\nThe whole collection of interactive Observable notebooks for the book can be found here."
+    "text": "This page contains interactive widgets for the book.\n\nChapter 1 - The Bayesics\n\n\n\n\nThe Bernoulli distribution\n\n\n\n\n\nMaximum likelihood iid Bernoulli data\n\n\n\n\n\nBayes’ theorem for events\n\n\n\n\n\n\n\n\nChapter 2 - One-parameter models\n\n\n\n\nBayesian inference for iid Bernoulli data\n\n\n\n\n\n\n\n\nChapter 3 - Multi-parameter models\n\n\nChapter 4 - Priors\n\n\nChapter 5 - Regression\n\n\nChapter 6 - Prediction and Decision making\n\n\nChapter 7 - Normal posterior approximation\n\n\nChapter 8 - Classification\n\n\nChapter 9 - Gibbs sampling\n\n\nChapter 10 - Markov Chain Monte Carlo simulation\n\n\nChapter 11 - Variational inference\n\n\nChapter 12 - Regularization\n\n\nChapter 13 - Mixture models and Bayesian nonparametrics\n\n\nChapter 14 - Model comparison and variable selection\n\n\nChapter 15 - Gaussian processes\n\n\nChapter 16 - Interaction models\n\n\nChapter 17 - Dynamic models and sequential inference\n\n\n\n\nKalman filter and parameter estimation"
   },
   {
     "objectID": "index.html",

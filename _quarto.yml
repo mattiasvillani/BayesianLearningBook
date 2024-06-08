@@ -11,7 +11,7 @@ website:
       - href: notebooks.qmd
         text: Notebooks
       - href: code.qmd
-        text: code
+        text: Code
       - href: interactive.qmd
         text: Interactive
       - href: halloferrors.qmd

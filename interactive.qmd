@@ -9,11 +9,11 @@ This page contains interactive widgets for the book.
 
 #### Chapter 1 - The Bayesics
 
-|                                       |                                                                                                                                                                                                               |     |     |
+|                                                         |                                                                                                                                                                                                               |     |     |
 |-------------------|------------------|------------------|------------------|
-| <font color="#6C8EBF">The Bernoulli distribution</font>            | [![Bernoulli distribution](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/bernoulli-distribution)               |     |     |
-| Maximum likelihood iid Bernoulli data | [![ML for iid Bernoulli data](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/maximum-likelihood-bernoulli-data) |     |     |
-| Bayes' theorem for events             | [![Bayes theorem for events](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/bayes-theorem-for-events)           |     |     |
+| <font color="#6C8EBF">The Bernoulli distribution</font> | [![Bernoulli distribution](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/bernoulli-distribution)               |     |     |
+| Maximum likelihood iid Bernoulli data                   | [![ML for iid Bernoulli data](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/maximum-likelihood-bernoulli-data) |     |     |
+| Bayes' theorem for events                               | [![Bayes theorem for events](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/bayes-theorem-for-events)           |     |     |
 
 : {.striped}
 
@@ -21,25 +21,25 @@ This page contains interactive widgets for the book.
 
 |                                                              |                                                                                                                                                                                                |     |     |
 |-------------------|------------------|------------------|------------------|
-| <font color="#6C8EBF">Beta distribution</font>                                            | [![Julia](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](#0)                                                                              |     |     |
+| <font color="#6C8EBF">Beta distribution</font>               | [![Julia](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](#0)                                                                              |     |     |
 | Bayesian inference for iid Bernoulli data                    | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/beta-distribution)                           |     |     |
-| <font color="#6C8EBF">Normal distribution</font>                                        | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/normal-gaussian-distribution)                |     |     |
-| Bayesian inference for Gaussian iid data with known variance | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/bayes-iid-gaussian-known-var)                |     |     |
-| <font color="#6C8EBF">Poisson distribution</font>                                        | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/poisson-distribution)                        |     |     |
-| <font color="#6C8EBF">Gamma distribution</font>                                           | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/gamma-distribution)                          |     |     |
+| <font color="#6C8EBF">Normal distribution</font>             | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/normal-gaussian-distribution)                |     |     |
+| Bayesian inference for Gaussian iid data with known variance | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/bayes-iid-gaussian-known-var)157283´         |     |     |
+| <font color="#6C8EBF">Poisson distribution</font>            | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/poisson-distribution)                        |     |     |
+| <font color="#6C8EBF">Gamma distribution</font>              | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/gamma-distribution)                          |     |     |
 | Bayesian inference for iid Poisson counts                    | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/bayesian-inference-for-iid-poisson-counts)   |     |     |
-| <font color="#6C8EBF">Exponential distribution</font>                                     | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/exponential-distribution)                    |     |     |
+| <font color="#6C8EBF">Exponential distribution</font>        | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/exponential-distribution)                    |     |     |
 | Bayesian inference for Exponential iid data                  | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/bayesian-inference-for-exponential-iid-data) |     |     |
 
 : {.striped}
 
 #### Chapter 3 - Multi-parameter models
 
-|                                             |                                                                                                                                                                           |     |     |
+|                                                       |                                                                                                                                                                           |     |     |
 |-------------------|------------------|------------------|------------------|
-| <font color="#6C8EBF">Multinomial distribution</font>                    | [![Julia](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](#0)                                                         |     |     |
-| <font color="#6C8EBF">Dirichlet distribution</font>                      | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/dirichlet-distribution) |     |     |
-| **Bayesian inference for multinomial data** | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/multinomial-dirichlet)  |     |     |
+| <font color="#6C8EBF">Multinomial distribution</font> | [![Julia](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](#0)                                                         |     |     |
+| <font color="#6C8EBF">Dirichlet distribution</font>   | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/dirichlet-distribution) |     |     |
+| **Bayesian inference for multinomial data**           | [![](figs/Observable.svg){alt="Julia" fig-alt="The Bernoulli distribution" fig-align="left" width="25"}](https://observablehq.com/@mattiasvillani/multinomial-dirichlet)  |     |     |
 
 : {.striped}
 

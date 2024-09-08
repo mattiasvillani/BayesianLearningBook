@@ -26,13 +26,13 @@ This page contains code snippets for algorithms in the book, sometimes in multip
 #### Chapter 9 - Gibbs sampling
 
 |                                             |                                                                                                                                                                                                              |                                                                                                                                                                                          |     |
-|---------------------|-----------------|-----------------|-----------------|
-| Gibbs sampling from a multivariate normal   | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/e10f75403abbd992e28d6427777fbb03) |                                                                                                                                                                                          |     |
-| Gibbs sampling for mixture of normals       | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling for mixture of normals - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/92e82ca32b6c5334983eef3fe95b8045)     | [![R](figs/Rlogo.png){alt="R" fig-alt="Gibbs sampling for mixture of normals - R" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/27187865da917ba7fe29170c03a367c6) |     |
-| Gibbs sampling for mixture of Poissons      | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling for mixture of Poissons - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/d71fbadc3a431109e82f1f843a09fa7b)    |                                                                                                                                                                                          |     |
-| Gibbs sampling for probit regression        | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling for probit regression - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/09eeda1231e85e59ea3b22d22be1e181)      |                                                                                                                                                                                          |     |
-| Gibbs sampling for logistic regression      | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling for logistic regression - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/05df2e1657b336e049de683b394a6577)    |                                                                                                                                                                                          |     |
-| Gibbs sampling for autoregressive processes | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling for AR processes - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/aed206ee2f6166b75b4361628615f7a1)           |                                                                                                                                                                                          |     |
+|--------------------|------------------|------------------|------------------|
+| Gibbs sampling - multivariate normal   | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/e10f75403abbd992e28d6427777fbb03) |                                                                                                                                                                                          |     |
+| Gibbs sampling - mixture of normals       | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling - mixture of normals - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/92e82ca32b6c5334983eef3fe95b8045)     | [![R](figs/Rlogo.png){alt="R" fig-alt="Gibbs sampling - mixture of normals - R" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/27187865da917ba7fe29170c03a367c6) |     |
+| Gibbs sampling - mixture of Poissons      | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling - mixture of Poissons - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/d71fbadc3a431109e82f1f843a09fa7b)    |                                                                                                                                                                                          |     |
+| Gibbs sampling - probit regression        | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling - probit regression - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/09eeda1231e85e59ea3b22d22be1e181)      |                                                                                                                                                                                          |     |
+| Gibbs sampling - logistic regression      | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling - logistic regression - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/05df2e1657b336e049de683b394a6577)    |                                                                                                                                                                                          |     |
+| Gibbs sampling - autoregressive processes | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling - AR processes - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/aed206ee2f6166b75b4361628615f7a1)           |                                                                                                                                                                                          |     |
 
 : {.striped }
 
@@ -41,6 +41,13 @@ This page contains code snippets for algorithms in the book, sometimes in multip
 #### Chapter 11 - Variational inference
 
 #### Chapter 12 - Regularization
+
+
+|                                        |                                                                                                                                                                                                              |     |     |
+|-------------------|------------------|------------------|------------------|
+| Gibbs sampling - linear regression with L2-regularization | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/2edd03a1f7b98f41ac46035077854965) |     |     |
+
+: {.striped }
 
 #### Chapter 13 - Mixture models and Bayesian nonparametrics
 
@@ -53,7 +60,7 @@ This page contains code snippets for algorithms in the book, sometimes in multip
 #### Chapter 17 - Dynamic models and sequential inference
 
 |                                        |                                                                                                                                                                                                              |     |     |
-|--------------------|------------------|------------------|------------------|
+|-------------------|------------------|------------------|------------------|
 | Kalman filter and parameter estimation | [![Julia](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="20"}](https://gist.github.com/mattiasvillani/4a461587c037d257d7099b7675aa0ddf) |     |     |
 
 : {.striped }

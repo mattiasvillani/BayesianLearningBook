@@ -10,21 +10,19 @@ This page contains a set of notebooks in Julia, R and Python for some of the dat
 
 #### Chapter 2 - One-parameter models
 
-+--------------------------------------------------------+----------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
-| Bernoulli model for spam data                          | [![](figs/julialogo.svg){fig-align="left" width="20"}](notebooks/SpamBern/BernBeta.jl) | [![](figs/Rlogo.png){fig-align="left" width="20" height="16"}](notebooks/SpamBern/SpamBernR.ipynb)                                   |                                                                                                                            |
-+--------------------------------------------------------+----------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
-| Normal model for internet download speed data          |                                                                                        | [![](figs/Rlogo.png){alt="Julia" fig-align="left" width="20" height="16"}](notebooks/DownloadSpeedNormal/DownloadSpeedNormalR.ipynb) |                                                                                                                            |
-+--------------------------------------------------------+----------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
-| Poisson for number of eBay bidders                     |                                                                                        | [![](figs/Rlogo.png){alt="Julia" fig-align="left" width="20" height="16"}](notebooks/ebayPoissonOneParam/eBayPoissonR.ipynb)         | [![](figs/pythonlogo.svg){alt="Julia" fig-align="left" width="20"}](notebooks/ebayPoissonOneParam/eBayPoissonPython.ipynb) |
-+--------------------------------------------------------+----------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+|                                               |                                                                                        |                                                                                                                                      |                                                                                                                            |
+|------------------|------------------|--------------------|------------------|
+| Bernoulli model for spam data                 | [![](figs/julialogo.svg){fig-align="left" width="20"}](notebooks/SpamBern/BernBeta.jl) | [![](figs/Rlogo.png){fig-align="left" width="20" height="16"}](notebooks/SpamBern/SpamBernR.ipynb)                                   |                                                                                                                            |
+| Normal model for internet download speed data |                                                                                        | [![](figs/Rlogo.png){alt="Julia" fig-align="left" width="20" height="16"}](notebooks/DownloadSpeedNormal/DownloadSpeedNormalR.ipynb) |                                                                                                                            |
+| Poisson for number of eBay bidders            |                                                                                        | [![](figs/Rlogo.png){alt="Julia" fig-align="left" width="20" height="16"}](notebooks/ebayPoissonOneParam/eBayPoissonR.ipynb)         | [![](figs/pythonlogo.svg){alt="Julia" fig-align="left" width="20"}](notebooks/ebayPoissonOneParam/eBayPoissonPython.ipynb) |
 
 : {.striped}
 
 #### Chapter 3 - Multi-parameter models
 
-+--------------------------------------------------------+---------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------+---+
-| Multinomial model for survey data                      | [![](figs/julialogo.svg){alt="figs/julialogo.svg" width="20"}](notebooks/SurveyMultinomial/multinom.jl) | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/SurveyMultinomial/multinomial.Rmd) |   |
-+--------------------------------------------------------+---------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------+---+
+|                                   |                                                                                                         |                                                                                                                 |     |
+|-----------------|-------------------|--------------------|-----------------|
+| Multinomial model for survey data | [![](figs/julialogo.svg){alt="figs/julialogo.svg" width="20"}](notebooks/SurveyMultinomial/multinom.jl) | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/SurveyMultinomial/multinomial.Rmd) |     |
 
 : {.striped}
 
@@ -40,9 +38,10 @@ This page contains a set of notebooks in Julia, R and Python for some of the dat
 
 #### Chapter 8 - Classification
 
-+----------------------------------------------+-------+-------------------------------------------------------------------------------------------------------------------+-------+
-| Logistic regression for spam data            |       | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/SpamLogisticReg/SpamLogisticReg.Rmd) |       |
-+----------------------------------------------+-------+-------------------------------------------------------------------------------------------------------------------+-------+
+|                                      |     |                                                                                                                   |     |
+|--------------|--------------|-----------------------------|--------------|
+| Logistic regression for spam data    |     | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/SpamLogisticReg/SpamLogisticReg.Rmd) |     |
+| Logistic regression for Titanic data |     | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/TitanicLogistic/TitanicLogistic.qmd) |     |
 
 : {.striped}
 
@@ -64,8 +63,8 @@ This page contains a set of notebooks in Julia, R and Python for some of the dat
 
 #### Chapter 17 - Dynamic models and sequential inference
 
-+------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+---------+
-| Filtering and smoothing of the Nile river data | [![](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="20"}](notebooks/KalmanFilteringSmoothing/R_KalmanFilteringSmoothing.ipynb) |         |         |
-+------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+---------+
+|                                                |                                                                                                                                                                                                     |     |     |
+|--------------|-------------------------------|--------------|--------------|
+| Filtering and smoothing of the Nile river data | [![](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="20"}](notebooks/KalmanFilteringSmoothing/R_KalmanFilteringSmoothing.ipynb) |     |     |
 
 : {.striped}

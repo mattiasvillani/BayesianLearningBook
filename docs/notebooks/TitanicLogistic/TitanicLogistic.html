@@ -160,6 +160,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#load-packages" id="toc-load-packages" class="nav-link active" data-scroll-target="#load-packages">Load packages</a></li>
   <li><a href="#settings" id="toc-settings" class="nav-link" data-scroll-target="#settings">Settings</a></li>
   <li><a href="#read-data-and-set-up-prior" id="toc-read-data-and-set-up-prior" class="nav-link" data-scroll-target="#read-data-and-set-up-prior">Read data and set up prior</a></li>
+  <li><a href="#coding-up-the-log-posterior-function" id="toc-coding-up-the-log-posterior-function" class="nav-link" data-scroll-target="#coding-up-the-log-posterior-function">Coding up the log posterior function</a></li>
   <li><a href="#finding-the-mode-and-observed-information-using-optim" id="toc-finding-the-mode-and-observed-information-using-optim" class="nav-link" data-scroll-target="#finding-the-mode-and-observed-information-using-optim">Finding the mode and observed information using optim</a></li>
   <li><a href="#plot-the-marginal-posterior-of-beta" id="toc-plot-the-marginal-posterior-of-beta" class="nav-link" data-scroll-target="#plot-the-marginal-posterior-of-beta">Plot the marginal posterior of <span class="math inline">\(\beta\)</span></a></li>
   <li><a href="#plot-the-marginal-posterior-of-the-odds-expbeta" id="toc-plot-the-marginal-posterior-of-the-odds-expbeta" class="nav-link" data-scroll-target="#plot-the-marginal-posterior-of-the-odds-expbeta">Plot the marginal posterior of the odds <span class="math inline">\(\exp(\beta)\)</span></a></li>
@@ -208,21 +209,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="read-data-and-set-up-prior" class="level3">
 <h3 class="anchored" data-anchor-id="read-data-and-set-up-prior">Read data and set up prior</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://github.com/mattiasvillani/introbayes/raw/main/data/titanic.csv"</span>, <span class="at">header=</span><span class="cn">TRUE</span>) </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(df[,<span class="dv">1</span>])</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> df[,<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">2</span>)]</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>X[, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">*</span>(X[,<span class="dv">2</span>] <span class="sc">==</span> <span class="st">"female"</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>X[, <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">*</span>(X[,<span class="dv">3</span>] <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">cbind</span>(<span class="dv">1</span>,X))</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">dim</span>(X)[<span class="dv">2</span>]</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>varNames <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"intercept"</span>, <span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"firstclass"</span>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up the prior</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">rep</span>(<span class="dv">0</span>,p)) <span class="co"># Prior mean vector</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">&lt;-</span> tau<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span><span class="fu">diag</span>(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://github.com/mattiasvillani/introbayes/raw/main/data/titanic.csv"</span>, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">header=</span><span class="cn">TRUE</span>) </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(df[,<span class="dv">1</span>])</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> df[,<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">2</span>)]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>X[, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">*</span>(X[,<span class="dv">2</span>] <span class="sc">==</span> <span class="st">"female"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>X[, <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">*</span>(X[,<span class="dv">3</span>] <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">cbind</span>(<span class="dv">1</span>,X))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">dim</span>(X)[<span class="dv">2</span>]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>varNames <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"intercept"</span>, <span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"firstclass"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up the prior</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">rep</span>(<span class="dv">0</span>,p)) <span class="co"># Prior mean vector</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">&lt;-</span> tau<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span><span class="fu">diag</span>(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="coding-up-the-log-posterior-function" class="level5">
-<h5 class="anchored" data-anchor-id="coding-up-the-log-posterior-function">Coding up the log posterior function</h5>
+</section>
+<section id="coding-up-the-log-posterior-function" class="level3">
+<h3 class="anchored" data-anchor-id="coding-up-the-log-posterior-function">Coding up the log posterior function</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>LogPostLogistic <span class="ot">&lt;-</span> <span class="cf">function</span>(betaVect, y, X, mu, Sigma){</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">length</span>(betaVect)</span>
@@ -232,7 +236,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(logLik <span class="sc">+</span> logPrior)</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
 </section>
 <section id="finding-the-mode-and-observed-information-using-optim" class="level3">
 <h3 class="anchored" data-anchor-id="finding-the-mode-and-observed-information-using-optim">Finding the mode and observed information using optim</h3>
@@ -266,11 +269,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)) </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  gridVals <span class="ot">=</span> <span class="fu">exp</span>(<span class="fu">seq</span>(postMode[j] <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>postStd[j], postMode[j] <span class="sc">+</span> <span class="dv">3</span><span class="sc">*</span>postStd[j], <span class="at">length =</span> <span class="dv">100</span>))</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(gridVals, <span class="fu">dlnorm</span>(gridVals, <span class="at">meanlog =</span> postMode[j], <span class="at">sdlog =</span> postStd[j]), </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="fu">TeX</span>(<span class="fu">sprintf</span>(r<span class="st">'($</span><span class="sc">\e</span><span class="st">xp(</span><span class="sc">\b</span><span class="st">eta_%d$))'</span>, j<span class="dv">-1</span>)), <span class="at">ylab=</span> <span class="st">"posterior density"</span>, <span class="at">type =</span><span class="st">"l"</span>, <span class="at">bty =</span> <span class="st">"n"</span>, </span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"cornflowerblue"</span>, <span class="at">main =</span> varNames[j])</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  gridVals <span class="ot">=</span> <span class="fu">exp</span>(<span class="fu">seq</span>(postMode[j] <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>postStd[j], postMode[j] <span class="sc">+</span> <span class="dv">3</span><span class="sc">*</span>postStd[j], </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">length =</span> <span class="dv">100</span>))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(gridVals, <span class="fu">dlnorm</span>(gridVals, <span class="at">meanlog =</span> postMode[j], <span class="at">sdlog =</span> postStd[j]), </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="fu">TeX</span>(<span class="fu">sprintf</span>(r<span class="st">'($</span><span class="sc">\e</span><span class="st">xp(</span><span class="sc">\b</span><span class="st">eta_%d$))'</span>, j<span class="dv">-1</span>)), <span class="at">ylab=</span> <span class="st">"posterior density"</span>, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span><span class="st">"l"</span>, <span class="at">bty =</span> <span class="st">"n"</span>,  <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"cornflowerblue"</span>, <span class="at">main =</span> varNames[j])</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="TitanicLogistic_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>

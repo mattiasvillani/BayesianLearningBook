@@ -16,7 +16,9 @@ tau <- 10             # Prior std beta~N(0,tau^2*I)
 
 ### Read data and set up prior
 ```{r}
-df <- read.csv("https://github.com/mattiasvillani/introbayes/raw/main/data/titanic.csv", header=TRUE) 
+df <- read.csv(
+  "https://github.com/mattiasvillani/introbayes/raw/main/data/titanic.csv", 
+  header=TRUE) 
 y <- as.vector(df[,1])
 X <- df[,c(5, 4, 2)]
 X[, 2] <- 1*(X[,2] == "female")
@@ -30,7 +32,7 @@ mu <- as.vector(rep(0,p)) # Prior mean vector
 Sigma <- tau^2*diag(p)
 ```
 
-##### Coding up the log posterior function
+### Coding up the log posterior function
 ```{r}
 LogPostLogistic <- function(betaVect, y, X, mu, Sigma){
   p <- length(betaVect)
@@ -67,9 +69,10 @@ for (j in 1:4){
 ```{r}
 par(mfrow=c(2,2)) 
 for (j in 1:4){
-  gridVals = exp(seq(postMode[j] - 3*postStd[j], postMode[j] + 3*postStd[j], length = 100))
+  gridVals = exp(seq(postMode[j] - 3*postStd[j], postMode[j] + 3*postStd[j], 
+                     length = 100))
   plot(gridVals, dlnorm(gridVals, meanlog = postMode[j], sdlog = postStd[j]), 
-    xlab = TeX(sprintf(r'($\exp(\beta_%d$))', j-1)), ylab= "posterior density", type ="l", bty = "n", 
-    lwd = 2, col = "cornflowerblue", main = varNames[j])
+    xlab = TeX(sprintf(r'($\exp(\beta_%d$))', j-1)), ylab= "posterior density", 
+    type ="l", bty = "n",  lwd = 2, col = "cornflowerblue", main = varNames[j])
 }
 ```

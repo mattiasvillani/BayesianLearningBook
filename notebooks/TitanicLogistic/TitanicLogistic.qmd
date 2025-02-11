@@ -54,6 +54,9 @@ postStd <- sqrt(diag(postCov))         # Approximate stdev
 ```
 
 ### Plot the marginal posterior of $\beta$
+Since we have approximated the joint posterior $\boldsymbol{\beta}$ as 
+multivariate normal, the marginal posterior for each $\beta_j$ is univariate 
+normal.
 ```{r}
 par(mfrow=c(2,2))
 for (j in 1:4){
@@ -66,6 +69,8 @@ for (j in 1:4){
 ```
 
 ### Plot the marginal posterior of the odds $\exp(\beta)$
+Since the marginal posterior for each $\beta_j$ is approximated as normal, the 
+approximate posterior distribution for the odds $\exp(\beta_j)$ is log-normal.
 ```{r}
 par(mfrow=c(2,2)) 
 for (j in 1:4){

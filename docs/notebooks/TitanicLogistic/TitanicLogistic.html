@@ -250,6 +250,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="plot-the-marginal-posterior-of-beta" class="level3">
 <h3 class="anchored" data-anchor-id="plot-the-marginal-posterior-of-beta">Plot the marginal posterior of <span class="math inline">\(\beta\)</span></h3>
+<p>Since we have approximated the joint posterior <span class="math inline">\(\boldsymbol{\beta}\)</span> as multivariate normal, the marginal posterior for each <span class="math inline">\(\beta_j\)</span> is univariate normal.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
@@ -266,6 +267,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="plot-the-marginal-posterior-of-the-odds-expbeta" class="level3">
 <h3 class="anchored" data-anchor-id="plot-the-marginal-posterior-of-the-odds-expbeta">Plot the marginal posterior of the odds <span class="math inline">\(\exp(\beta)\)</span></h3>
+<p>Since the marginal posterior for each <span class="math inline">\(\beta_j\)</span> is approximated as normal, the approximate posterior distribution for the odds <span class="math inline">\(\exp(\beta_j)\)</span> is log-normal.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)) </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>

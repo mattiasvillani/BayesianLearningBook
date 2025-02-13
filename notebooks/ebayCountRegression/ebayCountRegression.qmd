@@ -7,8 +7,8 @@ author: "Mattias Villani"
 
 #### Variational approximation of the posterior
 ```{r}
-l2regmodel = stan_model(model_code = l2regression)
-vb_fit = vb(l2regmodel, data = c(data, prior), algorithm = "meanfield")
-s <- summary(vb_fit, probs = c(0.025, 0.975))
-s$summary  # all chaines merged
+#l2regmodel = stan_model(model_code = l2regression)
+#vb_fit = vb(l2regmodel, data = c(data, prior), algorithm = "meanfield")
+#s <- summary(vb_fit, probs = c(0.025, 0.975))
+#s$summary  # all chaines merged
 ```

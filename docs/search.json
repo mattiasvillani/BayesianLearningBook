@@ -18,7 +18,7 @@
     "href": "notebooks.html",
     "title": "Notebooks",
     "section": "",
-    "text": "This page contains a set of notebooks in Julia, R and Python for some of the data analyses presented in the book.\n\nChapter 1 - The Bayesics\n\n\nChapter 2 - One-parameter models\n\n\n\n\nBernoulli model for spam data\n\n\n\n\n\nNormal model for internet download speed data\n\n\n\n\n\nPoisson for number of eBay bidders\n\n\n\n\n\n\n\n\nChapter 3 - Multi-parameter models\n\n\n\n\nMultinomial model for survey data\n\n\n\n\n\n\n\n\n\n\n\nChapter 4 - Priors\n\n\nChapter 5 - Regression\n\n\nChapter 6 - Prediction and Decision making\n\n\nChapter 7 - Normal posterior approximation\n\n\nChapter 8 - Classification\n\n\n\n\nLogistic regression for spam data\n\n\n\n\n\nLogistic regression for Titanic data\n\n\n\n\n\n\n\n\nChapter 9 - Gibbs sampling\n\n\nChapter 10 - Markov Chain Monte Carlo simulation\n\n\nChapter 11 - Variational inference\n\n\nChapter 12 - Regularization\n\n\nChapter 13 - Mixture models and Bayesian nonparametrics\n\n\nChapter 14 - Model comparison and variable selection\n\n\nChapter 15 - Gaussian processes\n\n\nChapter 16 - Interaction models\n\n\nChapter 17 - Dynamic models and sequential inference\n\n\n\n\nFiltering and smoothing of the Nile river data"
+    "text": "This page contains a set of notebooks in Julia, R and Python for some of the data analyses presented in the book.\n\nChapter 1 - The Bayesics\n\n\nChapter 2 - One-parameter models\n\n\n\n\nBernoulli model for spam data\n\n\n\n\n\nNormal model for internet download speed data\n\n\n\n\n\nPoisson for number of eBay bidders\n\n\n\n\n\n\n\n\nChapter 3 - Multi-parameter models\n\n\n\n\nMultinomial model for survey data\n\n\n\n\n\n\n\n\n\n\n\nChapter 4 - Priors\n\n\nChapter 5 - Regression\n\n\nChapter 6 - Prediction and Decision making\n\n\nChapter 7 - Normal posterior approximation\n\n\nChapter 8 - Classification\n\n\n\n\nLogistic regression for spam data\n\n\n\n\n\nLogistic regression for Titanic data\n\n\n\n\n\n\n\n\nChapter 9 - Gibbs sampling\n\n\nChapter 10 - Markov Chain Monte Carlo simulation\n\n\nChapter 11 - Variational inference\n\n\nChapter 12 - Regularization\n\n\n\n\nPolynomial regression fossil data\n\n\n\n\n\n\n\n\nChapter 13 - Mixture models and Bayesian nonparametrics\n\n\nChapter 14 - Model comparison and variable selection\n\n\nChapter 15 - Gaussian processes\n\n\nChapter 16 - Interaction models\n\n\nChapter 17 - Dynamic models and sequential inference\n\n\n\n\nFiltering and smoothing of the Nile river data"
   },
   {
     "objectID": "observable/distributions.html#beta-distribution",
@@ -236,5 +236,12 @@
     "title": "Bayesian nonlinear regression in RStan",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nChaudhuri, P. and J. S. Marron (1999). Sizer for exploration of structures in curves. Journal of the American Statistical Association↩︎"
+  },
+  {
+    "objectID": "notebooks/ebayCountRegression/ebayCountRegression.html",
+    "href": "notebooks/ebayCountRegression/ebayCountRegression.html",
+    "title": "Count data regression in Stan",
+    "section": "",
+    "text": "Variational approximation of the posterior\n\n#l2regmodel = stan_model(model_code = l2regression)\n#vb_fit = vb(l2regmodel, data = c(data, prior), algorithm = \"meanfield\")\n#s &lt;- summary(vb_fit, probs = c(0.025, 0.975))\n#s$summary  # all chaines merged"
   }
 ]

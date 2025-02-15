@@ -10,6 +10,8 @@ This is the home for the book **Bayesian Learning**, which is still work in prog
 
 A [pdf](https://github.com/mattiasvillani/BayesianLearningBook/raw/main/pdf/BayesBook.pdf) of the book will always be available, even after the book gets published.
 
+The [exercises](exercise_solutions) tab contains solutions to many of the problems in the book, including the computer-based exercises.
+
 The [Notebooks](notebooks.qmd) tab contains Quarto/Jupyter/Pluto notebooks for the chapters in the book.
 
 The [Code](code.qmd) tab contains code for some algorithms used in the book.

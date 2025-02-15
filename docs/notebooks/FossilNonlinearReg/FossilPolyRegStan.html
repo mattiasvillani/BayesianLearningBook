@@ -300,24 +300,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>nDraws <span class="ot">=</span> <span class="dv">5000</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">stan</span>(<span class="at">model_code =</span> l2regression, <span class="at">data =</span> <span class="fu">c</span>(data, prior), <span class="at">iter =</span> nDraws)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Trying to compile a simple C file</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
-using C compiler: ‘gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0’
-gcc -I"/usr/share/R/include" -DNDEBUG   -I"/home/mv/R/x86_64-pc-linux-gnu-library/4.4/Rcpp/include/"  -I"/home/mv/R/x86_64-pc-linux-gnu-library/4.4/RcppEigen/include/"  -I"/home/mv/R/x86_64-pc-linux-gnu-library/4.4/RcppEigen/include/unsupported"  -I"/home/mv/R/x86_64-pc-linux-gnu-library/4.4/BH/include" -I"/home/mv/R/x86_64-pc-linux-gnu-library/4.4/StanHeaders/include/src/"  -I"/home/mv/R/x86_64-pc-linux-gnu-library/4.4/StanHeaders/include/"  -I"/home/mv/R/x86_64-pc-linux-gnu-library/4.4/RcppParallel/include/"  -I"/home/mv/R/x86_64-pc-linux-gnu-library/4.4/rstan/include" -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DUSE_STANC3 -DSTRICT_R_HEADERS  -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION  -D_HAS_AUTO_PTR_ETC=0  -include '/home/mv/R/x86_64-pc-linux-gnu-library/4.4/StanHeaders/include/stan/math/prim/fun/Eigen.hpp'  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1       -fpic  -g -O2 -ffile-prefix-map=/build/r-base-6tgf7J/r-base-4.4.2=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c foo.c -o foo.o
-In file included from /home/mv/R/x86_64-pc-linux-gnu-library/4.4/RcppEigen/include/Eigen/Core:19,
-                 from /home/mv/R/x86_64-pc-linux-gnu-library/4.4/RcppEigen/include/Eigen/Dense:1,
-                 from /home/mv/R/x86_64-pc-linux-gnu-library/4.4/StanHeaders/include/stan/math/prim/fun/Eigen.hpp:22,
-                 from &lt;command-line&gt;:
-/home/mv/R/x86_64-pc-linux-gnu-library/4.4/RcppEigen/include/Eigen/src/Core/util/Macros.h:679:10: fatal error: cmath: No such file or directory
-  679 | #include &lt;cmath&gt;
-      |          ^~~~~~~
-compilation terminated.
-make: *** [/usr/lib/R/etc/Makeconf:195: foo.o] Error 1</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: There were 9758 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+<pre><code>Warning: There were 9793 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
@@ -328,46 +311,51 @@ https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>summary  <span class="co"># all chaines merged</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>summary  <span class="co"># all chaines merged</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                mean      se_mean           sd        2.5%        97.5%
-beta0    -0.01370872 0.0029171840  0.065226824 -0.14367843   0.11019960
-beta[1]  -3.54275567 0.0127044571  0.244579154 -4.02880150  -3.07225972
-beta[2]  -1.66972070 0.0322615521  0.582707915 -2.80950648  -0.51557567
-beta[3]   3.42336950 0.0605321874  0.978367981  1.56534854   5.38902960
-beta[4]   0.73747926 0.0764290459  1.304469435 -1.79489106   3.29969103
-beta[5]   0.21209254 0.0844133892  1.314896328 -2.39488178   2.65425654
-beta[6]   1.69729792 0.0701299611  1.169406690 -0.56652795   3.94098223
-beta[7]  -0.90883497 0.0450689270  0.710453722 -2.23565145   0.49212504
-beta[8]  -1.14064824 0.0290308469  0.476932494 -2.07267344  -0.22735405
-beta[9]   0.20407067 0.0081475481  0.132868616 -0.05964357   0.45804643
-beta[10]  0.18999824 0.0046101614  0.075859770  0.04398486   0.33864378
-sigma2    0.10729506 0.0004921659  0.014776427  0.08212256   0.14001305
-psi2     76.39986709 0.9113747622 28.205290074 39.89704695 148.32614937
-lambda    0.01465242 0.0001490131  0.004762331  0.00674190   0.02506451
-lp__     23.41911751 0.0681566217  2.649660085 17.41927296  27.58577077
-             n_eff     Rhat
-beta0     499.9480 1.007672
-beta[1]   370.6181 1.011140
-beta[2]   326.2356 1.008366
-beta[3]   261.2352 1.017985
-beta[4]   291.3070 1.007442
-beta[5]   242.6389 1.019233
-beta[6]   278.0507 1.008127
-beta[7]   248.4947 1.018455
-beta[8]   269.8947 1.010101
-beta[9]   265.9445 1.016997
-beta[10]  270.7639 1.012042
-sigma2    901.3965 1.001322
-psi2      957.7830 1.002223
-lambda   1021.3869 1.003737
-lp__     1511.3471 1.001591</code></pre>
+<pre><code>                 mean      se_mean           sd         2.5%        97.5%
+beta0    -0.008525681 0.0028519643  0.063285939 -0.132042807   0.11768375
+beta[1]  -3.554312124 0.0123486647  0.246118722 -4.042584356  -3.07173027
+beta[2]  -1.736185847 0.0371615637  0.593951177 -2.917911141  -0.58131781
+beta[3]   3.475636229 0.0643686157  1.033492034  1.418201101   5.45679461
+beta[4]   0.892901002 0.0999028951  1.430009468 -1.862966746   3.71414417
+beta[5]   0.142895213 0.0960243603  1.449658334 -2.624609068   3.02383934
+beta[6]   1.560667943 0.0989305699  1.353470155 -1.099277651   4.11683715
+beta[7]  -0.873808551 0.0534659998  0.800594105 -2.481572627   0.65390687
+beta[8]  -1.089534971 0.0421463974  0.569815038 -2.167475999   0.02258160
+beta[9]   0.198072886 0.0098966084  0.150689706 -0.091291200   0.50142280
+beta[10]  0.183076904 0.0066045146  0.091134859  0.003151244   0.35973244
+sigma2    0.107107291 0.0004806464  0.015185911  0.081112274   0.14006253
+psi2     78.991639123 1.0789262133 28.425786544 40.856472536 151.14672022
+lambda    0.014180071 0.0001671474  0.004671324  0.006616088   0.02447593
+lp__     23.188646744 0.0909489560  2.732244295 16.926407105  27.45896412
+            n_eff     Rhat
+beta0    492.4093 1.006994
+beta[1]  397.2366 1.010208
+beta[2]  255.4545 1.009961
+beta[3]  257.7899 1.014698
+beta[4]  204.8904 1.012410
+beta[5]  227.9127 1.015685
+beta[6]  187.1700 1.014594
+beta[7]  224.2174 1.015488
+beta[8]  182.7877 1.016312
+beta[9]  231.8432 1.014816
+beta[10] 190.4089 1.016852
+sigma2   998.2294 1.003268
+psi2     694.1311 1.003526
+lambda   781.0537 1.003103
+lp__     902.4925 1.005562</code></pre>
 </div>
 </div>
 <p>The posterior mean and 80% and 95% credible intervals for the <span class="math inline">\(\beta\)</span> parameters</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"beta"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"beta"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>ci_level: 0.8 (80% intervals)</code></pre>
 </div>
@@ -380,7 +368,7 @@ lp__     1511.3471 1.001591</code></pre>
 </div>
 <p>and for <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\sigma^2\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"lambda"</span>, <span class="st">"sigma2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"lambda"</span>, <span class="st">"sigma2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>ci_level: 0.8 (80% intervals)</code></pre>
 </div>
@@ -393,50 +381,50 @@ lp__     1511.3471 1.001591</code></pre>
 </div>
 <p>Extract the draws for <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\sigma^2\)</span> and plot histograms.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>postsamples <span class="ot">&lt;-</span> <span class="fu">extract</span>(fit, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"lambda"</span>, <span class="st">"sigma2"</span>))</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(postsamples<span class="sc">$</span>lambda, <span class="dv">50</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">col =</span> colors[<span class="dv">2</span>], </span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(lambda), <span class="at">ylab =</span> <span class="st">"posterior density"</span>, </span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="fu">expression</span>(lambda))</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">sqrt</span>(postsamples<span class="sc">$</span>sigma2), <span class="dv">50</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">col =</span> colors[<span class="dv">2</span>], </span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(sigma), <span class="at">ylab =</span> <span class="st">"posterior density"</span>,</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="fu">expression</span>(sigma))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>postsamples <span class="ot">&lt;-</span> <span class="fu">extract</span>(fit, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"lambda"</span>, <span class="st">"sigma2"</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(postsamples<span class="sc">$</span>lambda, <span class="dv">50</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">col =</span> colors[<span class="dv">2</span>], </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(lambda), <span class="at">ylab =</span> <span class="st">"posterior density"</span>, </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="fu">expression</span>(lambda))</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">sqrt</span>(postsamples<span class="sc">$</span>sigma2), <span class="dv">50</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">col =</span> colors[<span class="dv">2</span>], </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(sigma), <span class="at">ylab =</span> <span class="st">"posterior density"</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="fu">expression</span>(sigma))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="FossilPolyRegStan_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Plot the fit with 95% credible bands</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>nThin <span class="ot">=</span> <span class="dv">10</span>  <span class="co"># Only keep every nThin draws (for storage)</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">floor</span>(nDraws<span class="sc">/</span>nThin)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>nGrid <span class="ot">&lt;-</span> <span class="dv">200</span> <span class="co"># Number of gridpoints in x-space</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>postsamples <span class="ot">&lt;-</span> <span class="fu">extract</span>(fit)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>nDraws <span class="ot">&lt;-</span> <span class="fu">dim</span>(postsamples<span class="sc">$</span>beta)[<span class="dv">1</span>]</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>xGrid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="at">length =</span> nGrid)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>XGrid <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">0</span>, nGrid<span class="sc">*</span>degree), nGrid, degree)</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>degree){</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  XGrid[, k] <span class="ot">=</span> xGrid<span class="sc">^</span>k</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>postSampRegLine <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">0</span>, m<span class="sc">*</span><span class="fu">length</span>(xGrid)), m, <span class="fu">length</span>(xGrid))</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>predSamp <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">0</span>, m<span class="sc">*</span><span class="fu">length</span>(xGrid)), m, <span class="fu">length</span>(xGrid))</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  j <span class="ot">=</span> <span class="dv">1</span> <span class="sc">+</span> (i<span class="dv">-1</span>)<span class="sc">*</span>nThin</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  postSampRegLine[i,] <span class="ot">&lt;-</span> postsamples<span class="sc">$</span>beta0[j] <span class="sc">+</span> XGrid <span class="sc">%*%</span> postsamples<span class="sc">$</span>beta[j,]</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  predSamp[i,] <span class="ot">&lt;-</span> postSampRegLine[i,] <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="fu">sqrt</span>(postsamples<span class="sc">$</span>sigma2[i]))</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">col =</span> <span class="st">"darkgray"</span>, <span class="at">cex =</span> <span class="fl">0.5</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>),</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"age (standardized)"</span>, <span class="at">ylab =</span> <span class="st">"strontium ratio (standardized)"</span>)</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xGrid, <span class="fu">colMeans</span>(postSampRegLine), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> colors[<span class="dv">3</span>])</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xGrid, <span class="fu">apply</span>(postSampRegLine, <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>) ), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> colors[<span class="dv">1</span>])</span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xGrid, <span class="fu">apply</span>(postSampRegLine, <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.975</span>) ), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> colors[<span class="dv">1</span>])</span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xGrid, <span class="fu">apply</span>(predSamp, <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>) ), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"black"</span>)</span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xGrid, <span class="fu">apply</span>(predSamp, <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.975</span>) ), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span>  <span class="st">"black"</span>)</span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x =</span> <span class="st">"bottomleft"</span>, <span class="at">inset=</span>.<span class="dv">05</span>,</span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Data"</span>, <span class="st">"Posterior mean"</span>, <span class="st">"C.I."</span>, <span class="st">"P.I."</span>), <span class="at">lwd =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>),</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">19</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="cn">NA</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>),</span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"darkgray"</span>, colors[<span class="dv">3</span>], colors[<span class="dv">1</span>], <span class="st">"black"</span>), <span class="at">box.lty=</span><span class="dv">1</span></span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>nThin <span class="ot">=</span> <span class="dv">10</span>  <span class="co"># Only keep every nThin draws (for storage)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">floor</span>(nDraws<span class="sc">/</span>nThin)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>nGrid <span class="ot">&lt;-</span> <span class="dv">200</span> <span class="co"># Number of gridpoints in x-space</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>postsamples <span class="ot">&lt;-</span> <span class="fu">extract</span>(fit)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>nDraws <span class="ot">&lt;-</span> <span class="fu">dim</span>(postsamples<span class="sc">$</span>beta)[<span class="dv">1</span>]</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>xGrid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="at">length =</span> nGrid)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>XGrid <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">0</span>, nGrid<span class="sc">*</span>degree), nGrid, degree)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>degree){</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  XGrid[, k] <span class="ot">=</span> xGrid<span class="sc">^</span>k</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>postSampRegLine <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">0</span>, m<span class="sc">*</span><span class="fu">length</span>(xGrid)), m, <span class="fu">length</span>(xGrid))</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>predSamp <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">0</span>, m<span class="sc">*</span><span class="fu">length</span>(xGrid)), m, <span class="fu">length</span>(xGrid))</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  j <span class="ot">=</span> <span class="dv">1</span> <span class="sc">+</span> (i<span class="dv">-1</span>)<span class="sc">*</span>nThin</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  postSampRegLine[i,] <span class="ot">&lt;-</span> postsamples<span class="sc">$</span>beta0[j] <span class="sc">+</span> XGrid <span class="sc">%*%</span> postsamples<span class="sc">$</span>beta[j,]</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  predSamp[i,] <span class="ot">&lt;-</span> postSampRegLine[i,] <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="fu">sqrt</span>(postsamples<span class="sc">$</span>sigma2[i]))</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">col =</span> <span class="st">"darkgray"</span>, <span class="at">cex =</span> <span class="fl">0.5</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>),</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"age (standardized)"</span>, <span class="at">ylab =</span> <span class="st">"strontium ratio (standardized)"</span>)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xGrid, <span class="fu">colMeans</span>(postSampRegLine), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> colors[<span class="dv">3</span>])</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xGrid, <span class="fu">apply</span>(postSampRegLine, <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>) ), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> colors[<span class="dv">1</span>])</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xGrid, <span class="fu">apply</span>(postSampRegLine, <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.975</span>) ), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> colors[<span class="dv">1</span>])</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xGrid, <span class="fu">apply</span>(predSamp, <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>) ), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"black"</span>)</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xGrid, <span class="fu">apply</span>(predSamp, <span class="dv">2</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.975</span>) ), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span>  <span class="st">"black"</span>)</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x =</span> <span class="st">"bottomleft"</span>, <span class="at">inset=</span>.<span class="dv">05</span>,</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Data"</span>, <span class="st">"Posterior mean"</span>, <span class="st">"C.I."</span>, <span class="st">"P.I."</span>), <span class="at">lwd =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>),</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">19</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="cn">NA</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>),</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"darkgray"</span>, colors[<span class="dv">3</span>], colors[<span class="dv">1</span>], <span class="st">"black"</span>), <span class="at">box.lty=</span><span class="dv">1</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="FossilPolyRegStan_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>

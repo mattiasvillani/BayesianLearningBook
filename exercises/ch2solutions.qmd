@@ -1,0 +1,25 @@
+---
+title: "Solutions to Exercises from Bayesian Learning"
+author: "Mattias Villani"
+---
+
+#### Exercise 2.1 
+
+The likelihood from an iid sample from $\mathrm{Expon}(\theta)$ is
+$$
+p(x_1,\ldots,x_n \vert \theta)=\prod_{i=1}^n \theta e^{-\theta x_i} = \theta^n e^{-\theta\sum_{i=1}^n x_i}
+$$
+The density of the $\theta \sim \mathrm{Gamma}(\alpha,\beta)$ prior is proportional to 
+$$
+p(\theta) \propto \theta^{\alpha-1}\exp(-\beta\theta)
+$$
+
+By Bayes' theorem, the posterior distribution is 
+$$
+\begin{align}
+  p(\theta \vert x_1,\ldots,x_n) &\propto p(x_1,\ldots,x_n \vert \theta)p(\theta)   \\
+ & = \theta^n e^{-\theta\sum_{i=1}^n x_i}\theta^{\alpha-1}\exp(-\beta\theta)  \\
+ & =  \theta^{\alpha + n - 1} e^{ -\theta(\beta + \sum_{i=1}^n x_i)},
+\end{align}
+$$
+which can be recognized as proportional to the $\theta \sim \mathrm{Gamma}(\alpha +n,\beta + \sum_{i=1}^n x_i)$ distribution. Since the prior and posterior belongs to the same (Gamma) distributional family, the Gamma prior is conjugate to the exponential likelihood.

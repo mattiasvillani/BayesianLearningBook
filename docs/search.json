@@ -214,7 +214,7 @@
     "href": "index.html",
     "title": "Bayesian Learning",
     "section": "",
-    "text": "This is the home for the book Bayesian Learning, which is still work in progress. The book is currently used for the course Bayesian Learning at Stockholm University.\nA pdf of the book will always be available, even after the book gets published.\nThe Notebooks tab contains Quarto/Jupyter/Pluto notebooks for the chapters in the book.\nThe Code tab contains code for some algorithms used in the book.\nThe Interactive tab contains interactive Observable widgets.\n\nContents\n\nThe Bayesics\nSingle-parameter models\nMulti-parameter models\nPriors\nRegression\nPrediction and Decision making\nNormal posterior approximation\nClassification\nPosterior simulation\nVariational inference\nRegularization\nModel comparison\nVariable selection\nGaussian processes\nInteraction models\nMixture models\nDynamic models and sequential inference\nAppendix: Some Mathematical results\n\nThanks to all who found typos and error in the book."
+    "text": "This is the home for the book Bayesian Learning, which is still work in progress. The book is currently used for the course Bayesian Learning at Stockholm University.\nA pdf of the book will always be available, even after the book gets published.\nThe exercises tab contains solutions to many of the problems in the book, including the computer-based exercises.\nThe Notebooks tab contains Quarto/Jupyter/Pluto notebooks for the chapters in the book.\nThe Code tab contains code for some algorithms used in the book.\nThe Interactive tab contains interactive Observable widgets.\n\nContents\n\nThe Bayesics\nSingle-parameter models\nMulti-parameter models\nPriors\nRegression\nPrediction and Decision making\nNormal posterior approximation\nClassification\nPosterior simulation\nVariational inference\nRegularization\nModel comparison\nVariable selection\nGaussian processes\nInteraction models\nMixture models\nDynamic models and sequential inference\nAppendix: Some Mathematical results\n\nThanks to all who found typos and error in the book."
   },
   {
     "objectID": "notebooks/TitanicLogistic/TitanicLogistic.html",
@@ -240,8 +240,50 @@
   {
     "objectID": "notebooks/ebayCountRegression/ebayCountRegression.html",
     "href": "notebooks/ebayCountRegression/ebayCountRegression.html",
-    "title": "Count data regression in Stan",
+    "title": "Bayesian Count regression in RStan",
     "section": "",
-    "text": "Variational approximation of the posterior\n\n#l2regmodel = stan_model(model_code = l2regression)\n#vb_fit = vb(l2regmodel, data = c(data, prior), algorithm = \"meanfield\")\n#s &lt;- summary(vb_fit, probs = c(0.025, 0.975))\n#s$summary  # all chaines merged"
+    "text": "Model\nThis notebook illustrate how to do a Bayesian analysis using rstan for the Poisson regression model for count data response \\(y\\) conditional on \\(p\\) covariates \\(\\mathbf{x}=(x_1,\\dots,x_p)^\\top\\): \\[y \\vert \\mathbf{x} \\sim \\mathrm{Poisson}(\\beta_0 + \\beta_1 x_1 + \\ldots + \\beta_p x_p)\\]\nPrior\nThere is no conjugate prior for the Poisson regression and we use \\[\\boldsymbol{\\beta} \\sim N(\\mathbf{0},\\tau^2 \\mathbf{I}_p),  \\] where the hyperparameter \\(\\tau\\) can be fixed by the user or learned from the data. In the latter case we use a half-Cauchy prior for \\({\\tau \\sim C^+(0,1)}\\)."
+  },
+  {
+    "objectID": "notebooks/ebayCountRegression/ebayCountRegression.html#footnotes",
+    "href": "notebooks/ebayCountRegression/ebayCountRegression.html#footnotes",
+    "title": "Bayesian Count regression in RStan",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nChaudhuri, P. and J. S. Marron (1999). Sizer for exploration of structures in curves. Journal of the American Statistical Association↩︎"
+  },
+  {
+    "objectID": "exercises.html",
+    "href": "exercises.html",
+    "title": "Exercises",
+    "section": "",
+    "text": "The exercises and suggested solutions from the book.\n\nChapter 1 - The Bayesics\n\n\nChapter 2 - One-parameter models\n\n\n\n\n\n\n\nEx 2.1\n\n\n\n\n\nEx 2.2\n\n\n\n\n\n\n\n\nChapter 3 - Multi-parameter models\n\n\nChapter 4 - Priors\n\n\nChapter 5 - Regression\n\n\nChapter 6 - Prediction and Decision making\n\n\nChapter 7 - Normal posterior approximation\n\n\nChapter 8 - Classification\n\n\nChapter 9 - Gibbs sampling\n\n\nChapter 10 - Markov Chain Monte Carlo simulation\n\n\nChapter 11 - Variational inference\n\n\nChapter 12 - Regularization\n\n\nChapter 13 - Mixture models and Bayesian nonparametrics\n\n\nChapter 14 - Model comparison and variable selection\n\n\nChapter 15 - Gaussian processes\n\n\nChapter 16 - Interaction models\n\n\nChapter 17 - Dynamic models and sequential inference"
+  },
+  {
+    "objectID": "exercises/ch2_exercise_solutions.html",
+    "href": "exercises/ch2_exercise_solutions.html",
+    "title": "Solutions to Exercises from Bayesian Learning",
+    "section": "",
+    "text": "Chapter 1 Chapter 2 Chapter 3 Chapter 5 Chapter 5 Chapter 6 Chapter 7 Chapter 8 Chapter 9 Chapter 10\n\nExercise 2.1\nThe likelihood from an iid sample from \\(\\mathrm{Expon}(\\theta)\\) is \\[\np(x_1,\\ldots,x_n \\vert \\theta)=\\prod_{i=1}^n \\theta e^{-\\theta x_i} = \\theta^n e^{-\\theta\\sum_{i=1}^n x_i}\n\\] The density of the \\(\\theta \\sim \\mathrm{Gamma}(\\alpha,\\beta)\\) prior is proportional to \\[\np(\\theta) \\propto \\theta^{\\alpha-1}\\exp(-\\beta\\theta)\n\\]\nBy Bayes’ theorem, the posterior distribution is \\[\n\\begin{align}\n  p(\\theta \\vert x_1,\\ldots,x_n) &\\propto p(x_1,\\ldots,x_n \\vert \\theta)p(\\theta)   \\\\\n& = \\theta^n e^{-\\theta\\sum_{i=1}^n x_i}\\theta^{\\alpha-1}\\exp(-\\beta\\theta)  \\\\\n& =  \\theta^{\\alpha + n - 1} e^{ -\\theta(\\beta + \\sum_{i=1}^n x_i)},\n\\end{align}\n\\] which can be recognized as proportional to the \\(\\theta \\sim \\mathrm{Gamma}(\\alpha +n,\\beta + \\sum_{i=1}^n x_i)\\) distribution. Since the prior and posterior belongs to the same (Gamma) distributional family, the Gamma prior is conjugate to the exponential likelihood."
+  },
+  {
+    "objectID": "exercises/exercise_solutions.html",
+    "href": "exercises/exercise_solutions.html",
+    "title": "Solutions to Exercises from Bayesian Learning",
+    "section": "",
+    "text": "Chapter 1 Chapter 2 Chapter 3 Chapter 5 Chapter 5 Chapter 6 Chapter 7 Chapter 8 Chapter 9 Chapter 10"
+  },
+  {
+    "objectID": "exercises/ch2solutions.html",
+    "href": "exercises/ch2solutions.html",
+    "title": "Solutions to Exercises from Bayesian Learning",
+    "section": "",
+    "text": "Exercise 2.1\nThe likelihood from an iid sample from \\(\\mathrm{Expon}(\\theta)\\) is \\[\np(x_1,\\ldots,x_n \\vert \\theta)=\\prod_{i=1}^n \\theta e^{-\\theta x_i} = \\theta^n e^{-\\theta\\sum_{i=1}^n x_i}\n\\] The density of the \\(\\theta \\sim \\mathrm{Gamma}(\\alpha,\\beta)\\) prior is proportional to \\[\np(\\theta) \\propto \\theta^{\\alpha-1}\\exp(-\\beta\\theta)\n\\]\nBy Bayes’ theorem, the posterior distribution is \\[\n\\begin{align}\n  p(\\theta \\vert x_1,\\ldots,x_n) &\\propto p(x_1,\\ldots,x_n \\vert \\theta)p(\\theta)   \\\\\n& = \\theta^n e^{-\\theta\\sum_{i=1}^n x_i}\\theta^{\\alpha-1}\\exp(-\\beta\\theta)  \\\\\n& =  \\theta^{\\alpha + n - 1} e^{ -\\theta(\\beta + \\sum_{i=1}^n x_i)},\n\\end{align}\n\\] which can be recognized as proportional to the \\(\\theta \\sim \\mathrm{Gamma}(\\alpha +n,\\beta + \\sum_{i=1}^n x_i)\\) distribution. Since the prior and posterior belongs to the same (Gamma) distributional family, the Gamma prior is conjugate to the exponential likelihood."
+  },
+  {
+    "objectID": "exercise_solutions.html",
+    "href": "exercise_solutions.html",
+    "title": "Solutions to Exercises from Bayesian Learning",
+    "section": "",
+    "text": "Chapter 1 Chapter 2 Chapter 3 Chapter 5 Chapter 5 Chapter 6 Chapter 7 Chapter 8 Chapter 9 Chapter 10"
   }
 ]

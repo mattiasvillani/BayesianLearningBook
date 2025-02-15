@@ -1,0 +1,16 @@
+---
+title: "Solutions to Exercises from Bayesian Learning"
+author: "Mattias Villani"
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+![](../figs/linocut_mountaintops.png)
+
+[Chapter 1](/exercises/ch1solutions.qmd)<br> [Chapter 2](/exercises/ch2solutions.qmd)<br>
+[Chapter 3](/exercises/ch3solutions.qmd)<br> [Chapter 5](/exercises/ch4solutions.qmd)<br>
+[Chapter 5](/exercises/ch5solutions.qmd)<br> [Chapter 6](/exercises/ch6solutions.qmd)<br>
+[Chapter 7](/exercises/ch7solutions.qmd)<br> [Chapter 8](/exercises/ch8solutions.qmd)<br>
+[Chapter 9](/exercises/ch9solutions.qmd)<br> [Chapter 10](/exercises/ch10solutions.qmd)
+

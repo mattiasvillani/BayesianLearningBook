@@ -8,6 +8,8 @@ website:
     left:
       - href: index.qmd
         text: Home
+      - href: exercise_solutions.qmd
+        text: Exercises
       - href: notebooks.qmd
         text: Notebooks
       - href: code.qmd

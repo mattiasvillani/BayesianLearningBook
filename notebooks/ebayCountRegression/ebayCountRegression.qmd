@@ -1,14 +1,176 @@
 ---
-title: "Count data regression in Stan"
+title: "Bayesian Count regression in RStan"
 author: "Mattias Villani"
 ---
 
-
-
-#### Variational approximation of the posterior
 ```{r}
-#l2regmodel = stan_model(model_code = l2regression)
-#vb_fit = vb(l2regmodel, data = c(data, prior), algorithm = "meanfield")
-#s <- summary(vb_fit, probs = c(0.025, 0.975))
-#s$summary  # all chaines merged
+#| echo: false
+#| output: false
+colors = c("#6C8EBF", "#c0a34d", "#780000", "#007878", "#b5c6df","#eadaaa")
 ```
+
+
+### Poisson regression
+
+**Model**
+
+This notebook illustrate how to do a Bayesian analysis using `rstan` for the Poisson regression model for count data response $y$ conditional on $p$ covariates $\mathbf{x}=(x_1,\dots,x_p)^\top$:
+$$y \vert \mathbf{x} \sim \mathrm{Poisson}(\beta_0 + \beta_1 x_1 + \ldots + \beta_p x_p)$$
+
+**Prior**
+
+There is no conjugate prior for the Poisson regression and we use
+$$\boldsymbol{\beta} \sim N(\mathbf{0},\tau^2 \mathbf{I}_p),  $$
+where the hyperparameter $\tau$ can be fixed by the user or learned from the data. In the latter case we use a half-Cauchy prior for ${\tau \sim C^+(0,1)}$.
+
+### Rstan: Install, load, use all cores and no recompile unless needed
+```{r}
+#install.packages("rstan", repos = c('https://stan-dev.r-universe.dev', 
+#                                    getOption("repos")))
+suppressMessages(library(rstan))
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+```
+
+
+### Load the fossil data ^[Chaudhuri, P. and J. S. Marron (1999). [Sizer for exploration of structures in curves. *Journal of the American Statistical Association*](https://www.tandfonline.com/doi/abs/10.1080/01621459.1999.10474186)]
+```{r}
+# Read and transform data
+rawdata <- read.csv(
+  file = "https://github.com/mattiasvillani/introbayes/raw/main/data/fossil.csv"
+)
+n  = dim(rawdata)[1]
+y = rawdata$strontium_ratio
+x = rawdata$age
+plot(x, y, pch = 16, ylab = "strontium_ratio", xlab = "age", col = colors[1], 
+     main = "fossil data")
+```
+
+### Standardize the covariates and the response variable
+```{r}
+mean_y = mean(y)
+mean_x = mean(x)
+sd_y = sd(y)
+sd_x = sd(x)
+y = (y - mean_y)/sd_y
+x = (x - mean_x)/sd_x
+```
+
+### Set up covariate matrix from 10 degree polynomial
+```{r}
+degree = 10 # polynomial degree
+X = matrix(rep(0, n*degree), n, degree)
+for (k in 1:degree){
+  X[, k] = x^k
+}
+p = dim(X)[2]
+```
+
+### Setup stan data structures and set prior hyperparameters values
+```{r}
+data <- list(n = length(y), p = p, X = X, y = y)
+prior <- list(sigma0_intercept = 100, nu0 = 2, sigma20 = 0.11, omega0 = 10, 
+              psi20 = 100)
+```
+
+### Set up stan model (can also be defined in a separate file)
+```{r}
+l2regression = '
+data {
+  // data
+  int<lower=0> n;   // number of observations
+  int<lower=0> p;   // number of covariates
+  matrix[n, p] X;   // covariate matrix
+  vector[n] y;      // response vector
+  // prior
+  real<lower=0> sigma0_intercept;
+  real<lower=0> nu0;
+  real<lower=0> sigma20;
+  real<lower=0> omega0;
+  real<lower=0> psi20;
+}
+parameters {
+  real beta0;            // intercept
+  vector[p] beta;        // regression coefficients
+  real<lower=0> sigma2;  // error standard deviation
+  real<lower=0> psi2;    // psi2 = 1 / lambda, in the usual L2-regularization 
+}
+model {
+  beta0 ~ normal(0, sigma0_intercept);
+  sigma2 ~ scaled_inv_chi_square(nu0, sqrt(sigma20));
+  psi2 ~ scaled_inv_chi_square(omega0, sqrt(psi20));
+  beta ~ normal(0, sqrt(sigma2*psi2));
+  y ~ normal(beta0 + X * beta, sqrt(sigma2));  
+}
+generated quantities {
+  real<lower=0> lambda = 1/psi2;
+}
+'
+```
+
+### Run the HMC sampling and summarize the results
+```{r}
+nDraws = 5000
+fit = stan(model_code = l2regression, data = c(data, prior), iter = nDraws)
+s <- summary(fit, probs = c(0.025, 0.975))
+s$summary  # all chaines merged
+```
+
+The posterior mean and 80% and 95% credible intervals for the $\beta$ parameters
+```{r}
+plot(fit, pars = c("beta"))
+```
+and for $\lambda$ and $\sigma^2$
+```{r}
+plot(fit, pars = c("lambda", "sigma2"))
+```
+
+Extract the draws for $\lambda$ and $\sigma^2$ and plot histograms.
+```{r}
+postsamples <- extract(fit, pars = c("lambda", "sigma2"))
+par(mfrow = c(1,2))
+hist(postsamples$lambda, 50, freq = FALSE, col = colors[2], 
+     xlab = expression(lambda), ylab = "posterior density", 
+     main = expression(lambda))
+hist(sqrt(postsamples$sigma2), 50, freq = FALSE, col = colors[2], 
+     xlab = expression(sigma), ylab = "posterior density",
+     main = expression(sigma))
+```
+
+Plot the fit with 95% credible bands
+```{r}
+nThin = 10  # Only keep every nThin draws (for storage)
+m = floor(nDraws/nThin)
+nGrid <- 200 # Number of gridpoints in x-space
+postsamples <- extract(fit)
+nDraws <- dim(postsamples$beta)[1]
+xGrid <- seq(min(x), max(x), length = nGrid)
+XGrid = matrix(rep(0, nGrid*degree), nGrid, degree)
+for (k in 1:degree){
+  XGrid[, k] = xGrid^k
+}
+postSampRegLine <- matrix(rep(0, m*length(xGrid)), m, length(xGrid))
+predSamp <- matrix(rep(0, m*length(xGrid)), m, length(xGrid))
+for (i in 1:m){
+  j = 1 + (i-1)*nThin
+  postSampRegLine[i,] <- postsamples$beta0[j] + XGrid %*% postsamples$beta[j,]
+  predSamp[i,] <- postSampRegLine[i,] + rnorm(1, 0, sqrt(postsamples$sigma2[i]))
+}
+plot(x, y, pch = 16, col = "darkgray", cex = 0.5, ylim = c(-3,3),
+     xlab = "age (standardized)", ylab = "strontium ratio (standardized)")
+lines(xGrid, colMeans(postSampRegLine), type = "l", col = colors[3])
+lines(xGrid, apply(postSampRegLine, 2, quantile, probs = c(0.025) ), type = "l", col = colors[1])
+lines(xGrid, apply(postSampRegLine, 2, quantile, probs = c(0.975) ), type = "l", col = colors[1])
+lines(xGrid, apply(predSamp, 2, quantile, probs = c(0.025) ), type = "l", lty = 2, col = "black")
+lines(xGrid, apply(predSamp, 2, quantile, probs = c(0.975) ), type = "l", lty = 2, col =  "black")
+
+legend(x = "bottomleft", inset=.05,
+         legend = c("Data", "Posterior mean", "C.I.", "P.I."), lwd = c(3,3,3,3),
+         pch = c(19,NA,NA,NA), lty = c(0,1,1,2),
+         col = c("darkgray", colors[3], colors[1], "black"), box.lty=1
+  )
+
+```
+
+
+

@@ -6,7 +6,7 @@ editor:
     wrap: 72
 ---
 
-![](../figs/linocut_mountaintops.png)
+![](figs/linocut_mountaintops.png)
 
 [Chapter 1](/exercises/ch1solutions.qmd)<br> [Chapter 2](/exercises/ch2solutions.qmd)<br>
 [Chapter 3](/exercises/ch3solutions.qmd)<br> [Chapter 5](/exercises/ch4solutions.qmd)<br>

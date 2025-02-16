@@ -1,0 +1,25 @@
+
+### Exercise 2.1
+Let $X_1,\ldots,X_n \vert \theta \overset{\mathrm{iid}}{\sim} \mathrm{Expon}(\theta)$ be exponentially distributed data. Show that the Gamma distribution is the conjugate prior for this model.
+
+::: {#prob:expon_post .callout-note icon="false" collapse="true"}
+## Solution Exercise 2.1
+The likelihood from an iid sample from $\mathrm{Expon}(\theta)$ is 
+$$
+p(x_1,\ldots,x_n \vert \theta)= \prod_{i=1}^n p(x_i \vert \theta) = 
+  \prod_{i=1}^n \theta e^{-\theta x_i} = \theta^n e^{-\theta\sum_{i=1}^n x_i}
+$$ The density of the $\theta \sim \mathrm{Gamma}(\alpha,\beta)$ prior is $$
+p(\theta) =  \frac{\beta^\alpha}{\Gamma(\alpha)}\theta^{\alpha-1}e^{-\beta\theta} 
+             \propto \theta^{\alpha-1}e^{-\beta\theta}
+$$
+
+By Bayes' theorem, the posterior distribution is 
+$$
+\begin{align}
+  p(\theta \vert x_1,\ldots,x_n) &\propto p(x_1,\ldots,x_n \vert \theta)p(\theta)   \\
+ & = \theta^n e^{-\theta\sum_{i=1}^n x_i}\theta^{\alpha-1}e^{-\beta\theta}  \\
+ & =  \theta^{\alpha + n - 1} e^{ -\theta(\beta + \sum_{i=1}^n x_i)},
+\end{align}
+$$ 
+which can be recognized as proportional to the $\theta \sim \mathrm{Gamma}(\alpha +n,\beta + \sum\nolimits_{i=1}^n x_i)$ distribution. Since the prior and posterior belongs to the same (Gamma) distributional family, the Gamma prior is indeed conjugate to the exponential likelihood.
+:::

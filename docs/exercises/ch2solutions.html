@@ -8,7 +8,7 @@
 
 <meta name="author" content="Mattias Villani">
 
-<title>Bayesian Learning Book - Solutions to Exercises from Bayesian Learning</title>
+<title>Bayesian Learning Book - Solutions to Exercises - Chapter 2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -123,14 +157,21 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#exercise-2.1" id="toc-exercise-2.1" class="nav-link active" data-scroll-target="#exercise-2.1">Exercise 2.1</a></li>
+  <li><a href="#exercise-2.2" id="toc-exercise-2.2" class="nav-link" data-scroll-target="#exercise-2.2">Exercise 2.2</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Solutions to Exercises from Bayesian Learning</h1>
+<h1 class="title">Solutions to Exercises - Chapter 2</h1>
 </div>
 
 
@@ -151,20 +192,201 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="exercise-2.1" class="level4">
-<h4 class="anchored" data-anchor-id="exercise-2.1">Exercise 2.1</h4>
+<p>Click on the arrow to see a solution.</p>
+<section id="exercise-2.1" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2.1">Exercise 2.1</h3>
+<p>Let <span class="math inline">\(X_1,\ldots,X_n \vert \theta \overset{\mathrm{iid}}{\sim} \mathrm{Expon}(\theta)\)</span> be exponentially distributed data. Show that the Gamma distribution is the conjugate prior for this model.</p>
+<div id="prob:expon_post" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution Exercise 2.1
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>The likelihood from an iid sample from <span class="math inline">\(\mathrm{Expon}(\theta)\)</span> is <span class="math display">\[
-p(x_1,\ldots,x_n \vert \theta)=\prod_{i=1}^n \theta e^{-\theta x_i} = \theta^n e^{-\theta\sum_{i=1}^n x_i}
-\]</span> The density of the <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha,\beta)\)</span> prior is proportional to <span class="math display">\[
-p(\theta) \propto \theta^{\alpha-1}\exp(-\beta\theta)
+p(x_1,\ldots,x_n \vert \theta)= \prod_{i=1}^n p(x_i \vert \theta) =
+  \prod_{i=1}^n \theta e^{-\theta x_i} = \theta^n e^{-\theta\sum_{i=1}^n x_i}
+\]</span> The density of the <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha,\beta)\)</span> prior is <span class="math display">\[
+p(\theta) =  \frac{\beta^\alpha}{\Gamma(\alpha)}\theta^{\alpha-1}e^{-\beta\theta}
+             \propto \theta^{\alpha-1}e^{-\beta\theta}
 \]</span></p>
 <p>By Bayes’ theorem, the posterior distribution is <span class="math display">\[
 \begin{align}
   p(\theta \vert x_1,\ldots,x_n) &amp;\propto p(x_1,\ldots,x_n \vert \theta)p(\theta)   \\
-&amp; = \theta^n e^{-\theta\sum_{i=1}^n x_i}\theta^{\alpha-1}\exp(-\beta\theta)  \\
+&amp; = \theta^n e^{-\theta\sum_{i=1}^n x_i}\theta^{\alpha-1}e^{-\beta\theta}  \\
 &amp; =  \theta^{\alpha + n - 1} e^{ -\theta(\beta + \sum_{i=1}^n x_i)},
 \end{align}
-\]</span> which can be recognized as proportional to the <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha +n,\beta + \sum_{i=1}^n x_i)\)</span> distribution. Since the prior and posterior belongs to the same (Gamma) distributional family, the Gamma prior is conjugate to the exponential likelihood.</p>
+\]</span> which can be recognized as proportional to the <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha +n,\beta + \sum\nolimits_{i=1}^n x_i)\)</span> distribution. Since the prior and posterior belongs to the same (Gamma) distributional family, the Gamma prior is indeed conjugate to the exponential likelihood.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-2.2" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2.2">Exercise 2.2</h3>
+<p>The dataset <code>lung</code> in the R package <code>survival</code> contains data on 228 patients with advanced lung cancer. We will here analyze the survival time in days for the patients which is recorded by the variable <code>time</code>. The variable <code>status</code> is a binary variable with <code>status = 1</code> if the survival time of the patient is censored (patient still alive at the end of the study) and <code>status = 2</code> if the survival time was uncensored (patient dead before the end of the study).</p>
+<ol type="a">
+<li>Consider first only the uncensored patients (<code>status = 2</code>). Assume that the survival time <span class="math inline">\(X\)</span> of the patients are independent exponentially distributed with a common rate parameter <span class="math inline">\(\theta\)</span> such that <span class="math inline">\(\mathbb{E}(X \vert \theta) = 1/\theta\)</span>. Assume the conjugate prior <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha,\beta)\)</span>. A doctor tells you that the expected time until death (<span class="math inline">\(1/\theta\)</span>) for this population is around <span class="math inline">\(200\)</span> days. It can be shown that setting <span class="math inline">\(\alpha=3\)</span> and <span class="math inline">\(\beta=300\)</span> implies that the prior mean for <span class="math inline">\(\mathbb{E}(X \vert \theta) = 1/\theta\)</span> is <span class="math inline">\(200\)</span> days, so use that prior. Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values.</li>
+<li>Now consider all patients, both censored and uncensored, using the same prior as in (a). Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values. : The posterior is no longer tractable due to contributions of the censored patients to the likelihood. For the censored patients we only know that they lived the number of days recorded in the dataset. The likelihood contribution <span class="math inline">\(p(x_c \vert \theta)\)</span> for the <span class="math inline">\(c\)</span>th censored patient with recorded time <span class="math inline">\(x_c\)</span> is therefore <span class="math inline">\(p(X \geq x_c \vert \theta) = e^{-\theta x_c}\)</span>, which follows from the distribution function of the exponential distribution <span class="math inline">\(p(X \leq x \vert \theta) = 1 - e^{-\theta x}\)</span>.</li>
+</ol>
+<div id="prob:expon_lung_a" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution Exercise 2.2 a.
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>From Exercise 2.1, we know that the posterior distribution is <span class="math display">\[\theta \sim \mathrm{Gamma}(\alpha + n_u, \beta + \sum\nolimits_{u \in \mathcal{U}} x_u),\]</span> where <span class="math inline">\(n_u\)</span> is the number of uncensored observations and <span class="math inline">\(\mathcal{U}\)</span> is the set of observation indices for the uncensored data.</p>
+<p>The following code plots the prior, likelihood (normalized) and posterior over a grid of values for <span class="math inline">\(\theta\)</span>. Note that the data is so much stronger than the prior that the posterior is virtually identical to the likelihood, which is why the normalized likelihood is not visible in the plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># loads data manipulation and visualization packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival) <span class="co"># loads the lung cancer data as `lung`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the data needed for the posterior, filter out censored data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_summary <span class="ot">&lt;-</span> lung <span class="sc">%&gt;%</span> <span class="fu">filter</span>(status <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">sum_x =</span> <span class="fu">sum</span>(time))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up prior hyperparameters</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>alpha_prior <span class="ot">&lt;-</span> <span class="dv">3</span>   <span class="co"># shape parameter</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>beta_prior <span class="ot">&lt;-</span> <span class="dv">300</span>  <span class="co"># rate parameter</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute posterior hyperparameters</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>alpha_post <span class="ot">&lt;-</span> alpha_prior <span class="sc">+</span> data_summary<span class="sc">$</span>n  </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>beta_post <span class="ot">&lt;-</span> beta_prior <span class="sc">+</span> data_summary<span class="sc">$</span>sum_x   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the prior and posterior densities, and the (normalized) likelihood as a bon </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>thetaGrid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.03</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>prior_density <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> alpha_prior, <span class="at">rate =</span> beta_prior)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>likelihood_density <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> data_summary<span class="sc">$</span>n, <span class="at">rate =</span> data_summary<span class="sc">$</span>sum_x)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>posterior_density <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> alpha_post, <span class="at">rate =</span> beta_post)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">thetaGrid =</span> thetaGrid, </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> prior_density, </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">likelihood =</span> likelihood_density,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">posterior =</span> posterior_density</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="sc">-</span>thetaGrid, <span class="at">names_to =</span> <span class="st">"density_type"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot using ggplot2</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_long) <span class="sc">+</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> thetaGrid, <span class="at">y =</span> density, <span class="at">color =</span> density_type) <span class="sc">+</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"prior"</span>, <span class="st">"likelihood"</span>, <span class="st">"posterior"</span>), </span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(colors[<span class="dv">2</span>], colors[<span class="dv">1</span>], colors[<span class="dv">3</span>])) <span class="sc">+</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Exercise 2.2"</span>, <span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Density"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="ch2solutions_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="prob:expon_lung_b" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution Exercise 2.2 b.
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The likelihood for all data, censored and uncensored, is <span class="math display">\[
+\begin{align}
+p(x_1,\ldots,x_n \vert \theta) &amp; = \prod_{i=1}^n p(x_i \vert \theta) \\
+&amp; = \prod_{u \in \mathcal{U}} p(x_u \vert \theta) \prod_{c \in \mathcal{C}} p(x_c \vert \theta) \\
+&amp; = \prod_{u \in \mathcal{U}} p(x_u \vert \theta) \prod_{c \in \mathcal{C}} \left(1 - F(x_c \vert \theta)\right)
+\end{align}
+\]</span> where <span class="math inline">\(\mathcal{U}\)</span> and <span class="math inline">\(\mathcal{C}\)</span> are the sets of observation indicies for the uncensored and censored data, respectively. The likelihood for the uncensored data (the first product) is the same as before <span class="math display">\[
+\prod_{u \in \mathcal{U}} p(x_u \vert \theta) = \prod_{u \in \mathcal{U}} \theta e^{-\theta x_u} = \theta^{n_u} e^{-\theta\sum_{u \in \mathcal{U}} x_u},
+\]</span> where <span class="math inline">\(n_u\)</span> is the number of uncensored observations. The likelihood contribution for each observation in the censored set (the second product) is the survival function <span class="math display">\[
+\mathrm{Pr}(X \geq x_c) = 1 - F(x_c \vert \theta),
+\]</span> where <span class="math inline">\(F(x_c \vert \theta) = 1 - e^{-x_c \theta}\)</span> is the cumulative distribution function of the exponential distribution evaluated at <span class="math inline">\(x_c\)</span>.</p>
+<p>So the likelihood function is <span class="math display">\[
+p(x_1,\ldots,x_n \vert \theta) = \theta^n e^{-\theta\sum_{u \in \mathcal{U}} x_u} \times e^{-\theta \sum_{u \in \mathcal{U}} x_c} = \theta^{n_u} e^{-\theta\sum_{i = 1}^n x_i}.
+\]</span> where one should note that <span class="math inline">\(\theta\)</span> is raised to the number of uncensored observations, <span class="math inline">\(n_u\)</span> while the sum in the exponential term includes both uncensored and censored observations.</p>
+<p>By Bayes’ theorem, the posterior distribution is again a Gamma distribution <span class="math display">\[
+\begin{align}
+p(\theta \vert x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \\
+&amp; \propto \theta^{n_u} e^{-\theta\sum_{i = 1}^n x_i} \times \theta^{\alpha-1}e^{-\beta\theta} \\
+&amp; = \theta^{\alpha + n_u - 1} e^{ -\theta(\beta + \sum_{i = 1}^n x_i)},
+\end{align}
+\]</span> which we recognize as proportional to the following Gamma distribution <span class="math display">\[
+\theta \vert x_1,\ldots,x_n \sim \mathrm{Gamma}(\alpha + n_u,\beta + \sum\nolimits_{i=1}^n x_i).
+\]</span></p>
+<p>The code below plots both:</p>
+<ul>
+<li>the posterior from the previous exercise (a) with only the uncensored data and</li>
+<li>the posterior from with all data.</li>
+</ul>
+<p>The posterior with all data is more informative and concentrates on smaller <span class="math inline">\(\theta\)</span> values. Since smaller <span class="math inline">\(\theta\)</span> values correspond to longer expected survival times, this is makes sense since the censored patients were still alive at the end of the study.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the data needed for the posterior, grouped by `status`:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data_summary <span class="ot">&lt;-</span> lung <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(status) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">sum_x =</span> <span class="fu">sum</span>(time))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up prior hyperparameters</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>alpha_prior <span class="ot">&lt;-</span> <span class="dv">3</span>   <span class="co"># shape parameter</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>beta_prior <span class="ot">&lt;-</span> <span class="dv">300</span>  <span class="co"># rate parameter</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute posterior hyperparameters - only uncensored data</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>alpha_post_u <span class="ot">&lt;-</span> alpha_prior <span class="sc">+</span> data_summary<span class="sc">$</span>n[<span class="dv">2</span>] <span class="co"># second row is uncensored data (status = 2)  </span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>beta_post_u <span class="ot">&lt;-</span> beta_prior <span class="sc">+</span> data_summary<span class="sc">$</span>sum_x[<span class="dv">2</span>] <span class="co"># sum over uncensored observations</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute posterior hyperparameters - all data</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>alpha_post_all <span class="ot">&lt;-</span> alpha_prior <span class="sc">+</span> data_summary<span class="sc">$</span>n[<span class="dv">2</span>] <span class="co"># note: this is still n_u </span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>beta_post_all <span class="ot">&lt;-</span> beta_prior <span class="sc">+</span> <span class="fu">sum</span>(data_summary<span class="sc">$</span>sum_x) <span class="co"># sum over all observations   </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the prior and the two posterior densities </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>thetaGrid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.03</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>prior_density <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> alpha_prior, <span class="at">rate =</span> beta_prior)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>posterior_density_u <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> alpha_post_u, <span class="at">rate =</span> beta_post_u)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>posterior_density_all <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> alpha_post_all, <span class="at">rate =</span> beta_post_all)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">thetaGrid =</span> thetaGrid, </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> prior_density, </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">posterior_uncensored =</span> posterior_density_u,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">posterior_all =</span> posterior_density_all</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="sc">-</span>thetaGrid, <span class="at">names_to =</span> <span class="st">"density_type"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot using ggplot2</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_long) <span class="sc">+</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> thetaGrid, <span class="at">y =</span> density, <span class="at">color =</span> density_type) <span class="sc">+</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"prior"</span>, <span class="st">"posterior_uncensored"</span>, <span class="st">"posterior_all"</span>), </span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(colors[<span class="dv">2</span>], colors[<span class="dv">3</span>], colors[<span class="dv">4</span>])) <span class="sc">+</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Exercise 2.2"</span>, <span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Density"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="ch2solutions_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 
 </section>

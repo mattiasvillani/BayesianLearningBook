@@ -1,5 +1,5 @@
 ---
-title: "Solutions to Exercises from Bayesian Learning"
+title: "Exercise Solutions -  Bayesian Learning book"
 author: "Mattias Villani"
 editor: 
   markdown: 

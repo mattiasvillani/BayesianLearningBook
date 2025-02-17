@@ -17,7 +17,7 @@ By Bayes' theorem, the posterior distribution is
 $$
 \begin{align}
   p(\theta \vert x_1,\ldots,x_n) &\propto p(x_1,\ldots,x_n \vert \theta)p(\theta)   \\
- & = \theta^n e^{-\theta\sum_{i=1}^n x_i}\theta^{\alpha-1}e^{-\beta\theta}  \\
+ & \propto \theta^n e^{-\theta\sum_{i=1}^n x_i}\theta^{\alpha-1}e^{-\beta\theta}  \\
  & =  \theta^{\alpha + n - 1} e^{ -\theta(\beta + \sum_{i=1}^n x_i)},
 \end{align}
 $$ 

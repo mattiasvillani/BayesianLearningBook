@@ -33,7 +33,7 @@ rstan_options(auto_write = TRUE)
 ```
 
 
-### Load the fossil data ^[Chaudhuri, P. and J. S. Marron (1999). [Sizer for exploration of structures in curves. *Journal of the American Statistical Association*](https://www.tandfonline.com/doi/abs/10.1080/01621459.1999.10474186)]
+### Load the eBay data ^[Wegmann, B. and Villani, M. (1999). [Sizer for exploration of structures in curves. *Journal of the American Statistical Association*](https://www.tandfonline.com/doi/abs/10.1080/01621459.1999.10474186)]
 ```{r}
 # Read and transform data
 rawdata <- read.csv(

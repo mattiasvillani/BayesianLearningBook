@@ -160,7 +160,7 @@ p(\theta) =  \frac{\beta^\alpha}{\Gamma(\alpha)}\theta^{\alpha-1}e^{-\beta\theta
 <p>By Bayes’ theorem, the posterior distribution is <span class="math display">\[
 \begin{align}
   p(\theta \vert x_1,\ldots,x_n) &amp;\propto p(x_1,\ldots,x_n \vert \theta)p(\theta)   \\
-&amp; = \theta^n e^{-\theta\sum_{i=1}^n x_i}\theta^{\alpha-1}e^{-\beta\theta}  \\
+&amp; \propto \theta^n e^{-\theta\sum_{i=1}^n x_i}\theta^{\alpha-1}e^{-\beta\theta}  \\
 &amp; =  \theta^{\alpha + n - 1} e^{ -\theta(\beta + \sum_{i=1}^n x_i)},
 \end{align}
 \]</span> which can be recognized as proportional to the <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha +n,\beta + \sum\nolimits_{i=1}^n x_i)\)</span> distribution. Since the prior and posterior belongs to the same (Gamma) distributional family, the Gamma prior is indeed conjugate to the exponential likelihood.</p>

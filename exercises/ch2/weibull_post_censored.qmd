@@ -1,15 +1,16 @@
 
-### Exercise 2.2
+### Exercise 2.3
 The dataset `lung` in the R package `survival` contains data on 228 patients with advanced lung cancer. We will here analyze the survival time in days for the patients which is recorded by the variable `time`. The variable `status` is a binary variable with `status = 1` if the survival time of the patient is censored (patient still alive at the end of the study) and `status = 2` if the survival time was uncensored (patient dead before the end of the study). 
 
-(a) Consider first only the uncensored patients (`status = 2`). Assume that the survival time $X$ of the patients are independent exponentially distributed with a common rate parameter $\theta$ such that $\mathbb{E}(X \vert \theta) = 1/\theta$. Assume the conjugate prior $\theta \sim \mathrm{Gamma}(\alpha,\beta)$. A doctor tells you that the expected time until death ($1/\theta$) for this population is around $200$ days. It can be shown that setting $\alpha=3$ and $\beta=300$ implies that the prior mean for $\mathbb{E}(X \vert \theta) = 1/\theta$ is $200$ days, so use that prior. Plot the prior and posterior densities for $\theta$ over a suitable grid of $\theta$-values.
-(b) Now consider all patients, both censored and uncensored, using the same prior as in (a). Plot the prior and posterior densities for $\theta$ over a suitable grid of $\theta$-values.  
-*Hint*: The posterior is no longer tractable due to contributions of the censored patients to the likelihood. For the censored patients we only know that they lived *at least* the number of days recorded in the dataset. The likelihood contribution $p(x_c \vert \theta)$ for the $c$th censored patient with recorded time $x_c$ is therefore $p(X \geq x_c \vert \theta) = e^{-\theta x_c}$, which follows from the distribution function of the exponential distribution $p(X \leq x \vert \theta) = 1 - e^{-\theta x}$.
-(c) Plot a histogram of `time` and overlay the pdf of the exponential model with the parameter $\theta$ estimated with the posterior mode.
+Assume that the survival time $X$ of the patients are independent Weibull distributed 
+$$
+X_1,\ldots,X_n \vert \theta, k \overset{\mathrm{iid}}{\sim} \mathrm{Weibull}(\theta,k).
+$$
+The exponential distribution used in Exercise 2.2 is the special case with $k=1$ where the failure (death) rate is constant over time. For $k<1$ the failure rate is descreasing with time and $k>$ gives an increasing failure rate over time. <br>
+Use the prior $\theta \sim \mathrm{Gamma}(\alpha,\beta)$ independent of $k \sim \mathrm{Expon}(\gamma)$. Set $\alpha=3$ and $\beta=300$ as in Exercise 2.2 and $\gamma = 1$ so that $\mathbb{E}(k) = 1$, i.e. the prior is centering the Weibull model on the Exponential model.
 
-
-::: {#prob:expon_lung_a .callout-note icon="false" collapse="true"}
-## Solution Exercise 2.2 a
+::: {#prob:weibull_lung .callout-note icon="false" collapse="true"}
+## Solution Exercise 2.3
 From Exercise 2.1, we know that the posterior distribution is 
 $$\theta \sim \mathrm{Gamma}(\alpha + n_u, \beta + \sum\nolimits_{u \in \mathcal{U}} x_u),$$
 where $n_u$ is the number of uncensored observations and $\mathcal{U}$ is the set of observation indices for the uncensored data.
@@ -151,6 +152,7 @@ df <- data.frame(
 
 df_long <- df %>% pivot_longer(-thetaGrid, names_to = "density_type", values_to = "density")
 
+# Plot using ggplot2
 ggplot(df_long) +
   aes(x = thetaGrid, y = density, color = density_type) +
   geom_line() +
@@ -158,25 +160,6 @@ ggplot(df_long) +
     breaks = c("prior", "posterior_uncensored", "posterior_all"), 
     values = c(colors[2], colors[3], colors[4])) +
   labs(title = "Exercise 2.2", x = expression(theta), y = "Density", color = "") + 
-  theme_minimal()
-```
-
-:::
-
-::: {#prob:expon_lung_c .callout-note icon="false" collapse="true"}
-## Solution Exercise 2.2 c
-The code below plots the histogram and the pdf of the exponential model with the parameter $\theta$ set equal to the posterior mode. It is clear that the exponential model with its monotonically decreasing density is not fitting the data well.
-```{r}
-postMode = df$thetaGrid[which.max(df$posterior_all)]
-
-ggplot(lung, aes(time)) +
-  geom_histogram(aes(y = after_stat(density), fill = "Data"), bins = 30) +
-  stat_function(fun = dexp, args = list(rate = postMode), lwd = 1, 
-                aes(color = "Exponential fit"),
-  ) +
-  labs(title = "Exercise 2.2c - Exponential model fit to lung cancer survival", x = "days", y = "Density") + 
-  scale_fill_manual("", values = colors[5]) +
-  scale_color_manual("", values = colors[3]) +
   theme_minimal()
 ```
 

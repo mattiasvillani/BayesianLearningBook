@@ -1,6 +1,6 @@
 
 ### Exercise 2.1
-Let $X_1,\ldots,X_n \vert \theta \overset{\mathrm{iid}}{\sim} \mathrm{Expon}(\theta)$ be exponentially distributed data. Show that the Gamma distribution is the conjugate prior for this model.
+Let $X_1,\ldots,X_n \vert \theta \overset{\mathrm{iid}}{\sim} \mathrm{Expon}(\theta)$ be iid exponentially distributed data. Show that the Gamma distribution is the conjugate prior for this model.
 
 ::: {#prob:expon_post .callout-note icon="false" collapse="true"}
 ## Solution Exercise 2.1

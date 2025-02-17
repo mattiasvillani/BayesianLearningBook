@@ -195,8 +195,9 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#exercise-2.1" id="toc-exercise-2.1" class="nav-link active" data-scroll-target="#exercise-2.1">Exercise 2.1</a></li>
-  <li><a href="#exercise-2.2" id="toc-exercise-2.2" class="nav-link" data-scroll-target="#exercise-2.2">Exercise 2.2</a></li>
+  <li><a href="#sec-prob_post_exp" id="toc-sec-prob_post_exp" class="nav-link active" data-scroll-target="#sec-prob_post_exp">Exercise 2.1</a></li>
+  <li><a href="#sec-prob_post_exp_lung" id="toc-sec-prob_post_exp_lung" class="nav-link" data-scroll-target="#sec-prob_post_exp_lung">Exercise 2.2</a></li>
+  <li><a href="#sec-prob_post_weibull_lung" id="toc-sec-prob_post_weibull_lung" class="nav-link" data-scroll-target="#sec-prob_post_weibull_lung">Exercise 2.3</a></li>
   </ul>
 </nav>
     </div>
@@ -229,8 +230,8 @@ window.Quarto = {
 
 
 <p>Click on the arrow to see a solution.</p>
-<section id="exercise-2.1" class="level3">
-<h3 class="anchored" data-anchor-id="exercise-2.1">Exercise 2.1</h3>
+<section id="sec-prob_post_exp" class="level3">
+<h3 class="anchored" data-anchor-id="sec-prob_post_exp">Exercise 2.1</h3>
 <p>Let <span class="math inline">\(X_1,\ldots,X_n \vert \theta \overset{\mathrm{iid}}{\sim} \mathrm{Expon}(\theta)\)</span> be iid exponentially distributed data. Show that the Gamma distribution is the conjugate prior for this model.</p>
 <div id="prob:expon_post" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -262,13 +263,14 @@ p(\theta) =  \frac{\beta^\alpha}{\Gamma(\alpha)}\theta^{\alpha-1}e^{-\beta\theta
 </div>
 </div>
 </section>
-<section id="exercise-2.2" class="level3">
-<h3 class="anchored" data-anchor-id="exercise-2.2">Exercise 2.2</h3>
+<section id="sec-prob_post_exp_lung" class="level3">
+<h3 class="anchored" data-anchor-id="sec-prob_post_exp_lung">Exercise 2.2</h3>
 <p>The dataset <code>lung</code> in the R package <code>survival</code> contains data on 228 patients with advanced lung cancer. We will here analyze the survival time in days for the patients which is recorded by the variable <code>time</code>. The variable <code>status</code> is a binary variable with <code>status = 1</code> if the survival time of the patient is censored (patient still alive at the end of the study) and <code>status = 2</code> if the survival time was uncensored (patient dead before the end of the study).</p>
 <ol type="a">
 <li>Consider first only the uncensored patients (<code>status = 2</code>). Assume that the survival time <span class="math inline">\(X\)</span> of the patients are independent exponentially distributed with a common rate parameter <span class="math inline">\(\theta\)</span> such that <span class="math inline">\(\mathbb{E}(X \vert \theta) = 1/\theta\)</span>. Assume the conjugate prior <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha,\beta)\)</span>. A doctor tells you that the expected time until death (<span class="math inline">\(1/\theta\)</span>) for this population is around <span class="math inline">\(200\)</span> days. It can be shown that setting <span class="math inline">\(\alpha=3\)</span> and <span class="math inline">\(\beta=300\)</span> implies that the prior mean for <span class="math inline">\(\mathbb{E}(X \vert \theta) = 1/\theta\)</span> is <span class="math inline">\(200\)</span> days, so use that prior. Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values.</li>
 <li>Now consider all patients, both censored and uncensored, using the same prior as in (a). Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values.<br>
 <em>Hint</em>: The posterior is no longer tractable due to contributions of the censored patients to the likelihood. For the censored patients we only know that they lived <em>at least</em> the number of days recorded in the dataset. The likelihood contribution <span class="math inline">\(p(x_c \vert \theta)\)</span> for the <span class="math inline">\(c\)</span>th censored patient with recorded time <span class="math inline">\(x_c\)</span> is therefore <span class="math inline">\(p(X \geq x_c \vert \theta) = e^{-\theta x_c}\)</span>, which follows from the distribution function of the exponential distribution <span class="math inline">\(p(X \leq x \vert \theta) = 1 - e^{-\theta x}\)</span>.</li>
+<li>Plot a histogram of <code>time</code> and overlay the pdf of the exponential model with the parameter <span class="math inline">\(\theta\)</span> estimated with the posterior mode.</li>
 </ol>
 <div id="prob:expon_lung_a" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -413,15 +415,14 @@ p(\theta \vert x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\th
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="sc">-</span>thetaGrid, <span class="at">names_to =</span> <span class="st">"density_type"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>)</span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot using ggplot2</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_long) <span class="sc">+</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> thetaGrid, <span class="at">y =</span> density, <span class="at">color =</span> density_type) <span class="sc">+</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"prior"</span>, <span class="st">"posterior_uncensored"</span>, <span class="st">"posterior_all"</span>), </span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(colors[<span class="dv">2</span>], colors[<span class="dv">3</span>], colors[<span class="dv">4</span>])) <span class="sc">+</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Exercise 2.2"</span>, <span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Density"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_long) <span class="sc">+</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> thetaGrid, <span class="at">y =</span> density, <span class="at">color =</span> density_type) <span class="sc">+</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"prior"</span>, <span class="st">"posterior_uncensored"</span>, <span class="st">"posterior_all"</span>), </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(colors[<span class="dv">2</span>], colors[<span class="dv">3</span>], colors[<span class="dv">4</span>])) <span class="sc">+</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Exercise 2.2"</span>, <span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Density"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -430,6 +431,185 @@ p(\theta \vert x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\th
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="prob:expon_lung_c" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution Exercise 2.2 c
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The code below plots the histogram and the pdf of the exponential model with the parameter <span class="math inline">\(\theta\)</span> set equal to the posterior mode. It is clear that the exponential model with its monotonically decreasing density is not fitting the data well.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>postMode <span class="ot">=</span> df<span class="sc">$</span>thetaGrid[<span class="fu">which.max</span>(df<span class="sc">$</span>posterior_all)]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lung, <span class="fu">aes</span>(time)) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density), <span class="at">fill =</span> <span class="st">"Data"</span>), <span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dexp, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">rate =</span> postMode), <span class="at">lwd =</span> <span class="dv">1</span>, </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Exponential fit"</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Exercise 2.2c - Exponential model fit to lung cancer survival"</span>, <span class="at">x =</span> <span class="st">"days"</span>, <span class="at">y =</span> <span class="st">"Density"</span>) <span class="sc">+</span> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="st">""</span>, <span class="at">values =</span> colors[<span class="dv">5</span>]) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="st">""</span>, <span class="at">values =</span> colors[<span class="dv">3</span>]) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch2solutions_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-prob_post_weibull_lung" class="level3">
+<h3 class="anchored" data-anchor-id="sec-prob_post_weibull_lung">Exercise 2.3</h3>
+<p><em>This exercise continues the analysis of the lung cancer data in Exercise 2.2. @#sec-prob_post_exp_lung </em></p>
+<p>Assume that the survival time <span class="math inline">\(X\)</span> of the lung cancer patients in Exercise 2.2 are independent Weibull distributed <span class="math display">\[
+X_1,\ldots,X_n \vert \lambda, k \overset{\mathrm{iid}}{\sim} \mathrm{Weibull}(\lambda,k).
+\]</span> The value of <span class="math inline">\(k\)</span> determines how the failure rate changes with time:</p>
+<ul>
+<li><span class="math inline">\(k=1\)</span> gives a failure (death) rate that is constant over time and corresponds to the special case of a exponential distribution <span class="math inline">\(\mathrm{Expon}(\theta=1/\lambda)\)</span> used in Exercise 2.2. Note that (following Wikipedia) the exponential distribution is parameterized with a rate (inverse scale) parameter <span class="math inline">\(\theta\)</span>, while the Weibull is parameterized with a scale parameter <span class="math inline">\(\lambda= 1/\theta\)</span> 🤷</li>
+<li><span class="math inline">\(k&lt;1\)</span> gives a decreasing failure rate over time</li>
+<li><span class="math inline">\(k&gt;1\)</span> gives an increasing failure rate over time.</li>
+</ul>
+<ol type="a">
+<li>Plot the posterior distribution of <span class="math inline">\(\lambda\)</span> conditional on <span class="math inline">\(k=1\)</span>, <span class="math inline">\(k=3/2\)</span> and <span class="math inline">\(k=2\)</span>. For all <span class="math inline">\(k\)</span>, use the prior <span class="math inline">\(\lambda \sim \mathrm{Gamma}(\alpha,\beta)\)</span> with <span class="math inline">\(\alpha=3\)</span> and <span class="math inline">\(\beta=1/50\)</span> (which a similar prior for <span class="math inline">\(\theta=1/\lambda\)</span> as in Exercise 2.2). <em>Hint</em>: the posterior distribution for <span class="math inline">\(k\neq 1\)</span> is intractable, so use numerical evaluation of the posterior over a grid of <span class="math inline">\(\lambda\)</span>-values.</li>
+<li>Plot the <code>time</code> variable as a histogram and overlay the fitted model for the three different <span class="math inline">\(k\)</span>-values; use the posterior mode for <span class="math inline">\(\theta\)</span> in each model when plotting the fitted model density.<br></li>
+</ol>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution Exercise 2.3
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Similar to Exercise 2.2, the likelihood can be computed with separate treatment of the uncensored and censored observations: <span class="math display">\[
+\begin{align}
+p(x_1,\ldots,x_n \vert \lambda, k) &amp; = \prod_{i=1}^n p(x_i \vert \lambda, k) \\
+&amp; = \prod_{u \in \mathcal{U}} p(x_u \vert \lambda, k) \prod_{c \in \mathcal{C}} \Big(1 - F(x_c \vert \lambda, k)\Big)
+\end{align}
+\]</span> where <span class="math inline">\(p(x \vert \lambda, k)\)</span> is the pdf of Weibull variable <span class="math display">\[
+p(x \vert \lambda, k) = \frac{k}{\lambda}\Big( \frac{x}{\lambda} \Big)^{k-1}e^{-(x/\lambda)^k}\quad\text{ for }x&gt;0
+\]</span> which is implemented in R as <code>dweibull</code>. The cdf of the Weibull distribution is of rather simple form <span class="math display">\[
+F(x \vert \lambda, k) = 1 - e^{-(x/\lambda)^k}
+\]</span> and is implemented in R as <code>pweibull</code>.</p>
+<p>The code below plots the prior and posterior distribution for <span class="math inline">\(\lambda\)</span> for the three different <span class="math inline">\(k\)</span>-values. We could have inserted the mathematical expressions for the pdf and cdf and simplified the final likelihood expression; we will instead use the <code>dweibull</code> and <code>pweibull</code> functions without simplifications since it gives a more general template that can be used for any distribution, not just the Weibull model. For numerical stability we usually compute the posterior distribution on the log scale <span class="math display">\[
+\log p(\lambda^{(j)} \vert x_1,\ldots,x_n) \propto \log p(x_1,\ldots,x_n \vert \lambda_j) + \log p(\lambda_j)
+\]</span> for a grid of equally spaced <span class="math inline">\(\lambda\)</span>-values: <span class="math inline">\(\lambda^{(1)}\ldots,\lambda_^{(J)}\)</span>. The <span class="math inline">\(\propto\)</span> sign now means that there is a missing <em>additive</em> constant <span class="math inline">\(\log p(x_1,\ldots,x_n)\)</span> which does not depend on the unknown parameter <span class="math inline">\(\lambda\)</span>. When we have computed <span class="math inline">\(\log p(\lambda \vert x_1,\ldots,x_n)\)</span> over a grid of <span class="math inline">\(\lambda\)</span> values we compute the posterior on the original scale by <span class="math display">\[
+p(\lambda^{(j)} \vert x_1,\ldots,x_n) \propto \exp\Big( \log p(x_1,\ldots,x_n \vert \lambda_j) + \log p(\lambda_j) \Big)
+\]</span> and then divide all numbers with the normalizing constant to make sure that the posterior integrates to one. This is done numerically by approximating the integral by a Riemann rectangle sum <span class="math display">\[
+p(\lambda^{(j)} \vert x_1,\ldots,x_n) =
+\frac{\exp\Big( \log p(x_1,\ldots,x_n \vert \lambda^{(j)}) + \log p(\lambda^{(j)}) \Big)}
+{\sum_{h=1}^J \exp\Big( \log p(x_1,\ldots,x_n \vert \lambda^{(h)}) + \log p(\lambda^{(h)}) \Big) \Delta}
+\]</span> where <span class="math inline">\(\Delta\)</span> is the spacing between the grid points of <span class="math inline">\(\lambda\)</span>-values: <span class="math inline">\(\lambda^{(1)}, \ldots, \lambda^{(J)}\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># loads data manipulation and visualization packages</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival) <span class="co"># loads the lung cancer data as `lung`</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"#6C8EBF"</span>, <span class="st">"#c0a34d"</span>, <span class="st">"#780000"</span>,<span class="st">"#007878"</span>,<span class="st">"#B5C6DF"</span>,<span class="st">"#EADAAA"</span>,<span class="st">"#AE6666"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Set up prior hyperparameters</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>alpha_prior <span class="ot">&lt;-</span> <span class="dv">3</span>     <span class="co"># shape parameter</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>beta_prior <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">300</span>  <span class="co"># rate parameter</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Set up function that computes the likelihood for any <span class="math inline">\(\lambda\)</span> value:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make a function that computes the likelihood</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>weibull_loglike <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda, x, censored, k){</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  loglik_uncensored <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">dweibull</span>(x[<span class="sc">-</span>censored], <span class="at">shape =</span> k, <span class="at">scale =</span> lambda, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  loglik_censored <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">pweibull</span>(x[censored], <span class="at">shape =</span> k, <span class="at">scale =</span> lambda, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">lower.tail =</span> <span class="cn">FALSE</span>, <span class="at">log.p =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(loglik_uncensored <span class="sc">+</span> loglik_censored)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Set up a function that computes the posterior density over a grid of <span class="math inline">\(\lambda\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>weibull_posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(lambdaGrid, x, censored, k, alpha_prior, beta_prior){</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  Delta <span class="ot">=</span> lambdaGrid[<span class="dv">2</span>] <span class="sc">-</span> lambdaGrid[<span class="dv">1</span>] <span class="co"># Grid step size</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  logPrior <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(lambdaGrid, <span class="at">shape =</span> alpha_prior, <span class="at">rate =</span> beta_prior, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  logLike <span class="ot">&lt;-</span> <span class="fu">sapply</span>(lambdaGrid, weibull_loglike, x, censored, k)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  logPost <span class="ot">&lt;-</span> logLike <span class="sc">+</span> logPrior</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  logPost <span class="ot">&lt;-</span> logPost <span class="sc">-</span> <span class="fu">max</span>(logPost) <span class="co"># subtract constant to avoid overflow</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  post <span class="ot">&lt;-</span> <span class="fu">exp</span>(logPost)<span class="sc">/</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(logPost))<span class="sc">*</span>Delta) <span class="co"># original scale and normalize</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  logLike <span class="ot">&lt;-</span> logLike <span class="sc">-</span> <span class="fu">max</span>(logLike)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  likeNorm <span class="ot">&lt;-</span> <span class="fu">exp</span>(logLike)<span class="sc">/</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(logLike))<span class="sc">*</span>Delta) <span class="co"># normalized likelihood</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">post =</span> post, <span class="at">prior =</span> <span class="fu">exp</span>(logPrior), <span class="at">likeNorm =</span> likeNorm))</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the prior and posterior densities</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>lambdaGrid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">1000</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute to get the prior</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>postRes <span class="ot">&lt;-</span> <span class="fu">weibull_posterior</span>(lambdaGrid, lung<span class="sc">$</span>time, lung<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span>, <span class="at">k =</span> <span class="dv">1</span>, </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                             alpha_prior, beta_prior)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">lambdaGrid =</span> lambdaGrid, </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> postRes<span class="sc">$</span>prior</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute for all selected k values</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>postModes <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">2</span>)){</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  postRes <span class="ot">&lt;-</span> <span class="fu">weibull_posterior</span>(lambdaGrid, lung<span class="sc">$</span>time, lung<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span>, k, alpha_prior, beta_prior)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  df[<span class="fu">str_glue</span>(<span class="st">"posterior k={k}"</span>)] <span class="ot">&lt;-</span> postRes<span class="sc">$</span>post</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  postModes <span class="ot">=</span> <span class="fu">c</span>(postModes, lambdaGrid[<span class="fu">which.max</span>(postRes<span class="sc">$</span>post)])</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>df_long <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="sc">-</span>lambdaGrid, <span class="at">names_to =</span> <span class="st">"density_type"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot using ggplot2</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>p_post <span class="ot">=</span> <span class="fu">ggplot</span>(df_long) <span class="sc">+</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> lambdaGrid, <span class="at">y =</span> density, <span class="at">color =</span> density_type) <span class="sc">+</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"prior"</span>, <span class="st">"posterior k=1"</span>, <span class="st">"posterior k=1.5"</span>, <span class="st">"posterior k=2"</span>), </span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(colors[<span class="dv">2</span>], colors[<span class="dv">1</span>], colors[<span class="dv">3</span>], colors[<span class="dv">4</span>])) <span class="sc">+</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Exercise 2.3"</span>, <span class="at">x =</span> <span class="fu">expression</span>(lambda), <span class="at">y =</span> <span class="st">"Density"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>p_fit <span class="ot">=</span> <span class="fu">ggplot</span>(lung, <span class="fu">aes</span>(time)) <span class="sc">+</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density), <span class="at">fill =</span> <span class="st">"Data"</span>), <span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dweibull, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">shape =</span> <span class="dv">1</span>, <span class="at">scale =</span> postModes[<span class="dv">1</span>]), <span class="at">lwd =</span> <span class="dv">1</span>, </span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Weibull fit k = 1/2"</span>),</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dweibull, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">shape =</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">2</span>, <span class="at">scale =</span> postModes[<span class="dv">2</span>]), <span class="at">lwd =</span> <span class="dv">1</span>, </span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Weibull fit k = 1"</span>),</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dweibull, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">shape =</span> <span class="dv">2</span>, <span class="at">scale =</span> postModes[<span class="dv">3</span>]), <span class="at">lwd =</span> <span class="dv">1</span>, </span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Weibull fit k = 2"</span>),</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Weibull model fits"</span>, <span class="at">x =</span> <span class="st">"days"</span>, <span class="at">y =</span> <span class="st">"Density"</span>) <span class="sc">+</span> </span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="st">""</span>, <span class="at">values =</span> colors[<span class="dv">6</span>]) <span class="sc">+</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="st">""</span>, <span class="at">values =</span> <span class="fu">c</span>(colors[<span class="dv">1</span>], colors[<span class="dv">3</span>], colors[<span class="dv">4</span>])) <span class="sc">+</span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(p_post, p_fit, <span class="at">nrow =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch2solutions_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>```</p>
 </div>
 </div>
 </div>

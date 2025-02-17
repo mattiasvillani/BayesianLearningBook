@@ -1,0 +1,17 @@
+---
+title: "Chapter 7 - Exercise solutions"
+author: "Mattias Villani"
+output:
+  html_document:
+    collapse: false
+---
+
+```{r}
+#| echo: false
+#| output: false
+colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE6666")
+```
+
+Click on the arrow to see a solution.
+
+{{< include ch7/prob_weibull_lung_optim.qmd >}}

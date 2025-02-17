@@ -1,0 +1,183 @@
+
+### Exercise 7.2 {#sec-prob_weibull_lung_optim}
+
+*This exercise continues the analysis of the lung cancer data in Exercise 2.3*
+
+Following Exercise 2.3, assume that the survival time $X$ of the lung cancer patients are independent Weibull distributed 
+$$
+X_1,\ldots,X_n \vert \lambda, k \overset{\mathrm{iid}}{\sim} \mathrm{Weibull}(\lambda,k).
+$$
+In Exercise 2.3 the value of $k$ was fixed; here we will treat both $\lambda$ and $k$ as unknown. Since both these parameters are positive we reparameterize first by taking logs: 
+$$\tilde\lambda := \log\lambda \text{ and } \tilde k := \log k,$$ 
+which usually improves the normal approximation.<br>
+We assume prior independence between the two parameters and priors:
+$$\lambda \sim \mathrm{LogNormal}(5,1^2) \text{ and } k \sim \mathrm{LogNormal}(0,2^2),
+$$
+which by the definition of the log-normal distribution implies that 
+$$\tilde\lambda \sim N(5,1^2) \text{ and } \tilde k \sim N(0,2^2).$$
+
+(a) Compute a bivariate normal approximation of the joint posterior distribution in the log-parameterization $p(\tilde\lambda, \tilde k \vert x_1,\ldots,x_n)$ using numerical optimization. 
+(b) Use the results from (a) to obtain a Log-normal approximation for the two marginal posterior distributions $p(\lambda \vert x_1,\ldots,x_n)$ and $p(k \vert x_1,\ldots,x_n)$ in the original parameterization. Plot the prior and posterior density for both parameters.<br>
+*hint*: remember that the marginal distributions from a bivariat normal distribution are both normal. Also, recall the relationship between normal and log-normal distributions.
+(c) If  $X \sim \mathrm{Weibull}(\lambda, k)$ then 
+$$
+\mu := \mathbb{E}(X)=\lambda\Gamma(1+1/k),
+$$
+where $\Gamma()$ is the `gamma` function. Obtain an approximate posterior distribution for $\mu$ using the results from (a) and simulation.
+
+
+::: {.callout-note icon="false" collapse="true"}
+## Solution Exercise 7.2a
+
+```{r}
+#| output: false
+library(tidyverse) # loads data manipulation and visualization packages
+library(survival) # loads the lung cancer data as `lung`
+colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE6666")
+```
+
+Set data and set up prior hyperparameters
+```{r}
+x = lung$time
+censored = (lung$status == 1)
+log_lambda_mean <- 5
+log_lambda_sd <- 1
+log_k_mean <- 0
+log_k_sd <- 2
+```
+
+Set up function that computes the log posterior for any $\boldsymbol{\theta}=(\tilde\lambda,\tilde k)$ vector. The first argument of this function **must** be a vector containing all parameters.
+```{r}
+# Function for computing the log posterior for any given parameter vector 
+logpost_weibull <- function(theta, x, censored){
+  
+  # Compute the parameters in the original scale
+  lambda = exp(theta[1])
+  k = exp(theta[2])
+  
+   # Compute the (log) joint prior density
+  logPrior = dnorm(theta[1], log_lambda_mean, log_lambda_sd, log = TRUE) +
+             dnorm(theta[2], log_k_mean, log_k_sd, log = TRUE)
+  
+  # Compute the log-likelihood
+  loglik_uncensored = sum(dweibull(x[-censored], shape = k, scale = lambda, 
+                                   log = TRUE))
+  loglik_censored = sum(pweibull(x[censored], shape = k, scale = lambda, 
+                                 lower.tail = FALSE, log.p = TRUE))
+  logLik = loglik_uncensored + loglik_censored
+  
+  # Return the log posterior
+  return(logLik + logPrior) 
+}
+```
+
+Use optim to find the posterior mode and the observed information matrix J
+```{r}
+initVal <- c(log_lambda_mean, log_k_mean) # Start optimizer at prior means
+OptimResults<-optim(initVal, logpost_weibull, gr=NULL, x, censored,
+  method = c("BFGS"), control=list(fnscale=-1), hessian=TRUE)
+postMode = OptimResults$par
+postCov = -solve(OptimResults$hessian) # inv(J) - Approx posterior covar matrix
+postStd <- sqrt(diag(postCov))         # Approximate stdev
+```
+The bivariate normal approximation for the transformed parameter vector $\boldsymbol{\theta}=(\tilde\lambda,\tilde k)$ has mean vector
+```{r}
+postMode
+```
+and covariance matrix
+```{r}
+postCov
+```
+from which we can compute approximate posterior standard deviations for $\tilde\lambda$ and $\tilde k$
+```{r}
+postStd
+```
+
+:::
+
+::: {.callout-note icon="false" collapse="true"}
+## Solution Exercise 7.2b
+Since the marginal distributions from a bivariate normal distribution are both normal, we have that the following normal posterior approximations
+$$
+\begin{align}
+  \tilde\lambda \vert x_1,\ldots,x_n & \sim N(`{r} round(postMode[1], 3)`,`{r} round(postStd[1], 3)`) \\
+  \tilde k \vert x_1,\ldots,x_n  & \sim N(`{r} round(postMode[2], 3)`,`{r} round(postStd[2], 3)`) \\
+\end{align}
+$$
+and therefore Log-Normal approximations on the original scale
+$$
+\begin{align}
+  \lambda \vert x_1,\ldots,x_n  & \sim \mathrm{LogNormal}(`{r} round(postMode[1], 3)`,`{r} round(postStd[1], 3)`) \\
+  k \vert x_1,\ldots,x_n  & \sim \mathrm{LogNormal}(`{r} round(postMode[2], 3)`,`{r} round(postStd[2], 3)`) \\
+\end{align}
+$$
+
+
+```{r}
+# Plot the prior and posterior densities
+lambdaGrid <- seq(1, 600, length = 1000)
+kGrid <- seq(0.01, 3, length = 1000)
+
+# Plot the prior and posterior densities
+prior_dens_lambda <- dlnorm(lambdaGrid, log_lambda_mean, log_lambda_sd)
+post_dens_lambda <- dlnorm(lambdaGrid, postMode[1], postStd[1])
+prior_dens_k <- dlnorm(kGrid, log_k_mean, log_k_sd)
+post_dens_k <- dlnorm(kGrid, postMode[2], postStd[2])
+
+df_lambda <- data.frame(
+  paramGrid = lambdaGrid, 
+  prior = prior_dens_lambda, 
+  posterior = post_dens_lambda
+)
+
+df_k <- data.frame(
+  paramGrid = kGrid, 
+  prior = prior_dens_k, 
+  posterior = post_dens_k
+)
+
+df_long_lambda <- df_lambda %>% pivot_longer(-paramGrid, names_to = "density_type", values_to = "density")
+
+p_lambda = ggplot(df_long_lambda) +
+  aes(x = paramGrid, y = density, color = density_type) +
+  geom_line() +
+  scale_colour_manual(
+    breaks = c("prior", "posterior"), 
+    values = c(colors[2], colors[3])) +
+  labs(title = "", x = expression(lambda), y = "Density", color = "") + 
+  theme_minimal()
+
+df_long_k <- df_k %>% pivot_longer(-paramGrid, names_to = "density_type", values_to = "density")
+
+p_k = ggplot(df_long_k) +
+  aes(x = paramGrid, y = density, color = density_type) +
+  geom_line() +
+  scale_colour_manual(
+    breaks = c("prior", "posterior"), 
+    values = c(colors[2], colors[3])) +
+  labs(title = "" , x = expression(k), y = "Density", color = "") + 
+  theme_minimal()
+
+gridExtra::grid.arrange(p_lambda, p_k, nrow = 2)
+
+```
+
+:::
+
+::: {.callout-note icon="false" collapse="true"}
+## Solution Exercise 7.2c
+We can simulate from the multivariate normal posterior approximation of $\tilde\lambda,\tilde k$ from (a), transform the draws to the orginal parameterization $\lambda,k$ and the finally compute the mean $\mu = \lambda\Gamma(1 + 1/k)$ for each draw. Like this:
+```{r}
+library(mvtnorm)
+nDraws = 5000
+thetaDraws = rmvnorm(nDraws, postMode, postCov)
+lambdaDraws = exp(thetaDraws[,1])
+kDraws = exp(thetaDraws[,2])
+muDraws = lambdaDraws*gamma(1 + (1/kDraws))
+hist(muDraws, 50, col = colors[1], freq = FALSE, xlab = expression(mu), 
+     ylab = "density", main = "Posterior for the Weibull mean")
+```
+
+
+
+:::

@@ -194,7 +194,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#exercise-2.2" id="toc-exercise-2.2" class="nav-link active" data-scroll-target="#exercise-2.2">Exercise 2.2</a></li>
+  <li><a href="#sec-prob_post_exp_lung" id="toc-sec-prob_post_exp_lung" class="nav-link active" data-scroll-target="#sec-prob_post_exp_lung">Exercise 2.2</a></li>
   </ul>
 </nav>
     </div>
@@ -204,8 +204,8 @@ window.Quarto = {
 
 
 
-<section id="exercise-2.2" class="level3">
-<h3 class="anchored" data-anchor-id="exercise-2.2">Exercise 2.2</h3>
+<section id="sec-prob_post_exp_lung" class="level3">
+<h3 class="anchored" data-anchor-id="sec-prob_post_exp_lung">Exercise 2.2</h3>
 <p>The dataset <code>lung</code> in the R package <code>survival</code> contains data on 228 patients with advanced lung cancer. We will here analyze the survival time in days for the patients which is recorded by the variable <code>time</code>. The variable <code>status</code> is a binary variable with <code>status = 1</code> if the survival time of the patient is censored (patient still alive at the end of the study) and <code>status = 2</code> if the survival time was uncensored (patient dead before the end of the study).</p>
 <ol type="a">
 <li>Consider first only the uncensored patients (<code>status = 2</code>). Assume that the survival time <span class="math inline">\(X\)</span> of the patients are independent exponentially distributed with a common rate parameter <span class="math inline">\(\theta\)</span> such that <span class="math inline">\(\mathbb{E}(X \vert \theta) = 1/\theta\)</span>. Assume the conjugate prior <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha,\beta)\)</span>. A doctor tells you that the expected time until death (<span class="math inline">\(1/\theta\)</span>) for this population is around <span class="math inline">\(200\)</span> days. It can be shown that setting <span class="math inline">\(\alpha=3\)</span> and <span class="math inline">\(\beta=300\)</span> implies that the prior mean for <span class="math inline">\(\mathbb{E}(X \vert \theta) = 1/\theta\)</span> is <span class="math inline">\(200\)</span> days, so use that prior. Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values.</li>
@@ -219,7 +219,7 @@ window.Quarto = {
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution Exercise 2.2 a
+Solution Exercise 2.2a
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -287,7 +287,7 @@ Solution Exercise 2.2 a
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution Exercise 2.2 b.
+Solution Exercise 2.2b
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>

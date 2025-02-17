@@ -1,5 +1,5 @@
 
-### Exercise 2.2
+### Exercise 2.2 {#sec-prob_post_exp_lung}
 The dataset `lung` in the R package `survival` contains data on 228 patients with advanced lung cancer. We will here analyze the survival time in days for the patients which is recorded by the variable `time`. The variable `status` is a binary variable with `status = 1` if the survival time of the patient is censored (patient still alive at the end of the study) and `status = 2` if the survival time was uncensored (patient dead before the end of the study). 
 
 (a) Consider first only the uncensored patients (`status = 2`). Assume that the survival time $X$ of the patients are independent exponentially distributed with a common rate parameter $\theta$ such that $\mathbb{E}(X \vert \theta) = 1/\theta$. Assume the conjugate prior $\theta \sim \mathrm{Gamma}(\alpha,\beta)$. A doctor tells you that the expected time until death ($1/\theta$) for this population is around $200$ days. It can be shown that setting $\alpha=3$ and $\beta=300$ implies that the prior mean for $\mathbb{E}(X \vert \theta) = 1/\theta$ is $200$ days, so use that prior. Plot the prior and posterior densities for $\theta$ over a suitable grid of $\theta$-values.
@@ -9,7 +9,7 @@ The dataset `lung` in the R package `survival` contains data on 228 patients wit
 
 
 ::: {#prob:expon_lung_a .callout-note icon="false" collapse="true"}
-## Solution Exercise 2.2 a
+## Solution Exercise 2.2a
 From Exercise 2.1, we know that the posterior distribution is 
 $$\theta \sim \mathrm{Gamma}(\alpha + n_u, \beta + \sum\nolimits_{u \in \mathcal{U}} x_u),$$
 where $n_u$ is the number of uncensored observations and $\mathcal{U}$ is the set of observation indices for the uncensored data.
@@ -69,7 +69,7 @@ ggplot(df_long) +
 
 
 ::: {#prob:expon_lung_b .callout-note icon="false" collapse="true"}
-## Solution Exercise 2.2 b.
+## Solution Exercise 2.2b
 
 The likelihood for all data, censored and uncensored, is 
 $$

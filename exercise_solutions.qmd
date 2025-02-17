@@ -8,9 +8,12 @@ editor:
 
 ![](figs/linocut_mountaintops.png)
 
-[Chapter 1](/exercises/ch1solutions.qmd)<br> [Chapter 2](/exercises/ch2solutions.qmd)<br>
-[Chapter 3](/exercises/ch3solutions.qmd)<br> [Chapter 5](/exercises/ch4solutions.qmd)<br>
-[Chapter 5](/exercises/ch5solutions.qmd)<br> [Chapter 6](/exercises/ch6solutions.qmd)<br>
-[Chapter 7](/exercises/ch7solutions.qmd)<br> [Chapter 8](/exercises/ch8solutions.qmd)<br>
-[Chapter 9](/exercises/ch9solutions.qmd)<br> [Chapter 10](/exercises/ch10solutions.qmd)
-
+Chapter 1<br> [Chapter 2](/exercises/ch2solutions.qmd)<br>
+Chapter 3<br> Chapter 5<br>
+Chapter 5<br> Chapter 6<br>
+[Chapter 7](/exercises/ch7solutions.qmd)<br> Chapter 8<br>
+Chapter 9<br> Chapter 10<br>
+Chapter 11<br> Chapter 12<br>
+Chapter 13<br> Chapter 14<br>
+Chapter 15<br> Chapter 16<br>
+Chapter 17

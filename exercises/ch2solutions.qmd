@@ -18,4 +18,4 @@ Click on the arrow to see a solution.
 
 {{< include ch2/expon_post_censored.qmd >}}
 
-
+{{< include ch2/weibull_post_censored.qmd >}}

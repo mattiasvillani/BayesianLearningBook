@@ -196,6 +196,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#sec-prob_weibull_lung_optim" id="toc-sec-prob_weibull_lung_optim" class="nav-link active" data-scroll-target="#sec-prob_weibull_lung_optim">Exercise 7.2</a></li>
+  <li><a href="#sec-prob_weibullreg_lung_optim" id="toc-sec-prob_weibullreg_lung_optim" class="nav-link" data-scroll-target="#sec-prob_weibullreg_lung_optim">Exercise 7.3</a></li>
   </ul>
 </nav>
     </div>
@@ -233,11 +234,14 @@ window.Quarto = {
 <p><em>This exercise continues the analysis of the lung cancer data in Exercise 2.3</em></p>
 <p>Following Exercise 2.3, assume that the survival time <span class="math inline">\(X\)</span> of the lung cancer patients are independent Weibull distributed <span class="math display">\[
 X_1,\ldots,X_n \vert \lambda, k \overset{\mathrm{iid}}{\sim} \mathrm{Weibull}(\lambda,k).
-\]</span> In Exercise 2.3 the value of <span class="math inline">\(k\)</span> was fixed; here we will treat both <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(k\)</span> as unknown. Since both these parameters are positive we reparameterize first by taking logs: <span class="math inline">\(\tilde\lambda := \log\lambda\)</span> and <span class="math inline">\(\tilde k := \log k\)</span>. We assume the prior <span class="math inline">\(\lambda \sim \mathrm{LogNormal}(5,1^2)\)</span> independently of <span class="math inline">\(k \sim \mathrm{LogNormal}(0,2^2)\)</span>, which by the definition of the log-normal distribution implies that <span class="math inline">\(\tilde\lambda \sim N(5,1^2)\)</span> independently of <span class="math inline">\(\tilde k \sim N(0,2^2)\)</span>.</p>
+\]</span> In Exercise 2.3 the value of <span class="math inline">\(k\)</span> was fixed; here we will treat both <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(k\)</span> as unknown. Since both these parameters are positive we reparameterize first by taking logs: <span class="math display">\[\tilde\lambda := \log\lambda \text{ and } \tilde k := \log k,\]</span> which usually improves the normal approximation.<br> We assume prior independence between the two parameters and priors: <span class="math display">\[\lambda \sim \mathrm{LogNormal}(5,1^2) \text{ and } k \sim \mathrm{LogNormal}(0,2^2),
+\]</span> which by the definition of the log-normal distribution implies that <span class="math display">\[\tilde\lambda \sim N(5,1^2) \text{ and } \tilde k \sim N(0,2^2).\]</span></p>
 <ol type="a">
-<li>Obtain first a bivariate normal approximation of the joint posterior distribution in the log-parameterization <span class="math inline">\(p(\tilde\lambda, \tilde k \vert x_1,\ldots,x_n)\)</span> using numerical optimization.</li>
-<li>Use the results from (a) to obtain a Log-normal approximation for the two marginal posterior distributions <span class="math inline">\(p(\lambda \vert x_1,\ldots,x_n)\)</span> and <span class="math inline">\(p(k \vert x_1,\ldots,x_n)\)</span> in the original parameterization. Plot both the prior and posterior distribution for both parameters.<br> <em>hint</em>: remember that the marginal distributions from a bivariat normal distribution are normal. Also, remember the relationship between normal and log-normal distributions.</li>
-<li>If <span class="math inline">\(X \sim \mathrm{Weibull}(\lambda, k)\)</span> then <span class="math inline">\(\mu := \mathbb{E}(X)=\lambda\Gamma(1+1/k)\)</span>, where <span class="math inline">\(\Gamma()\)</span> is the <code>gamma</code> function. Obtain an approximation posterior distribution for <span class="math inline">\(\mu\)</span> using the results from (a) and simulation.</li>
+<li>Compute a bivariate normal approximation of the joint posterior distribution in the log-parameterization <span class="math inline">\(p(\tilde\lambda, \tilde k \vert x_1,\ldots,x_n)\)</span> using numerical optimization.</li>
+<li>Use the results from (a) to obtain a Log-normal approximation for the two marginal posterior distributions <span class="math inline">\(p(\lambda \vert x_1,\ldots,x_n)\)</span> and <span class="math inline">\(p(k \vert x_1,\ldots,x_n)\)</span> in the original parameterization. Plot the prior and posterior density for both parameters.<br> <em>hint</em>: remember that the marginal distributions from a bivariat normal distribution are both normal. Also, recall the relationship between normal and log-normal distributions.</li>
+<li>If <span class="math inline">\(X \sim \mathrm{Weibull}(\lambda, k)\)</span> then <span class="math display">\[
+\mu := \mathbb{E}(X)=\lambda\Gamma(1+1/k),
+\]</span> where <span class="math inline">\(\Gamma()\)</span> is the <code>gamma</code> function. Obtain an approximate posterior distribution for <span class="math inline">\(\mu\)</span> using the results from (a) and simulation.</li>
 </ol>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -432,6 +436,243 @@ Solution Exercise 7.2c
 <p><img src="ch7solutions_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-prob_weibullreg_lung_optim" class="level3">
+<h3 class="anchored" data-anchor-id="sec-prob_weibullreg_lung_optim">Exercise 7.3</h3>
+<p><em>This exercise uses the lung cancer data presented in Exercise 2.3</em></p>
+<p>Here we model the survival times of the lung cancer patients in Exercise 2.3 as independent Weibull distributed with a scale parameter <span class="math inline">\(\lambda\)</span> that is a function of covariates, i.e.&nbsp;using a Weibull <em>regression</em> model. The response variable <code>time</code> is denoted by <span class="math inline">\(y\)</span> and is modelled as a function of the three covariates <code>age</code>, <code>sex</code> and <code>ph.ecog</code> (ECOG performance score). The model for patient <span class="math inline">\(i\)</span> is: <span class="math display">\[
+y_i \vert \mathbf{x}_i, \boldsymbol{\beta}, k \overset{\mathrm{ind}}{\sim} \mathrm{Weibull}\big(\lambda_i = \exp(\mathbf{x}_i^\top \boldsymbol{\beta}),k\big).
+\]</span> where <span class="math inline">\(\boldsymbol{\beta}\)</span> is the vector with regression coefficients. Note that by the properties of the Weibull distribution, the conditional mean in this model is <span class="math inline">\(\mathbb{E}(y \vert \mathbf{x}_i) = \lambda_i\Gamma(1+1/k)\)</span>, so the regression coefficients do not quite have the usual interpretation of the effect on the conditional mean. The three covariates are placed in a <span class="math inline">\(n\times p\)</span> matrix <span class="math inline">\(\mathbf{X}\)</span> with the first column being one for all observations to model the intercept. Use a multivariate normal prior for <span class="math inline">\(\boldsymbol{\beta} \sim N(\mathbf{0},\tau^2\mathbf{I}_p)\)</span> with the non-informative choice <span class="math inline">\(\tau = 100\)</span>. Reparameterize <span class="math inline">\(\tilde k := \log k\)</span> and use the prior <span class="math inline">\(\tilde k \sim N(0,2^2)\)</span>. Remove the patients with missing values in the selected covariates.</p>
+<ol type="a">
+<li>Compute a normal approximation of the joint posterior distribution <span class="math inline">\(p(\boldsymbol{\beta}, \tilde k \vert \mathbf{y}, \mathbf{X})\)</span> using numerical optimization. Plot the marginal posteriors of each regression coefficient and the marginal posterior for <span class="math inline">\(k\)</span> on the original scale.</li>
+<li>Use the result from (a) and Monte Carlo simulation to compute the predictive densities for the following two new patients:
+<ul>
+<li>80-year female with an ECOG performance score of 0 (0=asymptomatic), i.e.&nbsp;<span class="math inline">\(\mathbf{x} = (1, 80, 1, 0)^\top\)</span></li>
+<li>80-year female with an ECOG performance score of 4 (4=bedbound) <span class="math inline">\(\mathbf{x} = (1, 80, 1, 4)^\top\)</span>.</li>
+</ul>
+Plot the two predictive densities and compare. Compute the predictive probability of living for at least another 1000 days for both patients.</li>
+</ol>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution Exercise 7.3a
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># loads data manipulation and visualization packages</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mvtnorm)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"#6C8EBF"</span>, <span class="st">"#c0a34d"</span>, <span class="st">"#780000"</span>,<span class="st">"#007878"</span>,<span class="st">"#B5C6DF"</span>,<span class="st">"#EADAAA"</span>,<span class="st">"#AE6666"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Set data and set up prior hyperparameters</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival) <span class="co"># loads the lung cancer data as `lung`</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>lung <span class="ot">&lt;-</span> lung <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(<span class="st">"time"</span>, <span class="st">"status"</span>, <span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"ph.ecog"</span>)) <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>()</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> lung<span class="sc">$</span>time</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">cbind</span>(<span class="dv">1</span>, lung<span class="sc">$</span>age, lung<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">2</span>, lung<span class="sc">$</span>ph.ecog) <span class="co"># sex = 1 is female</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="fu">dim</span>(X)[<span class="dv">2</span>]</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>censored <span class="ot">=</span> (lung<span class="sc">$</span>status <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,p)  <span class="co"># beta ~ N(mu, tau^2*I)</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>tau <span class="ot">&lt;-</span> <span class="dv">100</span>    </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>log_k_mean <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>log_k_sd <span class="ot">&lt;-</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Set up a function that computes the log posterior for any <span class="math inline">\(\boldsymbol{\theta}=(\boldsymbol{\beta}^\top,\tilde k)^\top\)</span> vector. The first argument of this function <strong>must</strong> be a vector containing all parameters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for computing the log posterior for any given parameter vector </span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>logpost_weibullreg <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, y, X, censored){</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">=</span> <span class="fu">dim</span>(X)[<span class="dv">2</span>]</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute the parameters in the original scale</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  beta_ <span class="ot">=</span> theta[<span class="dv">1</span><span class="sc">:</span>p]</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  k <span class="ot">=</span> <span class="fu">exp</span>(theta[p<span class="sc">+</span><span class="dv">1</span>])</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>   <span class="co"># Compute the (log) joint prior density</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  logPrior <span class="ot">=</span> <span class="fu">dmvnorm</span>(beta_, mu, tau<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span><span class="fu">diag</span>(p), <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>             <span class="fu">dnorm</span>(theta[p<span class="sc">+</span><span class="dv">1</span>], log_k_mean, log_k_sd, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute the log-likelihood</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  lambda_uncensored <span class="ot">=</span> <span class="fu">exp</span>(X[<span class="sc">-</span>censored,]<span class="sc">%*%</span>beta_)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  loglik_uncensored <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">dweibull</span>(y[<span class="sc">-</span>censored], <span class="at">shape =</span> k, </span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">scale =</span> lambda_uncensored, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  lambda_censored <span class="ot">=</span> <span class="fu">exp</span>(X[censored,]<span class="sc">%*%</span>beta_)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  loglik_censored <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">pweibull</span>(y[censored], <span class="at">shape =</span> k, </span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">scale =</span> lambda_censored, </span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">lower.tail =</span> <span class="cn">FALSE</span>, <span class="at">log.p =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  logLik <span class="ot">=</span> loglik_uncensored <span class="sc">+</span> loglik_censored</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return the log posterior</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(logLik <span class="sc">+</span> logPrior) </span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Use <code>optim</code> to find the posterior mode and the observed information matrix <strong>J</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>initVal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, log_k_mean) <span class="co"># Start optimizer at prior means</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>OptimResults<span class="ot">&lt;-</span><span class="fu">optim</span>(initVal, logpost_weibullreg, <span class="at">gr=</span><span class="cn">NULL</span>, y, X, censored,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="fu">c</span>(<span class="st">"BFGS"</span>), <span class="at">control=</span><span class="fu">list</span>(<span class="at">fnscale=</span><span class="sc">-</span><span class="dv">1</span>), <span class="at">hessian=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in dweibull(y[-censored], shape = k, scale = lambda_uncensored, : NaNs
+produced
+Warning in dweibull(y[-censored], shape = k, scale = lambda_uncensored, : NaNs
+produced
+Warning in dweibull(y[-censored], shape = k, scale = lambda_uncensored, : NaNs
+produced
+Warning in dweibull(y[-censored], shape = k, scale = lambda_uncensored, : NaNs
+produced
+Warning in dweibull(y[-censored], shape = k, scale = lambda_uncensored, : NaNs
+produced
+Warning in dweibull(y[-censored], shape = k, scale = lambda_uncensored, : NaNs
+produced</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>postMode <span class="ot">=</span> OptimResults<span class="sc">$</span>par</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>postCov <span class="ot">=</span> <span class="sc">-</span><span class="fu">solve</span>(OptimResults<span class="sc">$</span>hessian) <span class="co"># inv(J) - Approx posterior covar matrix</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The multivariate normal approximation for <span class="math inline">\(\boldsymbol{\theta}=(\boldsymbol{\beta},\tilde k)\)</span> has mean vector</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>postMode</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  6.29535724 -0.00240418  0.23063114 -0.25847948  0.37972847</code></pre>
+</div>
+</div>
+<p>and covariance matrix</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>postCov</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              [,1]          [,2]          [,3]          [,4]          [,5]
+[1,]  0.1019922630 -1.589499e-03 -3.809323e-03  8.236358e-04 -8.249516e-04
+[2,] -0.0015894994  2.666312e-05  9.209196e-06 -8.162842e-05  1.683131e-05
+[3,] -0.0038093228  9.209196e-06  8.756587e-03 -3.349311e-04 -5.095982e-04
+[4,]  0.0008236358 -8.162842e-05 -3.349311e-04  4.673567e-03  2.946088e-04
+[5,] -0.0008249516  1.683131e-05 -5.095982e-04  2.946088e-04  2.656437e-03</code></pre>
+</div>
+</div>
+<p>from which we can compute approximate posterior standard deviations for each parameter</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>postStd <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(postCov))         <span class="co"># Approximate stdev</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>postStd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.319362275 0.005163634 0.093576639 0.068363492 0.051540635</code></pre>
+</div>
+</div>
+<p>Since the marginal distributions from a multivariate normal distribution are all normal, the marginal posterior for <span class="math inline">\(\tilde k\)</span> is normal and the posterior for <span class="math inline">\(k\)</span> is therefore Log-Normal <span class="math display">\[
+\begin{equation}
+  k \vert \mathbf{y},\mathbf{X}  \sim \mathrm{LogNormal}(0.38,0.052) \\
+\end{equation}
+\]</span> This marginal posterior is plotted below</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>kGrid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.01</span>, <span class="dv">2</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>prior_dens_k <span class="ot">&lt;-</span> <span class="fu">dlnorm</span>(kGrid, log_k_mean, log_k_sd)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>post_dens_k <span class="ot">&lt;-</span> <span class="fu">dlnorm</span>(kGrid, postMode[p<span class="sc">+</span><span class="dv">1</span>], postStd[p<span class="sc">+</span><span class="dv">1</span>])</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kGrid, prior_dens_k, <span class="at">col =</span> colors[<span class="dv">1</span>], <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">5.5</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(kGrid, post_dens_k, <span class="at">col =</span> colors[<span class="dv">3</span>], <span class="at">lwd  =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch7solutions_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The marginal posteriors for the four beta coefficients are plotted below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>varNames <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"intercept"</span>, <span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"ph.ecog"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p){</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  betaGrid <span class="ot">=</span> <span class="fu">seq</span>(postMode[j] <span class="sc">-</span> <span class="dv">4</span><span class="sc">*</span>postStd[j], postMode[j] <span class="sc">+</span> <span class="dv">4</span><span class="sc">*</span>postStd[j], </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">length =</span> <span class="dv">1000</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(betaGrid, <span class="fu">dnorm</span>(betaGrid, postMode[j], postStd[j]), <span class="at">col =</span> colors[<span class="dv">1</span>], </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">ylab =</span> <span class="st">"density"</span>, <span class="at">main =</span> varNames[j], </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch7solutions_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution Exercise 7.3b
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The predictive distribution for the lifetime of a new person <span class="math inline">\(\tilde y\)</span> with covariate vector <span class="math inline">\(\tilde{\mathbf{x}}\)</span> given the training data <span class="math inline">\((\mathbf{y}, \mathbf{X})\)</span> is given by the integral: <span class="math display">\[
+p(\tilde y \vert \tilde{\mathbf{x}}, \mathbf{y}, \mathbf{X}) = \int p(\tilde y \vert \tilde{\mathbf{x}}, \boldsymbol{\beta}, k)
+                    p(\boldsymbol{\beta}, k \vert \mathbf{y}, \mathbf{X})\mathrm{d}\boldsymbol{\beta} \mathrm{d} k
+\]</span> where <span class="math inline">\(p(\boldsymbol{\beta}, k \vert \mathbf{y}, \mathbf{X})\)</span> is the posterior distribution and <span class="math inline">\(p(\tilde y \vert \tilde{\mathbf{x}}, \boldsymbol{\beta}, k)\)</span> is the Weibull density. A Monte Carlo evaluation of this integral is obtained by:</p>
+<ul>
+<li>simulating parameter draws <span class="math inline">\(\boldsymbol{\beta}^{(i)}, \tilde{k}^{(i)}\)</span> for <span class="math inline">\(i=1,\ldots,m\)</span> from the multivariate normal approximation in (a)</li>
+<li>compute <span class="math inline">\(k^{(i)} = \exp\big(\tilde{k}^{(i)}\big)\)</span> for each draw</li>
+<li>simulate a predictive draw <span class="math inline">\(\tilde y^{(i)}\)</span> from the Weibull model given those parameters <span class="math display">\[
+\tilde y^{(i)} \vert \tilde{\mathbf{x}}, \boldsymbol{\beta}^{(i)}, k^{(i)} \overset{\mathrm{ind}}{\sim} \mathrm{Weibull}\big(\lambda_i = \exp(\tilde{\mathbf{x}}^\top \boldsymbol{\beta}^{(i)}), k^{(i)} \big).
+\]</span> This code below does exactly this for the two patients. Note that this can be done much efficiently by making all draws in one shot, but this code is connects better to the algorithm.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>nDraws <span class="ot">=</span> <span class="dv">5000</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>x1_tilde <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">80</span>,<span class="dv">1</span>,<span class="dv">0</span>) <span class="co"># first patient</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>x2_tilde <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">80</span>,<span class="dv">1</span>,<span class="dv">5</span>) <span class="co"># second patient</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>y1_tilde <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,nDraws)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>y2_tilde <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,nDraws)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nDraws){</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simulate from multivariate normal posterior approximation</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  theta <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(<span class="dv">1</span>, postMode, postCov)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  beta_ <span class="ot">=</span> theta[<span class="dv">1</span><span class="sc">:</span>p]</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  k <span class="ot">=</span> <span class="fu">exp</span>(theta[p<span class="sc">+</span><span class="dv">1</span>])</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simulate predictive draws from the model</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  y1_tilde[i] <span class="ot">=</span> <span class="fu">rweibull</span>(<span class="dv">1</span>, <span class="at">shape =</span> k, <span class="at">scale =</span> <span class="fu">exp</span>(x1_tilde <span class="sc">%*%</span> beta_))</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  y2_tilde[i] <span class="ot">=</span> <span class="fu">rweibull</span>(<span class="dv">1</span>, <span class="at">shape =</span> k, <span class="at">scale =</span> <span class="fu">exp</span>(x2_tilde <span class="sc">%*%</span> beta_))</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the predictive densities as kernel density estimates</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>kde1 <span class="ot">=</span> <span class="fu">density</span>(y1_tilde)</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>kde2 <span class="ot">=</span> <span class="fu">density</span>(y2_tilde)</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde1<span class="sc">$</span>x, kde1<span class="sc">$</span>y, <span class="at">col =</span> colors[<span class="dv">1</span>], <span class="at">type =</span> <span class="st">"l"</span>, , <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.005</span>),</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"days"</span>, <span class="at">ylab =</span> <span class="st">"predictive density"</span>,</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"predictive distributions for two patients"</span>)</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(kde2<span class="sc">$</span>x, kde2<span class="sc">$</span>y, <span class="at">col =</span> colors[<span class="dv">3</span>], <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x =</span> <span class="st">"topright"</span>, <span class="at">inset=</span>.<span class="dv">05</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"asymptomatic"</span>, <span class="st">"bedbound"</span>), </span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">col =</span> <span class="fu">c</span>(colors[<span class="dv">1</span>], colors[<span class="dv">3</span>]), <span class="at">box.lty=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch7solutions_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The posterior predictive probability of living for at least another 1000 days is</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"The probability that a 80 year female asymptomatic patient lives for at least 1000 days is "</span>, <span class="fu">mean</span>(y1_tilde <span class="sc">&gt;=</span> <span class="dv">1000</span>))  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The probability that a 80 year female asymptomatic patient lives for at least 1000 days is 0.106</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"The probability that a 80 year female bedbound patient lives for at least 1000 days is "</span>, <span class="fu">mean</span>(y2_tilde <span class="sc">&gt;=</span> <span class="dv">1000</span>))  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The probability that a 80 year female bedbound patient lives for at least 1000 days is 6e-04</code></pre>
 </div>
 </div>
 </div>

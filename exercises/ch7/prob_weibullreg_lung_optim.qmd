@@ -1,0 +1,183 @@
+
+### Exercise 7.3 {#sec-prob_weibullreg_lung_optim}
+
+*This exercise uses the lung cancer data presented in Exercise 2.3*
+
+Here we model the survival times of the lung cancer patients in Exercise 2.3 as independent Weibull distributed with a scale parameter $\lambda$ that is a function of covariates, i.e. using a Weibull *regression* model. The response variable `time` is denoted by $y$ and is modelled as a function of the three covariates `age`, `sex` and `ph.ecog` (ECOG performance score). The model for patient $i$ is:
+$$
+y_i \vert \mathbf{x}_i, \boldsymbol{\beta}, k \overset{\mathrm{ind}}{\sim} \mathrm{Weibull}\big(\lambda_i = \exp(\mathbf{x}_i^\top \boldsymbol{\beta}),k\big).
+$$
+where $\boldsymbol{\beta}$ is the vector with regression coefficients. Note that by the properties of the Weibull distribution, the conditional mean in this model is $\mathbb{E}(y \vert \mathbf{x}_i) = \lambda_i\Gamma(1+1/k)$, so the regression coefficients do not quite have the usual interpretation of the effect on the conditional mean. The three covariates are placed in a $n\times p$ matrix $\mathbf{X}$ with the first column being one for all observations to model the intercept. Use a multivariate normal prior for $\boldsymbol{\beta} \sim N(\mathbf{0},\tau^2\mathbf{I}_p)$ with the non-informative choice $\tau = 100$. Reparameterize $\tilde k := \log k$ and use the prior $\tilde k \sim N(0,2^2)$. Remove the patients with missing values in the selected covariates. 
+
+(a) Compute a normal approximation of the joint posterior distribution $p(\boldsymbol{\beta}, \tilde k \vert \mathbf{y}, \mathbf{X})$ using numerical optimization. Plot the marginal posteriors of each regression coefficient and the marginal posterior for $k$ on the original scale.
+(b) Use the result from (a) and Monte Carlo simulation to compute the predictive densities for the following two new patients:
+    - 80-year female with an ECOG performance score of 0 (0=asymptomatic), i.e. $\mathbf{x} = (1, 80, 1, 0)^\top$
+    - 80-year female with an ECOG performance score of 4 (4=bedbound)  $\mathbf{x} = (1, 80, 1, 4)^\top$.
+  
+    Plot the two predictive densities and compare. Compute the predictive probability of living for at least another 1000 days for both patients.
+  
+::: {.callout-note icon="false" collapse="true"}
+## Solution Exercise 7.3a
+
+```{r}
+#| output: false
+library(tidyverse) # loads data manipulation and visualization packages
+library(mvtnorm)
+colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE6666")
+```
+
+Set data and set up prior hyperparameters
+```{r}
+library(survival) # loads the lung cancer data as `lung`
+lung <- lung %>% select(c("time", "status", "age", "sex", "ph.ecog")) %>% drop_na()
+y = lung$time
+X = cbind(1, lung$age, lung$sex == 2, lung$ph.ecog) # sex = 1 is female
+p = dim(X)[2]
+censored = (lung$status == 1)
+mu <- rep(0,p)  # beta ~ N(mu, tau^2*I)
+tau <- 100    
+log_k_mean <- 0
+log_k_sd <- 2
+```
+
+Set up a function that computes the log posterior for any $\boldsymbol{\theta}=(\boldsymbol{\beta}^\top,\tilde k)^\top$ vector. The first argument of this function **must** be a vector containing all parameters.
+```{r}
+# Function for computing the log posterior for any given parameter vector 
+logpost_weibullreg <- function(theta, y, X, censored){
+  
+  p = dim(X)[2]
+  
+  # Compute the parameters in the original scale
+  beta_ = theta[1:p]
+  k = exp(theta[p+1])
+  
+   # Compute the (log) joint prior density
+  logPrior = dmvnorm(beta_, mu, tau^2*diag(p), log = TRUE) +
+             dnorm(theta[p+1], log_k_mean, log_k_sd, log = TRUE)
+  
+  # Compute the log-likelihood
+  lambda_uncensored = exp(X[-censored,]%*%beta_)
+  loglik_uncensored = sum(dweibull(y[-censored], shape = k, 
+                                   scale = lambda_uncensored, log = TRUE))
+  lambda_censored = exp(X[censored,]%*%beta_)
+  loglik_censored = sum(pweibull(y[censored], shape = k, 
+                                  scale = lambda_censored, 
+                                  lower.tail = FALSE, log.p = TRUE))
+  logLik = loglik_uncensored + loglik_censored
+  
+  # Return the log posterior
+  return(logLik + logPrior) 
+}
+```
+
+Use `optim` to find the posterior mode and the observed information matrix **J**:
+```{r}
+initVal <- c(5, 0, 0, 0, log_k_mean) # Start optimizer at prior means
+OptimResults<-optim(initVal, logpost_weibullreg, gr=NULL, y, X, censored,
+  method = c("BFGS"), control=list(fnscale=-1), hessian=TRUE)
+postMode = OptimResults$par
+postCov = -solve(OptimResults$hessian) # inv(J) - Approx posterior covar matrix
+```
+The multivariate normal approximation for $\boldsymbol{\theta}=(\boldsymbol{\beta},\tilde k)$ has mean vector
+```{r}
+postMode
+```
+and covariance matrix
+```{r}
+postCov
+```
+from which we can compute approximate posterior standard deviations for each parameter
+```{r}
+postStd <- sqrt(diag(postCov))         # Approximate stdev
+postStd
+```
+Since the marginal distributions from a multivariate normal distribution are all normal, the marginal posterior for $\tilde k$ is normal and the posterior for $k$ is therefore Log-Normal
+$$
+\begin{equation}
+  k \vert \mathbf{y},\mathbf{X}  \sim \mathrm{LogNormal}(`{r} round(postMode[p+1], 3)`,`{r} round(postStd[p+1], 3)`) \\
+\end{equation}
+$$
+This prior and marginal posterior for $k$ is plotted below
+```{r}
+kGrid <- seq(0.01, 2, length = 1000)
+prior_dens_k <- dlnorm(kGrid, log_k_mean, log_k_sd)
+post_dens_k <- dlnorm(kGrid, postMode[p+1], postStd[p+1])
+plot(kGrid, prior_dens_k, col = colors[1], type = "l", ylim = c(0,5.5), lwd = 2)
+lines(kGrid, post_dens_k, col = colors[3], lwd  = 2)
+legend(x = "topleft", inset=.05, legend = c("prior", "posterior"), 
+       lwd = 2, lty = c(1,1), col = c(colors[1], colors[3]), box.lty=1)
+```
+The marginal posteriors for the four beta coefficients are plotted below.
+```{r}
+varNames = c("intercept", "age", "sex", "ph.ecog")
+par(mfrow = c(2,2))
+for (j in 1:p){
+  betaGrid = seq(postMode[j] - 4*postStd[j], postMode[j] + 4*postStd[j], 
+                 length = 1000)
+  plot(betaGrid, dnorm(betaGrid, postMode[j], postStd[j]), col = colors[1], 
+       xlab = expression(beta), ylab = "density", main = varNames[j], 
+       type = "l", lwd = 2)
+}
+```
+
+
+:::
+
+
+
+::: {.callout-note icon="false" collapse="true"}
+## Solution Exercise 7.3b
+The predictive distribution for the lifetime of a new person $\tilde y$ with covariate vector $\tilde{\mathbf{x}}$ given the training data $(\mathbf{y}, \mathbf{X})$ is:
+$$
+p(\tilde y \vert \tilde{\mathbf{x}}, \mathbf{y}, \mathbf{X}) = \int p(\tilde y \vert \tilde{\mathbf{x}}, \boldsymbol{\beta}, k)
+                    p(\boldsymbol{\beta}, k \vert \mathbf{y}, \mathbf{X})\mathrm{d}\boldsymbol{\beta} \mathrm{d} k,
+$$
+where $p(\boldsymbol{\beta}, k \vert \mathbf{y}, \mathbf{X})$ is the posterior distribution and 
+$$p(\tilde y \vert \tilde{\mathbf{x}}, \boldsymbol{\beta}, k) = \mathrm{Weibull}\big(\tilde y \vert k, \tilde{\lambda}\big)$$ 
+is the Weibull density with $\tilde{\lambda} = \exp(\tilde{\mathbf{x}}^\top \boldsymbol{\beta})$. A Monte Carlo evaluation of this integral is obtained by:
+
++ simulating $m$ parameter draws $\boldsymbol{\beta}^{(i)}, \tilde{k}^{(i)}$ for  $i=1,\ldots,m$ from the multivariate normal approximation in (a) 
++ compute $k^{(i)} = \exp\big(\tilde{k}^{(i)}\big)$ for each draw
++ simulate a predictive draw $\tilde y^{(i)}$ from the Weibull model given those parameters
+$$
+\tilde y^{(i)} \vert \tilde{\mathbf{x}}, \boldsymbol{\beta}^{(i)}, k^{(i)} \overset{\mathrm{ind}}{\sim} \mathrm{Weibull}\big(\lambda_i = \exp(\tilde{\mathbf{x}}^\top \boldsymbol{\beta}^{(i)}), k^{(i)} \big).
+$$
+The code below does exactly this for the two patients. Note that this can be done much efficiently by making all draws in one shot, but this code is connects better to the algorithm above.
+```{r}
+nDraws = 5000
+x1_tilde = c(1,80,1,0) # first patient
+x2_tilde = c(1,80,1,5) # second patient
+y1_tilde = rep(0,nDraws)
+y2_tilde = rep(0,nDraws)
+for (i in 1:nDraws){
+  
+  # Simulate from multivariate normal posterior approximation
+  theta <- rmvnorm(1, postMode, postCov)
+  beta_ = theta[1:p]
+  k = exp(theta[p+1])
+  
+  # Simulate predictive draws from the model
+  y1_tilde[i] = rweibull(1, shape = k, scale = exp(x1_tilde %*% beta_))
+  y2_tilde[i] = rweibull(1, shape = k, scale = exp(x2_tilde %*% beta_))
+}
+
+# Plot the predictive densities as kernel density estimates
+kde1 = density(y1_tilde)
+kde2 = density(y2_tilde)
+plot(kde1$x, kde1$y, col = colors[1], type = "l", , lwd = 2, ylim = c(0, 0.005),
+     xlab = "days", ylab = "predictive density",
+     main = "predictive distributions for two patients")
+lines(kde2$x, kde2$y, col = colors[3], lwd = 2)
+legend(x = "topright", inset=.05, legend = c("asymptomatic", "bedbound"), 
+         lty = c(1,1), col = c(colors[1], colors[3]), box.lty=1)
+```
+The posterior predictive probability of living for at least another 1000 days is
+```{r}
+message("The probability that a 80 year female asymptomatic patient lives for at least 1000 days is ", mean(y1_tilde >= 1000))  
+message("The probability that a 80 year female bedbound patient lives for at least 1000 days is ", mean(y2_tilde >= 1000))  
+```
+
+
+
+
+:::

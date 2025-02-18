@@ -1,0 +1,118 @@
+
+### Exercise 10.1 {#sec-prob_weibullreg_lung_stan}
+
+*This exercise uses the lung cancer data first presented in Exercise 2.3 and performs a HMC sampling with `stan` from the same posterior distribution for the Weibull regression that was approximated by a normal distribution in Exercise 7.3*
+
+Here we model the survival times of the lung cancer patients in Exercise 2.3 as independent Weibull distributed with a scale parameter $\lambda$ that is a function of covariates, i.e. using a Weibull *regression* model. The response variable `time` is denoted by $y$ and is modelled as a function of the three covariates `age`, `sex` and `ph.ecog` (ECOG performance score). The model for patient $i$ is:
+$$
+y_i \vert \mathbf{x}_i, \boldsymbol{\beta}, k \overset{\mathrm{ind}}{\sim} \mathrm{Weibull}\big(\lambda_i = \exp(\mathbf{x}_i^\top \boldsymbol{\beta}),k\big).
+$$
+where $\boldsymbol{\beta}$ is the vector with regression coefficients. Note that by the properties of the Weibull distribution, the conditional mean in this model is $\mathbb{E}(y \vert \mathbf{x}_i) = \lambda_i\Gamma(1+1/k)$, so the regression coefficients do not quite have the usual interpretation of the effect on the conditional mean. The three covariates are placed in a $n\times p$ matrix $\mathbf{X}$ with the first column being one for all observations to model the intercept. Use a multivariate normal prior for $\boldsymbol{\beta} \sim N(\mathbf{0},\tau^2\mathbf{I}_p)$ with the non-informative choice $\tau = 100$, and the prior $\ k \sim \mathrm{logNormal}(0,2^2)$. Remove the patients with missing values in the selected covariates. 
+
+Sample from the posterior distribution $p(\boldsymbol{\beta}, k \vert \mathbf{y}, \mathbf{X})$ using HMC in stan. Plot the  marginal posterior for $k$ and the marginal posteriors of each regression coefficient.
+  
+::: {.callout-note icon="false" collapse="true"}
+## Solution Exercise 10.1a
+
+```{r}
+#| output: false
+library(tidyverse) # loads data manipulation and visualization packages
+library(rstan)
+colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE6666")
+```
+
+Set data and set up prior hyperparameters
+```{r}
+library(survival) # loads the lung cancer data as `lung`
+lung <- lung %>% select(c("time", "status", "age", "sex", "ph.ecog")) %>% drop_na()
+y = lung$time
+X = cbind(1, lung$age, lung$sex == 2, lung$ph.ecog) # sex = 1 is female
+p = dim(X)[2]
+censored = (lung$status == 1)
+y_obs = y[-censored]
+y_cens = y[censored]
+X_obs = X[-censored,]
+X_cens = X[censored,]
+mu <- rep(0,p)  # beta ~ N(mu, tau^2*I)
+tau <- 100    
+mu_k <- 0       # k ~ LogNormal(mu_k, sigma_k^2)
+sigma_k <- 2
+```
+
+Set up the stan model for the Weibull regression. 
+```{r}
+weibull_survivalreg <- '
+data {
+
+  // Data
+  int<lower=0> N_obs;
+  int<lower=0> N_cens;
+  int<lower=1> p;
+  array[N_obs] real y_obs;
+  array[N_cens] real y_cens;
+  matrix[N_obs,p] X_obs;
+  matrix[N_cens,p] X_cens;
+  
+  // Prior hyperparameters k ~ LogNormal(mu_k, sigma_k) and beta_ ~ N(0, tau^2*I)
+  real mu_k;
+  real<lower=0> sigma_k;
+  real<lower = 0> tau;
+}
+parameters {
+  vector[p] beta_;
+  real<lower=0> k;
+}
+model {
+  k ~ lognormal(mu_k, sigma_k);    // specifies the prior
+  beta_ ~ normal(0, tau);
+  y_obs ~ weibull(k, exp(X_obs * beta_));  // add the observed (non-censored) data
+  target += weibull_lccdf(y_cens | k, exp(X_cens * beta_)); // add censored. 
+}
+'
+```
+
+We set up the data and prior lists that will be supplied to stan:
+```{r}
+data <- list(p = dim(X_obs)[2], N_obs = length(y_obs), N_cens = length(y_cens), 
+             y_obs = y_obs, y_cens = y_cens, X_obs = X_obs, X_cens = X_cens)
+
+prior <- list(tau = tau, mu_k = mu_k, sigma_k = sigma_k)
+```
+
+Load rstan and set some options
+```{r}
+#install.packages("rstan", repos = c('https://stan-dev.r-universe.dev', 
+#                                    getOption("repos")))
+suppressMessages(library(rstan))
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+```
+
+Sample from the posterior distribution using HMC in stan
+```{r}
+nDraws = 5000
+fit = stan(model_code = weibull_survivalreg, data = c(data, prior), iter = nDraws)
+```
+
+```{r}
+s <- summary(fit, pars = c("beta_", "k"), probs = c(0.025, 0.975))
+s$summary  # results from all the different runs (chains) merged.
+```
+Plotting the marginal posterior of $k$
+```{r}
+# Plot histogram from stan draws
+postsamples <- extract(fit, pars = c("beta_","k"))
+hist(postsamples$k, 50, freq = FALSE, col = colors[5], 
+     xlab = expression(k), ylab = "posterior density", 
+     main = expression(k))
+```
+
+Plotting the marginal posteriors for each $\beta$ coefficient
+```{r}
+varNames = c("intercept", "age", "sex", "ph.ecog")
+par(mfrow = c(2,2))
+for (j in 1:p){
+  hist(postsamples$beta_[,j], 50, col = colors[6], 
+       xlab = expression(beta), ylab = "density", main = varNames[j])
+}
+```

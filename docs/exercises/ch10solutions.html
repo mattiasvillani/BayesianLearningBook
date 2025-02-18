@@ -8,7 +8,7 @@
 
 <meta name="author" content="Mattias Villani">
 
-<title>Chapter 2 - Exercise solutions – Bayesian Learning Book</title>
+<title>Chapter 10 - Exercise solutions – Bayesian Learning Book</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -204,7 +204,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Chapter 2 - Exercise solutions</h1>
+<h1 class="title">Chapter 10 - Exercise solutions</h1>
 </div>
 
 
@@ -341,18 +341,18 @@ make: *** [/usr/lib/R/etc/Makeconf:195: foo.o] Error 1</code></pre>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"beta_"</span>, <span class="st">"k"</span>), <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>summary  <span class="co"># results from all the different runs (chains) merged.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                 mean      se_mean         sd        2.5%        97.5%    n_eff
-beta_[1]  6.323183764 4.707963e-03 0.32624538  5.69660791  6.972984534 4802.006
-beta_[2] -0.002780692 7.680246e-05 0.00528345 -0.01329995  0.007373614 4732.438
-beta_[3]  0.236011257 1.130429e-03 0.09492970  0.05434784  0.427564364 7052.087
-beta_[4] -0.259322933 8.213059e-04 0.06960832 -0.39696702 -0.123985781 7183.108
-k         1.451674551 9.178104e-04 0.07622491  1.30678989  1.604862097 6897.439
-              Rhat
-beta_[1] 1.0003208
-beta_[2] 1.0001760
-beta_[3] 0.9999765
-beta_[4] 1.0004056
-k        0.9999669</code></pre>
+<pre><code>                 mean      se_mean          sd        2.5%        97.5%
+beta_[1]  6.323743731 4.899731e-03 0.324357870  5.69396365  6.968370965
+beta_[2] -0.002785857 7.991563e-05 0.005233737 -0.01315194  0.007362697
+beta_[3]  0.235519019 1.153045e-03 0.095728204  0.05189297  0.425089728
+beta_[4] -0.259906484 8.298041e-04 0.069748795 -0.39828751 -0.126092505
+k         1.450197010 9.165366e-04 0.075444237  1.30254072  1.601608659
+            n_eff      Rhat
+beta_[1] 4382.323 1.0008854
+beta_[2] 4289.043 1.0008358
+beta_[3] 6892.669 0.9999986
+beta_[4] 7065.164 0.9999039
+k        6775.673 0.9999232</code></pre>
 </div>
 </div>
 <p>Plotting the marginal posterior of <span class="math inline">\(k\)</span></p>

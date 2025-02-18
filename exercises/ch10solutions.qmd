@@ -1,5 +1,5 @@
 ---
-title: "Chapter 2 - Exercise solutions"
+title: "Chapter 10 - Exercise solutions"
 author: "Mattias Villani"
 output:
   html_document:

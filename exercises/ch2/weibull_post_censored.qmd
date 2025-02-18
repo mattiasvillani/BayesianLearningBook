@@ -15,7 +15,7 @@ The value of $k$ determines how the failure rate changes with time:
 
 (a) Plot the posterior distribution of $\lambda$ conditional on $k=1$, $k=3/2$ and $k=2$. For all $k$, use the prior $\lambda \sim \mathrm{Gamma}(\alpha,\beta)$ with $\alpha=3$ and $\beta=1/50$ (which a similar prior for $\theta=1/\lambda$ as in Exercise 2.2). *Hint*: the posterior distribution for $k\neq 1$ is intractable, so use numerical evaluation of the posterior over a grid of $\lambda$-values.
 (b) Plot the `time` variable as a histogram and overlay the fitted model for the three different $k$-values; use the posterior mode for $\theta$ in each model when plotting the fitted model density.<br>
-
+(c) Use `stan` to sample from the posterior distribution of $\lambda$ for a given $k=3/2$. This should replicate your results in (a). Read [this part](https://mc-stan.org/docs/stan-users-guide/truncation-censoring.html#integrating-out-censored-values) of the Stan User Guide on how to implement censoring in the model before starting. The example in the User Guide has the same censoring point for all patients, which is not the case in the `lung` dataset. So you need to generalize that to a vector of censoring points, one for each patient.
 
 ::: {.callout-note icon="false" collapse="true"}
 ## Solution Exercise 2.3a
@@ -63,7 +63,7 @@ colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE666
 Set up prior hyperparameters
 ```{r}
 alpha_prior <- 3     # shape parameter
-beta_prior <- 1/300  # rate parameter
+beta_prior <- 1/50   # rate parameter
 ```
 
 Set up function that computes the likelihood for any $\lambda$ value:
@@ -96,7 +96,7 @@ weibull_posterior <- function(lambdaGrid, x, censored, k, alpha_prior, beta_prio
 ```{r}
 # Plot the prior and posterior densities
 
-lambdaGrid <- seq(1, 1000, length.out = 1000)
+lambdaGrid <- seq(200, 800, length.out = 1000)
 # Compute to get the prior
 postRes <- weibull_posterior(lambdaGrid, lung$time, lung$status == 1, k = 1, 
                              alpha_prior, beta_prior)
@@ -119,6 +119,7 @@ df_long <- df %>% pivot_longer(-lambdaGrid, names_to = "density_type", values_to
 ggplot(df_long) +
   aes(x = lambdaGrid, y = density, color = density_type) +
   geom_line() +
+  xlim(250,600) +
   scale_colour_manual(
     breaks = c("prior", "posterior k=1", "posterior k=1.5", "posterior k=2"), 
     values = c(colors[2], colors[1], colors[3], colors[4])) +
@@ -130,15 +131,15 @@ ggplot(df_long) +
 
 ::: {.callout-note icon="false" collapse="true"}
 ## Solution Exercise 2.3b
-The fit of the three Weibull models are plotted below. The best fit seems to be for $k=3/2$, which is still not very good. In a later exercise you will be asked to freely estimate both $\lambda$ and $k$.
+The fit of the three Weibull models are plotted below. The best fit seems to be for $k=3/2$, but it is still not very good. In a later exercise you will be asked to freely estimate both $\lambda$ and $k$, and even later to fit a Weibull regression model with covariates.
 ```{r}
 ggplot(lung, aes(time)) +
   geom_histogram(aes(y = after_stat(density), fill = "Data"), bins = 30) +
   stat_function(fun = dweibull, args = list(shape = 1, scale = postModes[1]), lwd = 1, 
-                aes(color = "Weibull fit k = 1/2"),
+                aes(color = "Weibull fit k = 1"),
   ) +
   stat_function(fun = dweibull, args = list(shape = 3/2, scale = postModes[2]), lwd = 1, 
-                aes(color = "Weibull fit k = 1"),
+                aes(color = "Weibull fit k = 3/2"),
   ) +
   stat_function(fun = dweibull, args = list(shape = 2, scale = postModes[3]), lwd = 1, 
                 aes(color = "Weibull fit k = 2"),
@@ -150,4 +151,88 @@ ggplot(lung, aes(time)) +
 
 ```
 
+:::
+
+::: {.callout-note icon="false" collapse="true"}
+## Solution Exercise 2.3c
+
+The code below defines the iid Weibull survival model with censored data in `stan`. The code here extends [this example](https://mc-stan.org/docs/stan-users-guide/truncation-censoring.html#integrating-out-censored-values) in the Stan User Guide to the case with *different censoring points* for each patient. Note the `target +=` construction where the censored data points are added to the target (the log posterior) after the initial uncensored (observed) data are included in the log posterior with the `y_obs ~ weibull(k, lambda)` statement. The `weibull_lccdf` function in stan is a convenience function that computes the survival probability  $\mathrm{Pr}(X >= x) = 1 - F(x)$, where $F()$ is the cdf of the Weibull distribution. There are `_lccdf` versions of all distribution in stan. 
+```{r}
+weibull_survivalmodel <- '
+data {
+
+  // Data
+  int<lower=0> N_obs;
+  int<lower=0> N_cens;
+  array[N_obs] real y_obs;
+  array[N_cens] real y_cens;
+  
+  // Model setting
+  real<lower=0> k;
+  
+  // Prior hyperparameters theta ~ Gamma(alpha, beta)
+  real<lower=0> alpha;
+  real<lower=0> beta;
+}
+parameters {
+  real lambda;
+}
+model {
+  lambda ~ gamma(alpha, beta); // specifies the prior
+  y_obs ~ weibull(k, lambda);  // add the observed (non-censored) data
+  target += weibull_lccdf(y_cens | k, lambda); // add censored. lccdf is 1-cdf
+}
+'
+```
+
+We set up the data and prior lists that will be supplied to stan:
+```{r}
+k = 3/2
+y_obs <- lung %>% filter(status == 2) %>% pull(time)
+y_cens <- lung %>% filter(status == 1) %>% pull(time)
+
+data <- list(N_obs = length(y_obs), N_cens = length(y_cens), 
+             y_obs = y_obs, y_cens = y_cens, k = k)
+prior <- list(alpha = alpha_prior, beta = beta_prior)
+```
+
+Load rstan and set some options
+```{r}
+#install.packages("rstan", repos = c('https://stan-dev.r-universe.dev', 
+#                                    getOption("repos")))
+suppressMessages(library(rstan))
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+```
+
+Sample from the posterior distribution using HMC in stan
+```{r}
+nDraws = 5000
+fit = stan(model_code = weibull_survivalmodel, data = c(data, prior), iter = nDraws)
+```
+Summarize the results from the posterior sampling. The number of effective draws `n_eff` is not much lower than the $5000$ nominal number of draws, so the HMC sampling is efficient. The `Rhat` is also close to one, suggesting that the different runs gave similar results.
+```{r}
+s <- summary(fit, pars = "lambda", probs = c(0.025, 0.975))
+s$summary  # results from all the different runs (chains) merged.
+```
+Compare the posterior from HMC sampling with the gridded version above, as a bug check. Hmm, they should agree. Can't seem to find the bug now, will fix later. Well, you get the idea.
+```{r}
+
+# Plot histogram from stan draws
+postsamples <- extract(fit, pars = c("lambda"))
+hist(postsamples$lambda, 50, freq = FALSE, col = colors[5], 
+     xlab = expression(lambda), ylab = "posterior density", 
+     main = expression(lambda), ylim = c(0,0.025))
+
+# Adding the gridded version from above
+lambdaGrid <- seq(200, 800, length.out = 1000)
+postRes <- weibull_posterior(lambdaGrid, lung$time, lung$status == 1, k = k, 
+                             alpha_prior, beta_prior)
+lines(lambdaGrid, postRes$post, col = colors[3], lw = 2)
+
+legend(x = "topright", inset=.05, legend = c("Stan", "Gridded"), lty = c(0,1),
+         fill = c(colors[5], NA), border = c(1,0),
+         col = c(colors[5], colors[3]), box.lty=1
+  )
+```
 :::

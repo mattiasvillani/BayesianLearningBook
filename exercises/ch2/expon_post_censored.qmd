@@ -68,7 +68,7 @@ ggplot(df_long) +
 :::
 
 
-::: {#prob:expon_lung_b .callout-note icon="false" collapse="true"}
+::: {.callout-note icon="false" collapse="true"}
 ## Solution Exercise 2.2b
 
 The likelihood for all data, censored and uncensored, is 

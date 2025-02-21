@@ -1,0 +1,28 @@
+
+### Exercise 2.4 {#sec-prob_post_gamma}
+Let $X_1,\ldots,X_n$ be an iid sample from a distribution with density function
+$$
+p(x) \propto \theta^2 x \exp (-x\theta)\quad \text{ for } x>0 \text{ and } \theta>0. 
+$$
+Find the conjugate prior for this distribution and derive the posterior distribution from an iid sample $x_1,\ldots,x_n$.
+
+::: {.callout-note icon="false" collapse="true"}
+## Solution Exercise 2.4
+The likelihood function from a sample $x_1,\ldots,x_n$ is
+
+$$
+p(x_1,\ldots,x_n \vert \theta) = \prod_{i=1}^n\theta^2 x_i \exp (-x_i\theta) \propto \theta^{2n}\exp\Big(-\theta \sum_{i=1}^n x_i \Big)
+$$
+
+This likelihood resembles a Gamma distribution, so a good guess for a conjugate prior would be the $\theta \sim \mathrm{Gamma}(\alpha,\beta)$ distribution; to see that this is indeed a reasonable guess, note that the particular form of the Gamma density (a power of $\theta$ times an exponential in $\theta$) makes it closed under multiplication. The posterior distribution is then
+
+$$
+\begin{align}
+p(\theta|x_1,\ldots,x_n) & \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \\
+      & \propto \theta^{2n}\exp\Big(-\theta \sum_{i=1}^n x_i \Big)\theta^{\alpha-1}\exp(-\theta\beta) \\
+      & \propto \theta^{\alpha + 2n - 1}\exp\Big(-\theta (\beta+\sum_{i=1}^n x_i) \Big)
+\end{align}
+$$
+and the posterior is therefore $\theta \vert x_1,\ldots,x_n \sim \mathrm{Gamma}(\alpha + 2n,\beta + \sum_{i=1}^n x_i)$. Since the posterior belongs to the same (Gamma) family as the prior, the Gamma prior is indeed conjugate to this likelihood.
+
+:::

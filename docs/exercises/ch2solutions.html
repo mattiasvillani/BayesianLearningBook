@@ -709,8 +709,8 @@ Solution Exercise 2.3c
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit, <span class="at">pars =</span> <span class="st">"lambda"</span>, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>summary  <span class="co"># results from all the different runs (chains) merged.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           mean   se_mean      sd     2.5%    97.5%    n_eff     Rhat
-lambda 416.1025 0.3604745 21.4035 376.3959 460.5911 3525.497 1.000541</code></pre>
+<pre><code>           mean   se_mean       sd     2.5%    97.5%   n_eff     Rhat
+lambda 415.6186 0.3582918 20.68638 376.7969 457.8914 3333.46 1.001112</code></pre>
 </div>
 </div>
 <p>Compare the posterior from HMC sampling with the gridded version above, as a bug check. Hmm, they should agree. Can’t seem to find the bug now, will fix later. Well, you get the idea.</p>

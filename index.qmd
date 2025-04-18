@@ -10,6 +10,8 @@ This is the home for the book **Bayesian Learning**, which is still work in prog
 
 A [pdf](https://github.com/mattiasvillani/BayesianLearningBook/raw/main/pdf/BayesBook.pdf) of the book will always be available, even after the book gets published.
 
+I have recently started to write on a second book, [A Prequel to Bayesian learning](https://github.com/mattiasvillani/BayesianLearningBook/raw/main/pdf/PreBayesBook.pdf) which will contain all basic mathematics and statistics needed to read the Bayesian Learning book.
+
 The [exercises](exercise_solutions.qmd) tab contains solutions to many of the problems in the book, including the computer-based exercises.
 
 The [Notebooks](notebooks.qmd) tab contains Quarto/Jupyter/Pluto notebooks for the chapters in the book.

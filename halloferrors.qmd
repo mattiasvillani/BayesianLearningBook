@@ -5,12 +5,20 @@ format: html
 
 ![](figs/linocut_water.png)
 
-The following people 🙏 have kindly reported typos and errors in the book (ordered by the number of typos found):
+The following people 🙏 have kindly reported typos and errors (ordered by the number of typos found. Affiliation/student university when error was found):
+
+**Bayesian Learning**
 
 -   Alice Jonason, Stockholm University
 -   Michael Sederlin, KTH Royal Institute of Technology
 -   Tea Unnebäck, Stockholm University
 -   Federico M. Stefanini, University of Milan
 -   Dagmar Kallenberg, Stockholm University
+-   Per Gösta Andersson, Stockholm University
+-   Patrik Mirzai
+
+**Bayesian Learning - the prequel**
+
+-   Joachim Tscherpel, Stockholm University
 
 Please email me any typos and errors at my obvious gmail address. Thanks!

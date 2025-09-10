@@ -1,0 +1,9 @@
+::: {#prob:expon_post .callout-note icon="false" collapse="true"}
+## Exercise 1.1
+
+Let $\mathrm{A}$ be the event that a student has plagiarized and $\mathrm{B}$ the event that the student is flagged by the tool. We want to compute $\mathrm{Pr}(A|B)$ given that $\mathrm{Pr}(B|A)=0.95$, $\mathrm{Pr}(B^c|A^c)=0.90$ and $\mathrm{Pr}(A)=0.01$. Using Bayes' theorem we get
+  \begin{align*}
+    \mathrm{Pr}(A|B) =\frac{\mathrm{Pr}(B|A)\mathrm{Pr}(A)}{\mathrm{Pr}(B|A)\mathrm{Pr}(A)+\mathrm{Pr}(B|A^c)\mathrm{Pr}(A^c)} \approx 0.0876.
+  \end{align*}
+  Hence, even if the student is flagged by the tool there is still only an 8.76\% probability that the student has actually plagiarized.
+:::

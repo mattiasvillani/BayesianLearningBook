@@ -1,5 +1,5 @@
 ---
-title: "Chapter 2 - Single-parameter models: Exercise solutions"
+title: "Chapter 3 - Multi-parameter models: Exercise solutions"
 author: "Mattias Villani"
 output:
   html_document:
@@ -14,10 +14,3 @@ colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE666
 
 Click on the arrow to see a solution.
 
-{{< include ch2/expon_post.qmd >}}
-
-{{< include ch2/expon_post_censored.qmd >}}
-
-{{< include ch2/weibull_post_censored.qmd >}}
-
-{{< include ch2/gamma_post.qmd >}}

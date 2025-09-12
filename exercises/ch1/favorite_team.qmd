@@ -2,5 +2,5 @@
 ::: {#prob:expon_post .callout-note icon="false" collapse="true"}
 ## Exercise 1.2
 
-My favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around \$75 for a bet give me \$100 if Napoli wins, but not more, so my subjective probability is around 0.75.
+My favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around \$75, but not more,for a bet giving me \$100 if Napoli wins. Hence, my subjective probability is around 0.75.
 :::

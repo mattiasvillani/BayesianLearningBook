@@ -5,17 +5,21 @@ format: html
 
 ![](figs/linocut_water.png)
 
-The following people 🙏 have kindly reported typos and errors (ordered by the number of typos found. Affiliation/student university when error was found):
+The following people 🙏 have kindly reported typos and errors (ordered by the number of typos found, weighted by severity. Affiliation/student university when error was found):
 
 **Bayesian Learning**
 
 -   Alice Jonason, Stockholm University
--   Michael Sederlin, KTH Royal Institute of Technology
 -   Tea Unnebäck, Stockholm University
+-   Sune Karlsson, Örebro University
 -   Federico M. Stefanini, University of Milan
 -   Dagmar Kallenberg, Stockholm University
+-   Mona Sfaxi, Stockholm University
+-   Michael Sederlin, KTH Royal Institute of Technology
+-   Jinzhe Yang, Stockholm University
 -   Per Gösta Andersson, Stockholm University
 -   Patrik Mirzai
+-   Toni Dumitriu, Stockholm University
 
 **Bayesian Learning - the prequel**
 

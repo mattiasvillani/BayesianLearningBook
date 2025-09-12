@@ -284,7 +284,7 @@
     "href": "halloferrors.html",
     "title": "Hall of Typos",
     "section": "",
-    "text": "The following people 🙏 have kindly reported typos and errors (ordered by the number of typos found. Affiliation/student university when error was found):\nBayesian Learning\n\nAlice Jonason, Stockholm University\nMichael Sederlin, KTH Royal Institute of Technology\nTea Unnebäck, Stockholm University\nFederico M. Stefanini, University of Milan\nDagmar Kallenberg, Stockholm University\nPer Gösta Andersson, Stockholm University\nPatrik Mirzai\n\nBayesian Learning - the prequel\n\nJoachim Tscherpel, Stockholm University\n\nPlease email me any typos and errors at my obvious gmail address. Thanks!"
+    "text": "The following people 🙏 have kindly reported typos and errors (ordered by the number of typos found, weighted by severity. Affiliation/student university when error was found):\nBayesian Learning\n\nAlice Jonason, Stockholm University\nTea Unnebäck, Stockholm University\nSune Karlsson, Örebro University\nFederico M. Stefanini, University of Milan\nDagmar Kallenberg, Stockholm University\nMona Sfaxi, Stockholm University\nMichael Sederlin, KTH Royal Institute of Technology\nJinzhe Yang, Stockholm University\nPer Gösta Andersson, Stockholm University\nPatrik Mirzai\nToni Dumitriu, Stockholm University\n\nBayesian Learning - the prequel\n\nJoachim Tscherpel, Stockholm University\n\nPlease email me any typos and errors at my obvious gmail address. Thanks!"
   },
   {
     "objectID": "exercises/ch7/weibull_post_censored_optim.html",
@@ -340,7 +340,7 @@
     "href": "exercises/ch1/plagiarism.html",
     "title": "Bayesian Learning Book",
     "section": "",
-    "text": "Solution Exercise 1.1\n\n\n\n\n\nLet \\(\\mathrm{A}\\) be the event that a student has plagiarized and \\(\\mathrm{B}\\) the event that the student is flagged by the tool. We want to compute \\(\\mathrm{Pr}(A|B)\\) given that \\(\\mathrm{Pr}(B|A)=0.95\\), \\(\\mathrm{Pr}(B^c|A^c)=0.90\\) and \\(\\mathrm{Pr}(A)=0.01\\). Using Bayes’ theorem we get \\[\\begin{align*}\n    \\mathrm{Pr}(A|B) =\\frac{\\mathrm{Pr}(B|A)\\mathrm{Pr}(A)}{\\mathrm{Pr}(B|A)\\mathrm{Pr}(A)+\\mathrm{Pr}(B|A^c)\\mathrm{Pr}(A^c)} \\approx 0.0876.\n  \\end{align*}\\] Hence, even if the student is flagged by the tool there is still only an 8.76% probability that the student has actually plagiarized."
+    "text": "Solution Exercise 1.1\n\n\n\n\n\nLet \\(\\rm A\\) be the event that a student has plagiarized and \\(\\rm B\\) the event that the student is flagged by the tool. We want to compute \\(\\rm{Pr}(A|B)\\) given that \\(\\rm{Pr}(B|A)=0.95\\), \\(\\rm{Pr}(B^c|A^c)=0.90\\) and \\(\\rm{Pr}(A)=0.01\\). Using Bayes’ theorem we get \\[\\begin{align*}\n    \\rm{Pr}(A|B) =\\frac{\\rm{Pr}(B|A)\\rm{Pr}(A)}{\\rm{Pr}(B|A)\\rm{Pr}(A)+\\rm{Pr}(B|A^c)\\rm{Pr}(A^c)} \\approx 0.0876.\n  \\end{align*}\\] Hence, even if the student is flagged by the tool there is still only an 8.76% probability that the student has actually plagiarized."
   },
   {
     "objectID": "exercises/ch3solutions.html",
@@ -354,13 +354,13 @@
     "href": "exercises/ch1/favorite_team.html",
     "title": "Bayesian Learning Book",
     "section": "",
-    "text": "Solution Exercise 2.2\n\n\n\n\n\nMy favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around $75 for a bet that Napoli wins, but not more, so my subjective probability is around 0.75."
+    "text": "Exercise 1.2\n\n\n\n\n\nMy favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around $75, but not more,for a bet giving me $100 if Napoli wins. Hence, my subjective probability is around 0.75."
   },
   {
     "objectID": "exercises/ch1solutions.html",
     "href": "exercises/ch1solutions.html",
     "title": "Chapter 1 - The Bayesics: Exercise solutions",
     "section": "",
-    "text": "Click on the arrow to see a solution.\n\n\n\n\n\n\nSolution Exercise 1.1\n\n\n\n\n\nLet \\(\\mathrm{A}\\) be the event that a student has plagiarized and \\(\\mathrm{B}\\) the event that the student is flagged by the tool. We want to compute \\(\\mathrm{Pr}(A|B)\\) given that \\(\\mathrm{Pr}(B|A)=0.95\\), \\(\\mathrm{Pr}(B^c|A^c)=0.90\\) and \\(\\mathrm{Pr}(A)=0.01\\). Using Bayes’ theorem we get \\[\\begin{align*}\n    \\mathrm{Pr}(A|B) =\\frac{\\mathrm{Pr}(B|A)\\mathrm{Pr}(A)}{\\mathrm{Pr}(B|A)\\mathrm{Pr}(A)+\\mathrm{Pr}(B|A^c)\\mathrm{Pr}(A^c)} \\approx 0.0876.\n  \\end{align*}\\] Hence, even if the student is flagged by the tool there is still only an 8.76% probability that the student has actually plagiarized.\n\n\n\n\n\n\n\n\n\nSolution Exercise 1.2\n\n\n\n\n\nMy favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around $75 for a bet that Napoli wins, but not more, so my subjective probability is around 0.75."
+    "text": "Click on the arrow to see a solution.\n\n\n\n\n\n\nExercise 1.1\n\n\n\n\n\nLet \\(\\mathrm{A}\\) be the event that a student has plagiarized and \\(\\mathrm{B}\\) the event that the student is flagged by the tool. We want to compute \\(\\mathrm{Pr}(A|B)\\) given that \\(\\mathrm{Pr}(B|A)=0.95\\), \\(\\mathrm{Pr}(B^c|A^c)=0.90\\) and \\(\\mathrm{Pr}(A)=0.01\\). Using Bayes’ theorem we get \\[\\begin{align*}\n    \\mathrm{Pr}(A|B) =\\frac{\\mathrm{Pr}(B|A)\\mathrm{Pr}(A)}{\\mathrm{Pr}(B|A)\\mathrm{Pr}(A)+\\mathrm{Pr}(B|A^c)\\mathrm{Pr}(A^c)} \\approx 0.0876.\n  \\end{align*}\\] Hence, even if the student is flagged by the tool there is still only an 8.76% probability that the student has actually plagiarized.\n\n\n\n\n\n\n\n\n\nExercise 1.2\n\n\n\n\n\nMy favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around $75 for a bet giving me $100 if Napoli wins, but not more, so my subjective probability is around 0.75."
   }
 ]

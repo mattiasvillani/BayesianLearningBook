@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>favorite_team – Bayesian Learning Book</title>
+<title>iid_geo_conj – Bayesian Learning Book</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,6 +72,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -296,7 +325,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#exercise-1.2" id="toc-exercise-1.2" class="nav-link active" data-scroll-target="#exercise-1.2">Exercise 1.2</a></li>
+  <li><a href="#exercise-2.3" id="toc-exercise-2.3" class="nav-link active" data-scroll-target="#exercise-2.3">Exercise 2.3</a></li>
   </ul>
 </nav>
     </div>
@@ -307,10 +336,10 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="exercise-1.2" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-1.2">Exercise 1.2</h2>
-<p>Think about an event that you are uncertain about, for example the event that you favorite sports team wins their next game. Try to elicit your subjective probability for the event by considering a betting situation where you win $100 if the event occurs. Start with a price of $1 and ask yourself if you would be willing to take the bet. Then gradually increase the price of the bet until you are indifferent between taking the bet or not.</p>
-<div id="q:favorite_team" class="callout callout-style-default callout-note no-icon callout-titled">
+<section id="exercise-2.3" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2.3">Exercise 2.3</h3>
+<p>Let <span class="math inline">\(X_1,\ldots,X_n \vert \theta \overset{\mathrm{iid}}{\sim} \mathrm{Geom}(\theta)\)</span> be iid from a geometric distribution with parameter <span class="math inline">\(0&lt;\theta&lt;1\)</span>. Show that the Beta distribution is the conjugate prior for this model.</p>
+<div id="q:iid_geo_conj" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -322,7 +351,15 @@ Solution
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>My favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around $75, but not more,for a bet giving me $100 if Napoli wins. Hence, my subjective probability is around 0.75.</p>
+<p>The geometric distribution has probability mass function <span class="math display">\[
+p(x) = (1-\theta)^{x}\theta, \quad \text{ for }x=0,1,2,...
+\]</span> The likelihood from a sample of <span class="math inline">\(n\)</span> observations is therefore <span class="math display">\[
+p(x_{1},\ldots,x_{n}\vert\theta) = \prod_{i=1}^n p(x_i \vert \theta)= (1-\theta)^{\sum_{i=1}^n x_i}\theta^{n}
+\]</span> The posterior distribution when using a <span class="math inline">\(\theta \sim \mathrm{Beta}(\alpha,\beta)\)</span> prior is then by Bayes’ theorem <span class="math display">\[
+p(\theta\vert x_{1},\ldots,x_n) \propto
+(1-\theta)^{\sum_{i=1}^n x_i} \theta^{n} \cdot \theta^{\alpha-1}(1-\theta)^{\beta-1}
+=\theta^{\alpha + n-1}(1-\theta)^{\beta + \sum_{i=1}^n x_i-1}
+\]</span> which is proportional to the <span class="math inline">\(\mathrm{Beta}(\alpha+n,\beta+\sum_{i=1}^n x_i)\)</span> distribution. Since the posterior is in the same Beta family as the prior, the prior <span class="math inline">\(\theta \sim \mathrm{Beta}(\alpha,\beta)\)</span> is a conjugate prior to the geometric model.</p>
 </div>
 </div>
 </div>

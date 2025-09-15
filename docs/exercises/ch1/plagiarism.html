@@ -320,8 +320,14 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#exercise-1.1" id="toc-exercise-1.1" class="nav-link active" data-scroll-target="#exercise-1.1">Exercise 1.1</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -330,26 +336,30 @@ window.Quarto = {
 
 
 
+<section id="exercise-1.1" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1.1">Exercise 1.1</h2>
+<p>A university uses an automatic tool to detect plagiarism in student essays. The tool has a sensitivity of 0.95 (probability of flagging plagarism when the essay is plagiarized) and a specificity of 0.90 (probability of not flagging plagarism when the essay is not plagiarized). Assume that 1% of all students actually plagiarize. If a student is flagged by the tool, what is the probability that the student actually has plagiarized?</p>
 <div id="prob:expon_post" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution Exercise 1.1
+Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Let <span class="math inline">\(\rm A\)</span> be the event that a student has plagiarized and <span class="math inline">\(\rm B\)</span> the event that the student is flagged by the tool. We want to compute <span class="math inline">\(\rm{Pr}(A|B)\)</span> given that <span class="math inline">\(\rm{Pr}(B|A)=0.95\)</span>, <span class="math inline">\(\rm{Pr}(B^c|A^c)=0.90\)</span> and <span class="math inline">\(\rm{Pr}(A)=0.01\)</span>. Using Bayes’ theorem we get <span class="math display">\[\begin{align*}
-    \rm{Pr}(A|B) =\frac{\rm{Pr}(B|A)\rm{Pr}(A)}{\rm{Pr}(B|A)\rm{Pr}(A)+\rm{Pr}(B|A^c)\rm{Pr}(A^c)} \approx 0.0876.
+<p>Let <span class="math inline">\(\mathrm{A}\)</span> be the event that a student has plagiarized and <span class="math inline">\(\mathrm{B}\)</span> the event that the student is flagged by the tool. We want to compute <span class="math inline">\(\mathrm{Pr}(A|B)\)</span> given that <span class="math inline">\(\mathrm{Pr}(B|A)=0.95\)</span>, <span class="math inline">\(\mathrm{Pr}(B^c|A^c)=0.90\)</span> and <span class="math inline">\(\mathrm{Pr}(A)=0.01\)</span>. Using Bayes’ theorem we get <span class="math display">\[\begin{align*}
+    \mathrm{Pr}(A|B) =\frac{\mathrm{Pr}(B|A)\mathrm{Pr}(A)}{\mathrm{Pr}(B|A)\mathrm{Pr}(A)+\mathrm{Pr}(B|A^c)\mathrm{Pr}(A^c)} \approx 0.0876.
   \end{align*}\]</span> Hence, even if the student is flagged by the tool there is still only an 8.76% probability that the student has actually plagiarized.</p>
 </div>
 </div>
 </div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -29,4 +29,6 @@ format:
     #monobackgroundcolor: #c3d0e6
 callout-appearance: default
 
+filters:
+  - ref2crossref.lua
 

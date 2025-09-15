@@ -1,6 +1,9 @@
-
-::: {#prob:expon_post .callout-note icon="false" collapse="true"}
 ## Exercise 1.2
+
+{{< include /exercises/book_exercises/bayesics/favorite_team.tex >}}
+
+::: {#q:favorite_team .callout-note icon="false" collapse="true"}
+## Solution
 
 My favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around \$75, but not more,for a bet giving me \$100 if Napoli wins. Hence, my subjective probability is around 0.75.
 :::

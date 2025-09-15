@@ -1,0 +1,9 @@
+### Exercise 2.9
+
+{{< include /exercises/book_exercises/oneparam/normal_in_expfamily.tex >}}
+
+::: {#q:normal_in_expfamily .callout-note icon="false" collapse="true"}
+## Solution
+
+![](/exercises/larry.png){width="167"}
+:::

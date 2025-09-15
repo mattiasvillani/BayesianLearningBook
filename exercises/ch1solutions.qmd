@@ -17,3 +17,7 @@ Click on the arrow to see a solution.
 {{< include ch1/plagiarism.qmd >}}
 
 {{< include ch1/favorite_team.qmd >}}
+
+{{< include ch1/voting_share_histogram.qmd >}}
+
+{{< include ch1/discrete_bayes.qmd >}}

@@ -1,18 +1,10 @@
 
-### Exercise 10.1 {#sec-prob_weibullreg_lung_stan}
+### Exercise 10.2 
 
-*This exercise uses the lung cancer data first presented in Exercise 2.3 and performs a HMC sampling with `stan` from the same posterior distribution for the Weibull regression that was approximated by a normal distribution in Exercise 7.3*
-
-Here we model the survival times of the lung cancer patients in Exercise 2.3 as independent Weibull distributed with a scale parameter $\lambda$ that is a function of covariates, i.e. using a Weibull *regression* model. The response variable `time` is denoted by $y$ and is modelled as a function of the three covariates `age`, `sex` and `ph.ecog` (ECOG performance score). The model for patient $i$ is:
-$$
-y_i \vert \mathbf{x}_i, \boldsymbol{\beta}, k \overset{\mathrm{ind}}{\sim} \mathrm{Weibull}\big(\lambda_i = \exp(\mathbf{x}_i^\top \boldsymbol{\beta}),k\big).
-$$
-where $\boldsymbol{\beta}$ is the vector with regression coefficients. Note that by the properties of the Weibull distribution, the conditional mean in this model is $\mathbb{E}(y \vert \mathbf{x}_i) = \lambda_i\Gamma(1+1/k)$, so the regression coefficients do not quite have the usual interpretation of the effect on the conditional mean. The three covariates are placed in a $n\times p$ matrix $\mathbf{X}$ with the first column being one for all observations to model the intercept. Use a multivariate normal prior for $\boldsymbol{\beta} \sim N(\mathbf{0},\tau^2\mathbf{I}_p)$ with the non-informative choice $\tau = 100$, and the prior $\ k \sim \mathrm{logNormal}(0,2^2)$. Remove the patients with missing values in the selected covariates. 
-
-Sample from the posterior distribution $p(\boldsymbol{\beta}, k \vert \mathbf{y}, \mathbf{X})$ using HMC in stan. Plot the  marginal posterior for $k$ and the marginal posteriors of each regression coefficient.
+{{< include /exercises/book_exercises/mcmc/survival_weibullreg_stan.tex >}}
   
 ::: {.callout-note icon="false" collapse="true"}
-## Solution Exercise 10.1a
+## Solution
 
 ```{r}
 #| output: false
@@ -116,3 +108,4 @@ for (j in 1:p){
        xlab = expression(beta), ylab = "density", main = varNames[j])
 }
 ```
+::: 

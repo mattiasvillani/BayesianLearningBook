@@ -1,9 +1,9 @@
-### Exercise 2.1 {#sec-prob_post_exp}
+### Exercise 2.1
 
-Let $X_1,\ldots,X_n \vert \theta \overset{\mathrm{iid}}{\sim} \mathrm{Expon}(\theta)$ be iid exponentially distributed data. Show that the Gamma distribution is the conjugate prior for this model.
+{{< include /exercises/book_exercises/oneparam/iid_exp_conj.tex >}}
 
-::: {#prob:expon_post .callout-note icon="false" collapse="true"}
-## Solution Exercise 2.1
+::: {#q:iid_exp_conj .callout-note icon="false" collapse="true"}
+## Solution
 
 The likelihood from an iid sample from $\mathrm{Expon}(\theta)$ is $$
 p(x_1,\ldots,x_n \vert \theta)= \prod_{i=1}^n p(x_i \vert \theta) = 

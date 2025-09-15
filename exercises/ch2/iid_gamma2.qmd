@@ -1,13 +1,10 @@
 
-### Exercise 2.4 {#sec-prob_post_gamma}
-Let $X_1,\ldots,X_n$ be an iid sample from a distribution with density function
-$$
-p(x) \propto \theta^2 x \exp (-x\theta)\quad \text{ for } x>0 \text{ and } \theta>0. 
-$$
-Find the conjugate prior for this distribution and derive the posterior distribution from an iid sample $x_1,\ldots,x_n$.
+### Exercise 2.4
 
-::: {.callout-note icon="false" collapse="true"}
-## Solution Exercise 2.4
+{{< include /exercises/book_exercises/oneparam/iid_gamma2.tex >}}
+
+::: {#q:iid_gamma2 .callout-note icon="false" collapse="true"}
+## Solution 
 The likelihood function from a sample $x_1,\ldots,x_n$ is
 
 $$

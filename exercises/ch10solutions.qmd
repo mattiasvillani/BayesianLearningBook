@@ -1,5 +1,5 @@
 ---
-title: "Chapter 10 - Exercise solutions"
+title: "Chapter 10 - Markov Chain Monte Carlo: Exercise solutions"
 author: "Mattias Villani"
 output:
   html_document:
@@ -14,5 +14,7 @@ colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE666
 
 Click on the arrow to see a solution.
 
-{{< include ch10/prob_weibullreg_lung_stan.qmd >}}
+{{< include ch10/survival_weibull_stan.qmd >}}
+
+{{< include ch10/survival_weibullreg_stan.qmd >}}
 

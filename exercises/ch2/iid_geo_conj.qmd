@@ -1,0 +1,22 @@
+### Exercise 2.3
+
+{{< include /exercises/book_exercises/oneparam/iid_geo_conj.tex >}}
+
+::: {#q:iid_geo_conj .callout-note icon="false" collapse="true"}
+## Solution
+The geometric distribution has probability mass function
+$$
+p(x) = (1-\theta)^{x}\theta, \quad \text{ for }x=0,1,2,...
+$$
+The likelihood from a sample of $n$ observations is therefore
+$$
+p(x_{1},\ldots,x_{n}\vert\theta) = \prod_{i=1}^n p(x_i \vert \theta)= (1-\theta)^{\sum_{i=1}^n x_i}\theta^{n}
+$$
+The posterior distribution when using a $\theta \sim \mathrm{Beta}(\alpha,\beta)$ prior is then by Bayes' theorem
+$$
+p(\theta\vert x_{1},\ldots,x_n) \propto 
+(1-\theta)^{\sum_{i=1}^n x_i} \theta^{n} \cdot \theta^{\alpha-1}(1-\theta)^{\beta-1}
+=\theta^{\alpha + n-1}(1-\theta)^{\beta + \sum_{i=1}^n x_i-1}
+$$
+which is proportional to the $\mathrm{Beta}(\alpha+n,\beta+\sum_{i=1}^n x_i)$ distribution. Since the posterior is in the same Beta family as the prior, the prior  $\theta \sim \mathrm{Beta}(\alpha,\beta)$ is a conjugate prior to the geometric model.
+:::

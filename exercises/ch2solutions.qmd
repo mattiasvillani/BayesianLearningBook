@@ -14,10 +14,41 @@ colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE666
 
 Click on the arrow to see a solution.
 
-{{< include ch2/expon_post.qmd >}}
+{{< include ch2/iid_exp_conj.qmd >}}
 
-{{< include ch2/expon_post_censored.qmd >}}
+---
 
-{{< include ch2/weibull_post_censored.qmd >}}
+{{< include ch2/iid_exp_survival_uncens.qmd >}}
 
-{{< include ch2/gamma_post.qmd >}}
+---
+
+{{< include ch2/iid_geo_conj.qmd >}}
+
+---
+
+{{< include ch2/iid_gamma2.qmd >}}
+
+---
+
+{{< include ch2/truncated_normal.qmd >}}
+
+---
+
+{{< include ch2/iid_normal_derive.qmd >}}
+
+---
+
+{{< include ch2/iid_uniform.qmd >}}
+
+---
+
+{{< include ch2/iid_exp_survival_all.qmd >}}
+
+---
+
+{{< include ch2/normal_in_expfamily.qmd >}}
+
+---
+
+{{< include ch2/iid_weibull_survival_all.qmd >}}
+

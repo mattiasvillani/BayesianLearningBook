@@ -1,0 +1,73 @@
+### Exercise 10.1 
+
+{{< include /exercises/book_exercises/mcmc/survival_weibull_stan.tex >}}
+  
+::: {.callout-note icon="false" collapse="true"}
+## Solution
+
+```{r}
+#| output: false
+library(tidyverse) # loads data manipulation and visualization packages
+library(rstan)
+colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE6666")
+```
+
+The code below defines the iid Weibull survival model with censored data in `stan`. The code here extends [this example](https://mc-stan.org/docs/stan-users-guide/truncation-censoring.html#integrating-out-censored-values) in the Stan User Guide to the case with *different censoring points* for each patient. Note the `target +=` construction where the censored data points are added to the target (the log posterior) after the initial uncensored (observed) data are included in the log posterior with the `y_obs ~ weibull(k, lambda)` statement. The `weibull_lccdf` function in stan is a convenience function that computes the survival probability  $\mathrm{Pr}(X >= x) = 1 - F(x)$, where $F()$ is the cdf of the Weibull distribution. There are `_lccdf` versions of all distribution in stan. 
+```{r}
+weibull_survivalmodel <- '
+data {
+
+  // Data
+  int<lower=0> N_obs;
+  int<lower=0> N_cens;
+  array[N_obs] real y_obs;
+  array[N_cens] real y_cens;
+  
+  // Model setting
+  real<lower=0> k;
+  
+  // Prior hyperparameters theta ~ Gamma(alpha, beta)
+  real<lower=0> alpha;
+  real<lower=0> beta;
+}
+parameters {
+  real lambda;
+}
+model {
+  lambda ~ gamma(alpha, beta); // specifies the prior
+  y_obs ~ weibull(k, lambda);  // add the observed (non-censored) data
+  target += weibull_lccdf(y_cens | k, lambda); // add censored. lccdf is 1-cdf
+}
+'
+```
+
+We set up the data and prior lists that will be supplied to stan:
+```{r}
+library(survival) # loads the lung cancer data as `lung`
+k = 3/2
+y_obs <- lung %>% filter(status == 2) %>% pull(time)
+y_cens <- lung %>% filter(status == 1) %>% pull(time)
+
+data <- list(N_obs = length(y_obs), N_cens = length(y_cens), 
+             y_obs = y_obs, y_cens = y_cens, k = k)
+
+alpha_prior <- 3     # shape parameter
+beta_prior <- 1/50   # rate parameter
+prior <- list(alpha = alpha_prior, beta = beta_prior)
+```
+
+Load rstan and set some options
+```{r}
+#install.packages("rstan", repos = c('https://stan-dev.r-universe.dev', 
+#                                    getOption("repos")))
+suppressMessages(library(rstan))
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+```
+
+Sample from the posterior distribution using HMC in stan
+```{r}
+nDraws = 5000
+fit = stan(model_code = weibull_survivalmodel, data = c(data, prior), iter = nDraws)
+```
+::: 

@@ -1,0 +1,135 @@
+### Exercise 2.10
+
+{{< include /exercises/book_exercises/oneparam/iid_weibull_survival_all.tex >}}
+
+::: {.callout-note icon="false" collapse="true"}
+## Solution 
+
+The likelihood can be computed with separate treatment of the uncensored and censored observations: 
+$$
+\begin{align}
+p(x_1,\ldots,x_n \vert \lambda, k) & = \prod_{i=1}^n p(x_i \vert \lambda, k) \\
+& = \prod_{u \in \mathcal{U}} p(x_u \vert \lambda, k) \prod_{c \in \mathcal{C}} \Big(1 - F(x_c \vert \lambda, k)\Big) 
+\end{align}
+$$
+where $p(x \vert \lambda, k)$ is the pdf of a Weibull variable
+$$
+p(x \vert \lambda, k) = \frac{k}{\lambda}\Big( \frac{x}{\lambda} \Big)^{k-1}e^{-(x/\lambda)^k}\quad\text{ for }x>0
+$$
+which is implemented in R as `dweibull`. The cdf of the Weibull distribution is of rather simple form
+$$
+F(x \vert \lambda, k) = 1 - e^{-(x/\lambda)^k}
+$$
+and is implemented in R as `pweibull`.
+
+The code below plots the prior and posterior distribution for $\lambda$ for the three different $k$-values. We could have inserted the mathematical expressions for the pdf and cdf and simplified the final likelihood expression; we will instead use the `dweibull` and `pweibull` functions without simplifications since it gives a more general template that can be used for any distribution, not just the Weibull model. For numerical stability we usually compute the posterior distribution on the log scale
+$$
+\log p(\lambda^{(j)} \vert x_1,\ldots,x_n) \propto \log p(x_1,\ldots,x_n \vert \lambda_j) + \log p(\lambda_j)
+$$
+for a grid of equally spaced $\lambda$-values: $\lambda^{(1)}\ldots,\lambda^{(J)}$. The $\propto$ sign now means that there is a missing *additive* constant $\log p(x_1,\ldots,x_n)$ which does not depend on the unknown parameter $\lambda$. When we have computed $\log p(\lambda \vert x_1,\ldots,x_n)$ over a grid of $\lambda$ values we compute the posterior on the original scale by
+$$
+p(\lambda^{(j)} \vert x_1,\ldots,x_n) \propto \exp\Big( \log p(x_1,\ldots,x_n \vert \lambda_j) + \log p(\lambda_j) \Big)
+$$
+and then divide all numbers with the normalizing constant to make sure that the posterior integrates to one. This is done numerically by approximating the integral by a Riemann rectangle sum 
+$$
+p(\lambda^{(j)} \vert x_1,\ldots,x_n) = 
+\frac{\exp\Big( \log p(x_1,\ldots,x_n \vert \lambda^{(j)}) + \log p(\lambda^{(j)}) \Big)}
+{\sum_{h=1}^J \exp\Big( \log p(x_1,\ldots,x_n \vert \lambda^{(h)}) + \log p(\lambda^{(h)}) \Big) \Delta}
+$$
+where $\Delta$ is the spacing between the grid points of $\lambda$-values: $\lambda^{(1)}, \ldots, \lambda^{(J)}$.
+
+```{r}
+#| output: false
+library(tidyverse) # loads data manipulation and visualization packages
+library(survival) # loads the lung cancer data as `lung`
+colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE6666")
+```
+
+Set up prior hyperparameters
+```{r}
+alpha_prior <- 3     # shape parameter
+beta_prior <- 1/50   # rate parameter
+```
+
+Set up function that computes the likelihood for any $\lambda$ value:
+```{r}
+# Make a function that computes the likelihood
+weibull_loglike <- function(lambda, x, censored, k){
+  loglik_uncensored = sum(dweibull(x[-censored], shape = k, scale = lambda, 
+                                   log = TRUE))
+  loglik_censored = sum(pweibull(x[censored], shape = k, scale = lambda, 
+                                 lower.tail = FALSE, log.p = TRUE))
+  return(loglik_uncensored + loglik_censored)
+}
+```
+
+Set up a function that computes the posterior density over a grid of $\lambda$:
+```{r}
+weibull_posterior <- function(lambdaGrid, x, censored, k, alpha_prior, beta_prior){
+  Delta = lambdaGrid[2] - lambdaGrid[1] # Grid step size
+  logPrior <- dgamma(lambdaGrid, shape = alpha_prior, rate = beta_prior, log = TRUE)
+  logLike <- sapply(lambdaGrid, weibull_loglike, x, censored, k)
+  logPost <- logLike + logPrior
+  logPost <- logPost - max(logPost) # subtract constant to avoid overflow
+  post <- exp(logPost)/(sum(exp(logPost))*Delta) # original scale and normalize
+  logLike <- logLike - max(logLike)
+  likeNorm <- exp(logLike)/(sum(exp(logLike))*Delta) # normalized likelihood
+  return(list(post = post, prior = exp(logPrior), likeNorm = likeNorm))
+}
+```
+
+```{r}
+# Plot the prior and posterior densities
+
+lambdaGrid <- seq(200, 800, length.out = 1000)
+# Compute to get the prior
+postRes <- weibull_posterior(lambdaGrid, lung$time, lung$status == 1, k = 1, 
+                             alpha_prior, beta_prior)
+df <- data.frame(
+  lambdaGrid = lambdaGrid, 
+  prior = postRes$prior
+)
+
+# Compute for all selected k values
+postModes = c()
+for (k in c(1, 3/2, 2)){
+  postRes <- weibull_posterior(lambdaGrid, lung$time, lung$status == 1, k, alpha_prior, beta_prior)
+  df[str_glue("posterior k={k}")] <- postRes$post
+  postModes = c(postModes, lambdaGrid[which.max(postRes$post)])
+}
+
+df_long <- df %>% pivot_longer(-lambdaGrid, names_to = "density_type", values_to = "density")
+
+# Plot using ggplot2
+ggplot(df_long) +
+  aes(x = lambdaGrid, y = density, color = density_type) +
+  geom_line() +
+  xlim(250,600) +
+  scale_colour_manual(
+    breaks = c("prior", "posterior k=1", "posterior k=1.5", "posterior k=2"), 
+    values = c(colors[2], colors[1], colors[3], colors[4])) +
+  labs(title = "Exercise 2.3", x = expression(lambda), y = "Density", color = "") + 
+  theme_minimal()
+```
+
+The fit of the three Weibull models are plotted below. The best fit seems to be for $k=3/2$, but it is still not very good. In a later exercise you will be asked to freely estimate both $\lambda$ and $k$, and even later to fit a Weibull regression model with covariates.
+```{r}
+ggplot(lung, aes(time)) +
+  geom_histogram(aes(y = after_stat(density), fill = "Data"), bins = 30) +
+  stat_function(fun = dweibull, args = list(shape = 1, scale = postModes[1]), lwd = 1, 
+                aes(color = "Weibull fit k = 1"),
+  ) +
+  stat_function(fun = dweibull, args = list(shape = 3/2, scale = postModes[2]), lwd = 1, 
+                aes(color = "Weibull fit k = 3/2"),
+  ) +
+  stat_function(fun = dweibull, args = list(shape = 2, scale = postModes[3]), lwd = 1, 
+                aes(color = "Weibull fit k = 2"),
+  ) +
+  labs(title = "Weibull model fits", x = "days", y = "Density") + 
+  scale_fill_manual("", values = colors[6]) +
+  scale_color_manual("", values = c(colors[1], colors[3], colors[4])) +
+  theme_minimal()
+
+```
+
+:::

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>favorite_team – Bayesian Learning Book</title>
+<title>truncated_normal – Bayesian Learning Book</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -72,6 +107,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -296,7 +360,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#exercise-1.2" id="toc-exercise-1.2" class="nav-link active" data-scroll-target="#exercise-1.2">Exercise 1.2</a></li>
+  <li><a href="#exercise-2.5" id="toc-exercise-2.5" class="nav-link active" data-scroll-target="#exercise-2.5">Exercise 2.5</a></li>
   </ul>
 </nav>
     </div>
@@ -307,10 +371,10 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="exercise-1.2" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-1.2">Exercise 1.2</h2>
-<p>Think about an event that you are uncertain about, for example the event that you favorite sports team wins their next game. Try to elicit your subjective probability for the event by considering a betting situation where you win $100 if the event occurs. Start with a price of $1 and ask yourself if you would be willing to take the bet. Then gradually increase the price of the bet until you are indifferent between taking the bet or not.</p>
-<div id="q:favorite_team" class="callout callout-style-default callout-note no-icon callout-titled">
+<section id="exercise-2.5" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2.5">Exercise 2.5</h3>
+<p><strong>a)</strong> Let <span class="math inline">\(x_{1},\ldots,x_{10}\)</span> be a sample with mean <span class="math inline">\(\bar{x}=1.873\)</span>. Assume the model <span class="math inline">\(X_1,\ldots,X_n \overset{\mathrm{iid}}{\sim} N(\theta,1)\)</span>. Use the prior <span class="math inline">\(\theta \sim N(0,5)\)</span>. Note that the second parameter of the normal distribution is a variance, not a standard deviation. Compute the posterior distribution of <span class="math inline">\(\theta\)</span>.</p>
+<div id="q:iid_truncated_normal_a" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -322,7 +386,88 @@ Solution
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>My favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around $75, but not more,for a bet giving me $100 if Napoli wins. Hence, my subjective probability is around 0.75.</p>
+<p>We have <span class="math inline">\(n=10,\bar{x}=1.873,\sigma^{2}=1,\mu_{0}=0,\tau_{0}^{2}=5\)</span>. The posterior is normal with <span class="math display">\[\begin{align*}
+      w &amp;= \frac{\frac{10}{1}}{\frac{10}{1}+\frac{1}{5}}=\frac{50}{51}\approx0.98039 \\
+      \mu_{n}   &amp;= \frac{50}{51}\cdot1.873+\frac{1}{51}\cdot0=1.8363 \\
+      \tau_{n}^{2}  &amp;= \left(\frac{10}{1}+\frac{1}{5}\right)^{-1}=\frac{5}{51}.
+    \end{align*}\]</span></p>
+</div>
+</div>
+</div>
+<p><strong>b)</strong> You now get hold of a second sample <span class="math inline">\(Y_1,\ldots,Y_{10} | \theta \overset{\mathrm{iid}}{\sim} N(\theta ,2)\)</span>, where <span class="math inline">\(\theta\)</span> is the same quantity as in (a) but the measurements have a larger variance. The sample mean in this second sample is <span class="math inline">\(\bar{y}=0.582\)</span>. Compute the posterior distribution of <span class="math inline">\(\theta\)</span> using both samples (the <span class="math inline">\(x\)</span>’s and the <span class="math inline">\(y\)</span>’s) under the assumption that the two samples are independent.</p>
+<p><span class="math inline">\(\textit{Hint}\)</span>: batch learning.</p>
+<div id="q:iid_truncated_normal_b" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The easiest way to do this is use the posterior from the first sample as a prior for the second sample. That is, for this second sample we use the prior <span class="math display">\[\begin{equation*}
+      \theta\sim N\left(1.836,\frac{5}{51}\right),
+    \end{equation*}\]</span> which gives the posterior <span class="math display">\[\begin{align*}
+      w &amp;= \frac{\frac{10}{2}}{\frac{10}{2}+\frac{1}{5/51}}=\frac{25}{76} \\
+\mu_{n} &amp;= \frac{25}{76}\cdot0.582+\left(1-\frac{25}{76}\right)\cdot1.836=1.4237\\
+\tau_{n}^{2}    &amp;= \left(\frac{10}{2}+\frac{5}{51}\right)^{-1}=\frac{5}{76}.
+    \end{align*}\]</span></p>
+</div>
+</div>
+</div>
+<p><strong>c)</strong> You finally obtain a third sample <span class="math inline">\(Z_{1},\ldots,Z_{10} | \theta \overset{\mathrm{iid}}{\sim} N(\theta,3)\)</span>, with mean <span class="math inline">\(\bar{z}=1.221\)</span>. Unfortunately, the measuring device for this latter sample was defective and any measurement above <span class="math inline">\(3\)</span> was recorded as exactly <span class="math inline">\(3\)</span>. There were two such measurements. Give an expression for the unnormalized posterior distribution (likelihood times prior) for <span class="math inline">\(\theta\)</span> based on all three samples (<span class="math inline">\(x,y\)</span> and <span class="math inline">\(z\)</span>). Plot this unnormalized posterior over a grid of <span class="math inline">\(\theta\)</span> values.</p>
+<p><span class="math inline">\(\textit{Hint}\)</span>: the posterior distribution is not normal anymore when the measurements are truncated at <span class="math inline">\(3\)</span>.</p>
+<div id="q:iid_truncated_normal_c" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Let us do as before, using the posterior from the first two samples (obtained in problem b) above) as the prior. The prior is therefore <span class="math inline">\(\theta\sim N\left(1.4237,\frac{5}{76}\right)\)</span>.</p>
+<p>Let us first use these eight observations to update the posterior, and then add the information from the two measurements that where truncated at <span class="math inline">\(3\)</span>. The mean of the eight measurements which were correctly recorded is <span class="math inline">\(1.221\cdot10-3\cdot2=0.77625\)</span>. The eight correctly recorded observations gives the following updating of the <span class="math inline">\(N\left(1.4237,\frac{5}{76}\right)\)</span> prior: <span class="math display">\[\begin{align*}
+      w &amp;=\frac{\frac{8}{3}}{\frac{8}{3}+\frac{1}{5/76}}=\frac{10}{67} \\
+      \mu_{n}   &amp;=\frac{10}{67}\cdot0.77625+\left(1-\frac{10}{67}\right)\cdot1.4237=1.3271 \\
+      \tau_{n}^{2} &amp;=\left(\frac{8}{3}+\frac{1}{5/76}\right)^{-1}=\frac{15}{268}=0.05597.
+    \end{align*}\]</span> Note that most of the weight is now given to the prior, i.e.&nbsp;the posterior after the updates in (a) and (b). This is reasonable since the <span class="math inline">\(8\)</span> new observations have relatively large variance, <span class="math inline">\(\sigma^{2}=3\)</span>.</p>
+<p>We are now ready for the final piece of information: the two truncated observations. We do not know their exact values, but we know that they were equal to or larger than <span class="math inline">\(3\)</span>. This is important information which we cannot ignore. The likelihood of these two observations (let’s call them <span class="math inline">\(z_{1}\)</span> and <span class="math inline">\(z_{2}\)</span>) is <span class="math display">\[\begin{align*}
+      p(z_{1},z_{2}\vert\theta) &amp;=\mathrm{Pr}(z_{1}\geq3\vert\theta)\mathrm{Pr}(z_{2}\geq3\vert\theta) \\
+      &amp;=\Big(1-\mathrm{Pr}(z_{1}\leq 3\vert\theta)\Big) \Big(1-\mathrm{Pr}(z_{2}\leq3\vert\theta)\Big) \\
+      &amp;=\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]  \\
+      &amp;=\left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}
+    \end{align*}\]</span> where <span class="math inline">\(\Phi(\cdot)\)</span> is the CDF of the <span class="math inline">\(\mathrm{N}(0,1)\)</span> distribution. The posterior based on all <span class="math inline">\(30\)</span> data points is now obtained by multiplying this likelihood with the prior at this stage, that is the posterior based on the first <span class="math inline">\(28\)</span> correctly recorded data: <span class="math inline">\(N(1.3271,0.05597)\)</span>. The posterior is therefore proportional to <span class="math display">\[\begin{equation*}
+      \left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}\exp\left[-\frac{1}{2\cdot0.05597}\left(\mu-1.3271\right)^{2}\right].
+    \end{equation*}\]</span></p>
+<p>The code below plots the prior (which is the posterior based on the <span class="math inline">\(28\)</span> correctly recorded observations), the likelihood from the two truncated observations and the posterior based on all <span class="math inline">\(30\)</span> data points. Note the form of the likelihood function from the two truncated observations: the probability of observing them increases monotonically with <span class="math inline">\(\theta\)</span> since all we know about these observations is that they are larger or equal to <span class="math inline">\(3\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>theta_grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">2.5</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>bin_width <span class="ot">=</span> theta_grid[<span class="dv">2</span>] <span class="sc">-</span> theta_grid[<span class="dv">1</span>]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>like <span class="ot">=</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">3</span>, theta_grid, <span class="fu">sqrt</span>(<span class="dv">3</span>)))<span class="sc">^</span><span class="dv">2</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>prior <span class="ot">=</span> <span class="fu">dnorm</span>(theta_grid, <span class="fl">1.3271</span>, <span class="fu">sqrt</span>(<span class="fl">0.05597</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>post <span class="ot">=</span> like <span class="sc">*</span> prior <span class="co"># unnormalized</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>post <span class="ot">=</span> post <span class="sc">/</span> <span class="fu">sum</span>(post <span class="sc">*</span> bin_width)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>like <span class="ot">=</span> like <span class="sc">/</span> <span class="fu">sum</span>(like <span class="sc">*</span> bin_width)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(theta_grid, prior, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(theta), <span class="at">ylab =</span> <span class="st">"density"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(theta_grid, like, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(theta_grid, post, <span class="at">col =</span> <span class="st">"indianred"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Prior"</span>, <span class="st">"Likelihood"</span>, <span class="st">"Posterior"</span>),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"orange"</span>, <span class="st">"steelblue"</span>, <span class="st">"indianred"</span>), <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="truncated_normal_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

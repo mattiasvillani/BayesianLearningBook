@@ -321,8 +321,17 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#exercise-1.1" id="toc-exercise-1.1" class="nav-link active" data-scroll-target="#exercise-1.1">Exercise 1.1</a></li>
+  <li><a href="#exercise-1.2" id="toc-exercise-1.2" class="nav-link" data-scroll-target="#exercise-1.2">Exercise 1.2</a></li>
+  <li><a href="#exercise-1.3" id="toc-exercise-1.3" class="nav-link" data-scroll-target="#exercise-1.3">Exercise 1.3</a></li>
+  <li><a href="#exercise-1.4" id="toc-exercise-1.4" class="nav-link" data-scroll-target="#exercise-1.4">Exercise 1.4</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -354,13 +363,16 @@ window.Quarto = {
 
 
 <p>Click on the arrow to see a solution.</p>
+<section id="exercise-1.1" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1.1">Exercise 1.1</h2>
+<p>A university uses an automatic tool to detect plagiarism in student essays. The tool has a sensitivity of 0.95 (probability of flagging plagarism when the essay is plagiarized) and a specificity of 0.90 (probability of not flagging plagarism when the essay is not plagiarized). Assume that 1% of all students actually plagiarize. If a student is flagged by the tool, what is the probability that the student actually has plagiarized?</p>
 <div id="prob:expon_post" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Exercise 1.1
+Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -372,24 +384,69 @@ Exercise 1.1
 </div>
 </div>
 </div>
-<div id="prob:expon_post" class="callout callout-style-default callout-note no-icon callout-titled">
+</section>
+<section id="exercise-1.2" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1.2">Exercise 1.2</h2>
+<p>Think about an event that you are uncertain about, for example the event that you favorite sports team wins their next game. Try to elicit your subjective probability for the event by considering a betting situation where you win $100 if the event occurs. Start with a price of $1 and ask yourself if you would be willing to take the bet. Then gradually increase the price of the bet until you are indifferent between taking the bet or not.</p>
+<div id="q:favorite_team" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Exercise 1.2
+Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>My favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around $75 for a bet giving me $100 if Napoli wins, but not more, so my subjective probability is around 0.75.</p>
+<p>My favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around $75, but not more,for a bet giving me $100 if Napoli wins. Hence, my subjective probability is around 0.75.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-1.3" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1.3">Exercise 1.3</h2>
+<p>Think about a political party that you care about. Elicit a histogram to represent your prior distribution for the party’s support in percent, <span class="math inline">\(0\leq \theta \leq 100\)</span>, in the next national election, by asking yourself questions about the probability of certain intervals. For example, what is the probability that the party’s support is below 10%? Between 10% and 20%? And so on. Make sure that the final histogram integrates to one over the full support, and plot it.</p>
+<div id="q:voting_share_histogram" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-1.4" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1.4">Exercise 1.4</h2>
+<p>Reproduce the first row of Figure by writing your own code in your favorite programming language.</p>
+<div id="q:discrete_bayes" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+
 </div>
 </div>
 </div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

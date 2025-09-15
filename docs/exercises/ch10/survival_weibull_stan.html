@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>favorite_team – Bayesian Learning Book</title>
+<title>survival_weibull_stan – Bayesian Learning Book</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -72,6 +107,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -296,7 +360,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#exercise-1.2" id="toc-exercise-1.2" class="nav-link active" data-scroll-target="#exercise-1.2">Exercise 1.2</a></li>
+  <li><a href="#exercise-10.1" id="toc-exercise-10.1" class="nav-link active" data-scroll-target="#exercise-10.1">Exercise 10.1</a></li>
   </ul>
 </nav>
     </div>
@@ -307,10 +371,13 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="exercise-1.2" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-1.2">Exercise 1.2</h2>
-<p>Think about an event that you are uncertain about, for example the event that you favorite sports team wins their next game. Try to elicit your subjective probability for the event by considering a betting situation where you win $100 if the event occurs. Start with a price of $1 and ask yourself if you would be willing to take the bet. Then gradually increase the price of the bet until you are indifferent between taking the bet or not.</p>
-<div id="q:favorite_team" class="callout callout-style-default callout-note no-icon callout-titled">
+<section id="exercise-10.1" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-10.1">Exercise 10.1</h3>
+<p>This exercise extends the analysis of the Weibull model for survival times of lung cancer patients in Exercise to the regression setting. The survival times are here modelled as independent Weibull distributed with a scale parameter <span class="math inline">\(\lambda\)</span> that is a function of covariates, i.e.&nbsp;using a Weibull regression model. The response variable <code>time</code> is denoted by <span class="math inline">\(y\)</span> and is modelled as a function of the three covariates <code>age</code>, <code>sex</code> and <code>ph.ecog</code> (ECOG performance score). The model for patient <span class="math inline">\(i\)</span> is: <span class="math display">\[
+y_i \vert \mathbf{x}_i, \boldsymbol{\beta}, k \overset{\mathrm{ind}}{\sim} \mathrm{Weibull}\big(\lambda_i = \exp(\mathbf{x}_i^\top \boldsymbol{\beta}),k\big).
+\]</span> where <span class="math inline">\(\boldsymbol{\beta}\)</span> is the vector with regression coefficients. Note that by the properties of the Weibull distribution, the conditional mean in this model is <span class="math inline">\(\mathbb{E}(y \vert \mathbf{x}_i) = \lambda_i\Gamma(1+1/k)\)</span>, so the regression coefficients do not quite have the usual interpretation of the effect on the conditional mean. The three covariates are placed in a <span class="math inline">\(n\times p\)</span> matrix <span class="math inline">\(\mathbf{X}\)</span> with the first column being one for all observations to model the intercept. Use a multivariate normal prior for <span class="math inline">\(\boldsymbol{\beta} \sim N(\mathbf{0},\tau^2\mathbf{I}_p)\)</span> with the non-informative choice <span class="math inline">\(\tau = 100\)</span>, and the prior <span class="math inline">\(\ k \sim \mathrm{logNormal}(0,2^2)\)</span>. Remove the patients with missing values in the selected covariates.</p>
+<p>Sample from the posterior distribution <span class="math inline">\(p(\boldsymbol{\beta}, k \vert \mathbf{y}, \mathbf{X})\)</span> using HMC in stan. Plot the marginal posterior for <span class="math inline">\(k\)</span> and the marginal posteriors of each regression coefficient.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -322,7 +389,66 @@ Solution
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>My favorite sports team is the Italian soccer team Napoli. They are playing Juventus at home in Naples next week. I would be willing to pay around $75, but not more,for a bet giving me $100 if Napoli wins. Hence, my subjective probability is around 0.75.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># loads data manipulation and visualization packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"#6C8EBF"</span>, <span class="st">"#c0a34d"</span>, <span class="st">"#780000"</span>,<span class="st">"#007878"</span>,<span class="st">"#B5C6DF"</span>,<span class="st">"#EADAAA"</span>,<span class="st">"#AE6666"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The code below defines the iid Weibull survival model with censored data in <code>stan</code>. The code here extends <a href="https://mc-stan.org/docs/stan-users-guide/truncation-censoring.html#integrating-out-censored-values">this example</a> in the Stan User Guide to the case with <em>different censoring points</em> for each patient. Note the <code>target +=</code> construction where the censored data points are added to the target (the log posterior) after the initial uncensored (observed) data are included in the log posterior with the <code>y_obs ~ weibull(k, lambda)</code> statement. The <code>weibull_lccdf</code> function in stan is a convenience function that computes the survival probability <span class="math inline">\(\mathrm{Pr}(X &gt;= x) = 1 - F(x)\)</span>, where <span class="math inline">\(F()\)</span> is the cdf of the Weibull distribution. There are <code>_lccdf</code> versions of all distribution in stan.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>weibull_survivalmodel <span class="ot">&lt;-</span> <span class="st">'</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st">data {</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">  // Data</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">  int&lt;lower=0&gt; N_obs;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">  int&lt;lower=0&gt; N_cens;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">  array[N_obs] real y_obs;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">  array[N_cens] real y_cens;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">  // Model setting</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">  real&lt;lower=0&gt; k;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="st">  // Prior hyperparameters theta ~ Gamma(alpha, beta)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="st">  real&lt;lower=0&gt; alpha;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">  real&lt;lower=0&gt; beta;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="st">parameters {</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="st">  real lambda;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="st">model {</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="st">  lambda ~ gamma(alpha, beta); // specifies the prior</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="st">  y_obs ~ weibull(k, lambda);  // add the observed (non-censored) data</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="st">  target += weibull_lccdf(y_cens | k, lambda); // add censored. lccdf is 1-cdf</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We set up the data and prior lists that will be supplied to stan:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival) <span class="co"># loads the lung cancer data as `lung`</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>k <span class="ot">=</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y_obs <span class="ot">&lt;-</span> lung <span class="sc">%&gt;%</span> <span class="fu">filter</span>(status <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(time)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>y_cens <span class="ot">&lt;-</span> lung <span class="sc">%&gt;%</span> <span class="fu">filter</span>(status <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(time)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">N_obs =</span> <span class="fu">length</span>(y_obs), <span class="at">N_cens =</span> <span class="fu">length</span>(y_cens), </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">y_obs =</span> y_obs, <span class="at">y_cens =</span> y_cens, <span class="at">k =</span> k)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>alpha_prior <span class="ot">&lt;-</span> <span class="dv">3</span>     <span class="co"># shape parameter</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>beta_prior <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">50</span>   <span class="co"># rate parameter</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>prior <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">alpha =</span> alpha_prior, <span class="at">beta =</span> beta_prior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Load rstan and set some options</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("rstan", repos = c('https://stan-dev.r-universe.dev', </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                                    getOption("repos")))</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(rstan))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rstan_options</span>(<span class="at">auto_write =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Sample from the posterior distribution using HMC in stan</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nDraws <span class="ot">=</span> <span class="dv">5000</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">stan</span>(<span class="at">model_code =</span> weibull_survivalmodel, <span class="at">data =</span> <span class="fu">c</span>(data, prior), <span class="at">iter =</span> nDraws)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 </div>

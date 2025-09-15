@@ -1,0 +1,9 @@
+### Exercise 2.3
+
+{{< include /exercises/book_exercises/oneparam/iid_geo_conj.tex >}}
+
+::: {#q:iid_geo_conj .callout-note icon="false" collapse="true"}
+## Solution
+
+![](/exercises/larry.png){width="167"}
+:::

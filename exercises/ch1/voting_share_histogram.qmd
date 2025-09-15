@@ -1,0 +1,9 @@
+## Exercise 1.3
+
+{{< include /exercises/book_exercises/bayesics/voting_share_histogram.tex >}}
+
+::: {#q:voting_share_histogram .callout-note icon="false" collapse="true"}
+## Solution
+
+![](/exercises/larry.png){width="167"}
+:::

@@ -1,20 +1,10 @@
 
-### Exercise 2.2 {#sec-prob_post_exp_lung}
-The dataset `lung` in the R package `survival` contains data on 228 patients with advanced lung cancer. We will here analyze the survival time in days for the patients which is recorded by the variable `time`. The variable `status` is a binary variable with `status = 1` if the survival time of the patient is censored (patient still alive at the end of the study) and `status = 2` if the survival time was uncensored (patient dead before the end of the study). 
+### Exercise 2.8
 
-(a) Consider first only the uncensored patients (`status = 2`). Assume that the survival time $X$ of the patients are independent exponentially distributed with a common rate parameter $\theta$ such that $\mathbb{E}(X \vert \theta) = 1/\theta$. Assume the conjugate prior $\theta \sim \mathrm{Gamma}(\alpha,\beta)$. A doctor tells you that the expected time until death ($1/\theta$) for this population is around $200$ days. It can be shown that setting $\alpha=3$ and $\beta=300$ implies that the prior mean for $\mathbb{E}(X \vert \theta) = 1/\theta$ is $200$ days, so use that prior. Plot the prior and posterior densities for $\theta$ over a suitable grid of $\theta$-values.
-(b) Now consider all patients, both censored and uncensored, using the same prior as in (a). Plot the prior and posterior densities for $\theta$ over a suitable grid of $\theta$-values.  
-*Hint*: The posterior is no longer tractable due to contributions of the censored patients to the likelihood. For the censored patients we only know that they lived *at least* the number of days recorded in the dataset. The likelihood contribution $p(x_c \vert \theta)$ for the $c$th censored patient with recorded time $x_c$ is therefore $p(X \geq x_c \vert \theta) = e^{-\theta x_c}$, which follows from the distribution function of the exponential distribution $p(X \leq x \vert \theta) = 1 - e^{-\theta x}$.
-(c) Plot a histogram of `time` and overlay the pdf of the exponential model with the parameter $\theta$ estimated with the posterior mode.
+{{< include /exercises/book_exercises/oneparam/iid_exp_survival_all.tex >}}
 
-
-::: {#prob:expon_lung_a .callout-note icon="false" collapse="true"}
-## Solution Exercise 2.2a
-From Exercise 2.1, we know that the posterior distribution is 
-$$\theta \sim \mathrm{Gamma}(\alpha + n_u, \beta + \sum\nolimits_{u \in \mathcal{U}} x_u),$$
-where $n_u$ is the number of uncensored observations and $\mathcal{U}$ is the set of observation indices for the uncensored data.
-
-The following code plots the prior, likelihood (normalized) and posterior over a grid of values for $\theta$. Note that the data is so much stronger than the prior that the posterior is virtually identical to the likelihood, which is why the normalized likelihood is not visible in the plot.
+::: {#q:iid_exp_survival_all .callout-note icon="false" collapse="true"}
+## Solution 
 
 ```{r}
 #| output: false
@@ -22,54 +12,6 @@ library(tidyverse) # loads data manipulation and visualization packages
 library(survival) # loads the lung cancer data as `lung`
 colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE6666")
 ```
-
-```{r}
-# Summarize the data needed for the posterior, filter out censored data
-data_summary <- lung %>% filter(status == 2) %>% summarize(n = n(), sum_x = sum(time))
-```
-
-```{r}
-# Set up prior hyperparameters
-alpha_prior <- 3   # shape parameter
-beta_prior <- 300  # rate parameter
-
-# Compute posterior hyperparameters
-alpha_post <- alpha_prior + data_summary$n  
-beta_post <- beta_prior + data_summary$sum_x   
-```
-
-```{r}
-# Plot the prior and posterior densities, and the (normalized) likelihood as a bon 
-thetaGrid <- seq(0, 0.03, length.out = 1000)
-prior_density <- dgamma(thetaGrid, shape = alpha_prior, rate = beta_prior)
-likelihood_density <- dgamma(thetaGrid, shape = data_summary$n, rate = data_summary$sum_x)
-posterior_density <- dgamma(thetaGrid, shape = alpha_post, rate = beta_post)
-
-df <- data.frame(
-  thetaGrid = thetaGrid, 
-  prior = prior_density, 
-  likelihood = likelihood_density,
-  posterior = posterior_density
-)
-
-df_long <- df %>% pivot_longer(-thetaGrid, names_to = "density_type", values_to = "density")
-
-# Plot using ggplot2
-ggplot(df_long) +
-  aes(x = thetaGrid, y = density, color = density_type) +
-  geom_line() +
-  scale_colour_manual(
-    breaks = c("prior", "likelihood", "posterior"), 
-    values = c(colors[2], colors[1], colors[3])) +
-  labs(title = "Exercise 2.2", x = expression(theta), y = "Density", color = "") + 
-  theme_minimal()
-```
-
-:::
-
-
-::: {.callout-note icon="false" collapse="true"}
-## Solution Exercise 2.2b
 
 The likelihood for all data, censored and uncensored, is 
 $$
@@ -161,10 +103,7 @@ ggplot(df_long) +
   theme_minimal()
 ```
 
-:::
 
-::: {#prob:expon_lung_c .callout-note icon="false" collapse="true"}
-## Solution Exercise 2.2 c
 The code below plots the histogram and the pdf of the exponential model with the parameter $\theta$ set equal to the posterior mode. It is clear that the exponential model with its monotonically decreasing density is not fitting the data well.
 ```{r}
 postMode = df$thetaGrid[which.max(df$posterior_all)]

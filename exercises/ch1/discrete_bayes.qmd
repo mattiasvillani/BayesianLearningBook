@@ -1,0 +1,8 @@
+## Exercise 1.4
+
+{{< include /exercises/book_exercises/bayesics/discrete_bayes.tex >}}
+
+::: {#q:discrete_bayes .callout-note icon="false" collapse="true"}
+## Solution
+![](/exercises/larry.png){width="167"}
+:::

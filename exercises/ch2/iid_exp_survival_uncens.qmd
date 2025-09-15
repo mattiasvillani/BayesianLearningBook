@@ -1,0 +1,63 @@
+
+### Exercise 2.2
+
+{{< include /exercises/book_exercises/oneparam/iid_exp_survival_uncens.tex >}}
+
+::: {#q:iid_exp_survival_uncens .callout-note icon="false" collapse="true"}
+## Solution
+From Exercise 2.1, we know that the posterior distribution is 
+$$\theta \sim \mathrm{Gamma}(\alpha + n_u, \beta + \sum\nolimits_{u \in \mathcal{U}} x_u),$$
+where $n_u$ is the number of uncensored observations and $\mathcal{U}$ is the set of observation indices for the uncensored data.
+
+The following code plots the prior, likelihood (normalized) and posterior over a grid of values for $\theta$. Note that the data is so much stronger than the prior that the posterior is virtually identical to the likelihood, which is why the normalized likelihood is not visible in the plot.
+
+```{r}
+#| output: false
+library(tidyverse) # loads data manipulation and visualization packages
+library(survival) # loads the lung cancer data as `lung`
+colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE6666")
+```
+
+```{r}
+# Summarize the data needed for the posterior, filter out censored data
+data_summary <- lung %>% filter(status == 2) %>% summarize(n = n(), sum_x = sum(time))
+```
+
+```{r}
+# Set up prior hyperparameters
+alpha_prior <- 3   # shape parameter
+beta_prior <- 300  # rate parameter
+
+# Compute posterior hyperparameters
+alpha_post <- alpha_prior + data_summary$n  
+beta_post <- beta_prior + data_summary$sum_x   
+```
+
+```{r}
+# Plot the prior and posterior densities, and the (normalized) likelihood 
+thetaGrid <- seq(0, 0.03, length.out = 1000)
+prior_density <- dgamma(thetaGrid, shape = alpha_prior, rate = beta_prior)
+likelihood_density <- dgamma(thetaGrid, shape = data_summary$n, rate = data_summary$sum_x)
+posterior_density <- dgamma(thetaGrid, shape = alpha_post, rate = beta_post)
+
+df <- data.frame(
+  thetaGrid = thetaGrid, 
+  prior = prior_density, 
+  likelihood = likelihood_density,
+  posterior = posterior_density
+)
+
+df_long <- df %>% pivot_longer(-thetaGrid, names_to = "density_type", values_to = "density")
+
+# Plot using ggplot2
+ggplot(df_long) +
+  aes(x = thetaGrid, y = density, color = density_type) +
+  geom_line() +
+  scale_colour_manual(
+    breaks = c("prior", "likelihood", "posterior"), 
+    values = c(colors[2], colors[1], colors[3])) +
+  labs(title = "Survival lung cancer - uncensored patients", x = expression(theta), y = "Density", color = "") + 
+  theme_minimal()
+```
+
+:::

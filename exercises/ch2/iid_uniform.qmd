@@ -34,6 +34,44 @@ The likelihood from an iid sample of $n$ observation can therefore be written
 $$
 p(x_1,\ldots,x_n \vert \theta) = \prod_{i=1}^n p(x_i \vert \theta) = \prod_{i=1}^n I\Big(x_i - \frac{1}{2} \leq \theta \leq x_i + \frac{1}{2}\Big)
 $$
+The plots below illustrate how certain $\theta$ values makes the single data point $x_1 = 2.1$ impossible.
+```{r}
+#| code-fold: true
+xi = 2.1
+par(mfrow = c(3,1))
+
+# Adding the uniform density for an impossible theta
+theta = 1.2
+plot(xi, 0, pch = 19, col = "indianred", xlim = c(0,4), ylim = c(-0.1,1.1), 
+     main = "theta = 1.2 is too low - distribution misses the data x = 2.1")
+abline(h = 0, lty = "dashed")
+points(theta, 0, pch = 3, col = "orange", lwd = 3)
+lines(c(theta - 0.5, theta + 0.5), c(1,1), col = "orange")
+lines(c(theta - 0.5, theta - 0.5), c(0,1), col = "orange")
+lines(c(theta + 0.5, theta + 0.5), c(0,1), col = "orange")
+
+# Adding the uniform density for an impossible theta
+theta = 2
+plot(xi, 0, pch = 19, col = "indianred", xlim = c(0,4), ylim = c(-0.1,1.1), 
+     main = "theta = 2 is OK - distribution captures the data x = 2.1")
+abline(h = 0, lty = "dashed")
+points(theta, 0, pch = 3, col = "cornflowerblue", lwd = 3)
+lines(c(theta - 0.5, theta + 0.5), c(1,1), col = "cornflowerblue")
+lines(c(theta - 0.5, theta - 0.5), c(0,1), col = "cornflowerblue")
+lines(c(theta + 0.5, theta + 0.5), c(0,1), col = "cornflowerblue")
+
+# Adding the uniform density for an impossible theta
+theta = 3.2
+plot(xi, 0, pch = 19, col = "indianred", xlim = c(0,4), ylim = c(-0.1,1.1), 
+     main = "theta = 3.2 is too high - distribution misses the data x = 2.1")
+abline(h = 0, lty = "dashed")
+points(theta, 0, pch = 3, col = "green", lwd = 3)
+lines(c(theta - 0.5, theta + 0.5), c(1,1), col = "green")
+lines(c(theta - 0.5, theta - 0.5), c(0,1), col = "green")
+lines(c(theta + 0.5, theta + 0.5), c(0,1), col = "green")
+
+```
+
 The likelihood is non-zero only for the $\theta$ values where $x_i - \frac{1}{2} \leq \theta \leq x_i + \frac{1}{2}$ for **all** data observations $i=1,2,\ldots,n$. This means that the likelihood is non-zero only when $x_\max - \frac{1}{2} \leq \theta \leq x_\min + \frac{1}{2}$, where $x_\min$ and $x_\max$ are the minimum and maximum of the sample. With a uniform prior on $\theta$, the posterior is proportional to the likelihood, so
 $$
 p(\theta \vert x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \propto I\Big( x_\max - \frac{1}{2} \leq \theta \leq x_\min + \frac{1}{2} \Big)

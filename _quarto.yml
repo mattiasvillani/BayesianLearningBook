@@ -27,8 +27,8 @@ format:
     css: styles.css
     toc: true
     #monobackgroundcolor: #c3d0e6
-callout-appearance: default
-
+    callout-appearance: default
+    callout-collapse: true       # all callouts collapsed by default
 filters:
   - ref2crossref.lua
 

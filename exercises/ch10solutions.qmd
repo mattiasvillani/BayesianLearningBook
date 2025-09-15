@@ -1,9 +1,9 @@
 ---
 title: "Chapter 10 - Markov Chain Monte Carlo: Exercise solutions"
 author: "Mattias Villani"
-output:
-  html_document:
-    collapse: false
+format:
+  html: default
+  pdf: default
 ---
 
 ```{r}

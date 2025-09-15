@@ -1,9 +1,9 @@
 ---
 title: "Chapter 3 - Multi-parameter models: Exercise solutions"
 author: "Mattias Villani"
-output:
-  html_document:
-    collapse: false
+format:
+  html: default
+  pdf: default
 ---
 
 ```{r}

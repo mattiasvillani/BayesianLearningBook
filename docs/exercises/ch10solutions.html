@@ -364,7 +364,7 @@ window.Quarto = {
   <li><a href="#exercise-10.1" id="toc-exercise-10.1" class="nav-link active" data-scroll-target="#exercise-10.1">Exercise 10.1</a></li>
   <li><a href="#exercise-10.2" id="toc-exercise-10.2" class="nav-link" data-scroll-target="#exercise-10.2">Exercise 10.2</a></li>
   </ul>
-</nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="ch10solutions.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -567,39 +567,32 @@ Solution
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>nDraws <span class="ot">=</span> <span class="dv">5000</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">stan</span>(<span class="at">model_code =</span> weibull_survivalreg, <span class="at">data =</span> <span class="fu">c</span>(data, prior), <span class="at">iter =</span> nDraws)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: There were 661 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
-https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
-</div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"beta_"</span>, <span class="st">"k"</span>), <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>summary  <span class="co"># results from all the different runs (chains) merged.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"beta_"</span>, <span class="st">"k"</span>), <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>summary  <span class="co"># results from all the different runs (chains) merged.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                 mean      se_mean          sd        2.5%        97.5%
-beta_[1]  6.324837497 4.559026e-03 0.319224456  5.71572378  6.957521289
-beta_[2] -0.002813494 7.333408e-05 0.005160073 -0.01300137  0.007106381
-beta_[3]  0.233240142 1.649636e-03 0.095664264  0.04507922  0.422638999
-beta_[4] -0.259141298 9.346018e-04 0.068865339 -0.39279011 -0.122257283
-k         1.450477365 7.758604e-04 0.073560185  1.30800758  1.594592552
-            n_eff      Rhat
-beta_[1] 4902.844 1.0001428
-beta_[2] 4951.081 1.0000836
-beta_[3] 3362.970 1.0014021
-beta_[4] 5429.354 1.0004856
-k        8989.147 0.9999815</code></pre>
+beta_[1]  6.326162394 4.869551e-03 0.323775649  5.70127222  6.968225881
+beta_[2] -0.002834145 7.845797e-05 0.005254269 -0.01319023  0.007348398
+beta_[3]  0.234288159 1.080355e-03 0.095184244  0.05184712  0.425373285
+beta_[4] -0.259055417 8.814885e-04 0.069571466 -0.39388588 -0.124469559
+k         1.449843839 8.886235e-04 0.074705666  1.30512775  1.599808428
+            n_eff     Rhat
+beta_[1] 4420.898 1.001538
+beta_[2] 4484.877 1.001563
+beta_[3] 7762.421 1.000146
+beta_[4] 6229.154 1.000016
+k        7067.592 1.000660</code></pre>
 </div>
 </div>
 <p>Plotting the marginal posterior of <span class="math inline">\(k\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histogram from stan draws</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>postsamples <span class="ot">&lt;-</span> <span class="fu">extract</span>(fit, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"beta_"</span>,<span class="st">"k"</span>))</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(postsamples<span class="sc">$</span>k, <span class="dv">50</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">col =</span> colors[<span class="dv">5</span>], </span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(k), <span class="at">ylab =</span> <span class="st">"posterior density"</span>, </span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="fu">expression</span>(k))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histogram from stan draws</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>postsamples <span class="ot">&lt;-</span> <span class="fu">extract</span>(fit, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"beta_"</span>,<span class="st">"k"</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(postsamples<span class="sc">$</span>k, <span class="dv">50</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">col =</span> colors[<span class="dv">5</span>], </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(k), <span class="at">ylab =</span> <span class="st">"posterior density"</span>, </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="fu">expression</span>(k))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -610,12 +603,12 @@ k        8989.147 0.9999815</code></pre>
 </div>
 <p>Plotting the marginal posteriors for each <span class="math inline">\(\beta\)</span> coefficient</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>varNames <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"intercept"</span>, <span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"ph.ecog"</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p){</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(postsamples<span class="sc">$</span>beta_[,j], <span class="dv">50</span>, <span class="at">col =</span> colors[<span class="dv">6</span>], </span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">ylab =</span> <span class="st">"density"</span>, <span class="at">main =</span> varNames[j])</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>varNames <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"intercept"</span>, <span class="st">"age"</span>, <span class="st">"sex"</span>, <span class="st">"ph.ecog"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p){</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(postsamples<span class="sc">$</span>beta_[,j], <span class="dv">50</span>, <span class="at">col =</span> colors[<span class="dv">6</span>], </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">ylab =</span> <span class="st">"density"</span>, <span class="at">main =</span> varNames[j])</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

@@ -371,6 +371,7 @@ window.Quarto = {
   <li><a href="#exercise-2.8" id="toc-exercise-2.8" class="nav-link" data-scroll-target="#exercise-2.8">Exercise 2.8</a></li>
   <li><a href="#exercise-2.9" id="toc-exercise-2.9" class="nav-link" data-scroll-target="#exercise-2.9">Exercise 2.9</a></li>
   <li><a href="#exercise-2.10" id="toc-exercise-2.10" class="nav-link" data-scroll-target="#exercise-2.10">Exercise 2.10</a></li>
+  <li><a href="#exercise-2.11" id="toc-exercise-2.11" class="nav-link" data-scroll-target="#exercise-2.11">Exercise 2.11</a></li>
   </ul>
 </nav>
     </div>
@@ -440,7 +441,7 @@ p(\theta) =  \frac{\beta^\alpha}{\Gamma(\alpha)}\theta^{\alpha-1}e^{-\beta\theta
 </section>
 <section id="exercise-2.2" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.2">Exercise 2.2</h3>
-<p>The dataset in the R package contains data on 228 patients with advanced lung cancer. We will here analyze the survival time of the patient in days (). The variable is a binary variable with if the survival time of the patient is censored (patient was still alive at the end of the study) and if the survival time was uncensored (patient was dead before the end of the study).</p>
+<p>The dataset <span class="math inline">\(\texttt{lung}\)</span> in the R package <span class="math inline">\(\texttt{survival}\)</span> contains data on 228 patients with advanced lung cancer. We will here analyze the survival time of the patient in days (<span class="math inline">\(\texttt{time}\)</span>). The variable <span class="math inline">\(\texttt{status}\)</span> is a binary variable with <span class="math inline">\(\texttt{status}=1\)</span> if the survival time of the patient is censored (patient was still alive at the end of the study) and <span class="math inline">\(\texttt{status}=2\)</span> if the survival time was uncensored (patient was dead before the end of the study).</p>
 <p>In this exercise we will only analyze the uncensored patients; Exercise below asks you to analyze all patients. Assume that the survival times <span class="math inline">\(X_1,\ldots,X_n\)</span> of the uncensored patients are iid <span class="math inline">\(\mathrm{Expon}(\theta)\)</span> distributed. Use the conjugate prior <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha=3,\beta=300)\)</span>, which can be shown to imply that the expected survival time <span class="math inline">\(\mathbb{E}(X \vert \theta) = 1/\theta\)</span> for this population is around <span class="math inline">\(200\)</span> days. Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values.</p>
 <div id="q:iid_exp_survival_uncens" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -701,7 +702,7 @@ Solution
 </section>
 <section id="exercise-2.7" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.7">Exercise 2.7</h3>
-<p><strong>a)</strong> Let <span class="math inline">\(X_1,\dots,X_n |\theta \sim \mathrm{Uniform}(\theta-1/2,\theta+1/2)\)</span>. The estimator <span class="math inline">\(\hat\theta= \bar X\)</span> of <span class="math inline">\(\theta\)</span> is unbiased. Calculate for the sampling variance of <span class="math inline">\(\hat\theta\)</span>.</p>
+<p><strong>a)</strong> Let <span class="math inline">\(X_1,\dots,X_n |\theta \sim \mathrm{Uniform}(\theta-1/2,\theta+1/2)\)</span>. The estimator <span class="math inline">\(\hat\theta= \bar X\)</span> is unbiased for <span class="math inline">\(\theta\)</span>. Calculate for the sampling variance of <span class="math inline">\(\hat\theta\)</span>.</p>
 <div id="q:iid_uniform_a" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -757,7 +758,7 @@ Solution
 </section>
 <section id="exercise-2.8" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.8">Exercise 2.8</h3>
-<p>Exercise modelled the survival times of uncensored lung cancer patients with an iid exponential model. In this exercise we will extend that analysis to include also the censored patients, using the same prior as in Exercise . Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values. Finally, assess the fit of the exponential model by plotting a histogram of <code>time</code> and overlay the pdf of the exponential model with the parameter <span class="math inline">\(\theta\)</span> estimated with the posterior mode.</p>
+<p>Exercise modelled the survival times of uncensored lung cancer patients with an iid exponential model. In this exercise we will extend that analysis to include also the censored patients, using the same prior as in Exercise . Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values. Finally, assess the fit of the exponential model by plotting a histogram of <span class="math inline">\(\texttt{time}\)</span> and overlay the pdf of the exponential model with the parameter <span class="math inline">\(\theta\)</span> estimated with the posterior mode.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: The posterior is no longer tractable due to contributions of the censored patients to the likelihood. For the censored patients we only know that they lived the number of days recorded in the dataset. The likelihood contribution <span class="math inline">\(p(x_c \vert \theta)\)</span> for the <span class="math inline">\(c\)</span>th censored patient with recorded time <span class="math inline">\(x_c\)</span> is therefore <span class="math inline">\(p(X \geq x_c \vert \theta) = e^{-\theta x_c}\)</span>, which follows from the distribution function of the exponential distribution <span class="math inline">\(p(X \leq x \vert \theta) = 1 - e^{-\theta x}\)</span>.</p>
 <div id="q:iid_exp_survival_all" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
@@ -1044,6 +1045,51 @@ p(\lambda^{(j)} \vert x_1,\ldots,x_n) =
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="exercise-2.11" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2.11">Exercise 2.11</h3>
+<p>Let <span class="math display">\[
+X_1,\ldots,X_n \overset{iid}{\sim } \mathrm{Uniform}(0,\theta).
+\]</span> Show that the Pareto prior <span class="math inline">\(\theta \sim \mathrm{Pareto}(\alpha, \beta)\)</span>, is conjugate to the Uniform model by deriving the posterior distribution. See Box~ for a definition of the Pareto distribution and properties; note the support of the Pareto distribution.</p>
+<p><span class="math inline">\(\textit{Hint}\)</span>: Do not forget to include an indicator function when you write up the likelihood function since the <span class="math inline">\(\mathrm{Uniform}(0,\theta)\)</span> distribution is zero for outcomes larger than <span class="math inline">\(\theta\)</span>.</p>
+<div id="ex:iid_uniform_conj" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The pdf of the <span class="math inline">\(\mathrm{Uniform}(0,\theta)\)</span> distribution is <span class="math display">\[\begin{equation*}
+  p(x) = \begin{cases}
+          \frac{1}{\theta}  &amp; \text{if } x \leq  \theta \\
+          0                 &amp; \text{otherwise }
+          \end{cases}
+\end{equation*}\]</span> which can be written with an indicator function as <span class="math display">\[
+p(x) = \frac{1}{\theta} I(x_i \leq \theta).
+\]</span> The likelihood function is therefore of the form <span class="math display">\[\begin{equation*}
+   p(x_1,\ldots,x_n\vert\theta) = \prod_{i=1}^n \frac{1}{\theta} I(x_i \leq \theta) = \frac{1}{\theta^n} \prod_{i=1}^n I(x_i \leq \theta).
+\end{equation*}\]</span> The factor <span class="math inline">\(\prod_{i=1}^n I(x_i \leq \theta)\)</span> is only non-zero if <em>all</em> <span class="math inline">\(x_1,\ldots,x_n\)</span> are smaller or equal to <span class="math inline">\(\theta\)</span>, i.e.&nbsp;if <span class="math inline">\(x_{\mathrm{max}} := \mathrm{max}(x_1, \dots,x_n)\)</span> is smaller or equal to <span class="math inline">\(\theta\)</span>. We can therefore write the likelihood as <span class="math display">\[\begin{equation*}
+   p(x_1,\ldots,x_n\vert\theta) = \frac{1}{\theta^n}  I(x_{\mathrm{max}} \leq \theta).
+\end{equation*}\]</span></p>
+<p>The Pareto prior can also be written with an indicator function <span class="math display">\[\begin{align*}
+    p(\theta) = \frac{\alpha \beta^\alpha }{\theta^{\alpha+1}}\cdot I(\beta \leq \theta),
+\end{align*}\]</span> to explicitly include that <span class="math inline">\(p(\theta)=0\)</span> if <span class="math inline">\(\theta &lt; \beta\)</span>.</p>
+<p>By Bayes’ theorem, the posterior is then <span class="math display">\[\begin{align*}
+    p(\theta \vert x_1, \dots,x_n) &amp;\propto p(x_1, \dots,x_n \vert \theta)p(\theta) \\
+                       &amp;= \frac{1}{\theta^n} I(x_{\mathrm{max}} \leq \theta)
+                            \frac{\alpha \beta^\alpha }{\theta^{\alpha+1}}\cdot I(\beta \leq \theta) \\
+                       &amp;=  \frac{\alpha \beta^\alpha }{\theta^{n+\alpha+1}} \cdot  
+                            I\big(\tilde \beta \leq \theta \big)        
+\end{align*}\]</span> where <span class="math inline">\(\tilde \beta = \mathrm{max}(x_{\mathrm{max}},\beta)\)</span>. This is proportional to a <span class="math inline">\(\mathrm{Pareto}\big(\alpha + n, \tilde \beta \big)\)</span> density. Since the prior and posterior are both in the Pareto family, the Pareto prior is conjugate to the <span class="math inline">\(\mathrm{Uniform}(0,\theta)\)</span> model.</p>
 </div>
 </div>
 </div>

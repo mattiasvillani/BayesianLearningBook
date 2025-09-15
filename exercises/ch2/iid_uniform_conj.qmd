@@ -1,0 +1,43 @@
+### Exercise 2.11
+
+{{< include /exercises/book_exercises/oneparam/iid_uniform_conj.tex >}}
+
+::: {#ex:iid_uniform_conj .callout-note icon="false" collapse="true"}
+## Solution
+The pdf of the $\mathrm{Uniform}(0,\theta)$ distribution is
+\begin{equation*}
+  p(x) = \begin{cases}
+          \frac{1}{\theta}  & \text{if } x \leq  \theta \\
+          0                 & \text{otherwise }
+          \end{cases}
+\end{equation*}
+which can be written with an indicator function as 
+$$
+p(x) = \frac{1}{\theta} I(x_i \leq \theta).
+$$
+The likelihood function is therefore of the form
+\begin{equation*}
+   p(x_1,\ldots,x_n\vert\theta) = \prod_{i=1}^n \frac{1}{\theta} I(x_i \leq \theta) = \frac{1}{\theta^n} \prod_{i=1}^n I(x_i \leq \theta).
+\end{equation*}
+The factor $\prod_{i=1}^n I(x_i \leq \theta)$ is only non-zero if *all* $x_1,\ldots,x_n$ are smaller or equal to $\theta$, i.e. if $x_{\mathrm{max}} := \mathrm{max}(x_1, \dots,x_n)$ is smaller or equal to  $\theta$. We can therefore write the likelihood as
+\begin{equation*}
+   p(x_1,\ldots,x_n\vert\theta) = \frac{1}{\theta^n}  I(x_{\mathrm{max}} \leq \theta).
+\end{equation*}
+
+The Pareto prior can also be written with an indicator function
+\begin{align*}
+    p(\theta) = \frac{\alpha \beta^\alpha }{\theta^{\alpha+1}}\cdot I(\beta \leq \theta),
+\end{align*}
+to explicitly include that $p(\theta)=0$ if $\theta < \beta$.
+
+By Bayes' theorem, the posterior is then
+\begin{align*}
+    p(\theta \vert x_1, \dots,x_n) &\propto p(x_1, \dots,x_n \vert \theta)p(\theta) \\
+                       &= \frac{1}{\theta^n} I(x_{\mathrm{max}} \leq \theta)
+                            \frac{\alpha \beta^\alpha }{\theta^{\alpha+1}}\cdot I(\beta \leq \theta) \\
+                       &=  \frac{\alpha \beta^\alpha }{\theta^{n+\alpha+1}} \cdot  
+                            I\big(\tilde \beta \leq \theta \big)        
+\end{align*}
+where $\tilde \beta = \mathrm{max}(x_{\mathrm{max}},\beta)$. This is proportional to a $\mathrm{Pareto}\big(\alpha + n, \tilde \beta \big)$ density. Since the prior and posterior are both in the Pareto family, the Pareto prior is conjugate to the $\mathrm{Uniform}(0,\theta)$ model.
+
+:::

@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -338,7 +373,8 @@ window.Quarto = {
 
 <section id="exercise-2.7" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.7">Exercise 2.7</h3>
-<p><strong>a)</strong> Let <span class="math inline">\(X_1,\dots,X_n |\theta \sim \mathrm{Uniform}(\theta-1/2,\theta+1/2)\)</span>. The estimator <span class="math inline">\(\hat\theta= \bar X\)</span> of <span class="math inline">\(\theta\)</span> is unbiased. Calculate for the sampling variance of <span class="math inline">\(\hat\theta\)</span>.</p>
+<p><strong>a)</strong> Let <span class="math inline">\(X_1,\dots,X_n |\theta \sim \mathrm{Uniform}(\theta-1/2,\theta+1/2)\)</span> for <span class="math inline">\(-\infty &lt; \theta &lt;\infty\)</span>. The estimator <span class="math inline">\(\hat\theta= \bar X\)</span> is unbiased for <span class="math inline">\(\theta\)</span>. Calculate for the sampling variance of <span class="math inline">\(\hat\theta\)</span>.</p>
+<p><span class="math inline">\(\textit{Note}\)</span>: A more efficient estimator is the mid-range <span class="math inline">\(\hat\theta = (X_{\min} + X_{\max})/2\)</span>, but we use the sample mean here for simplicity.</p>
 <div id="q:iid_uniform_a" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -351,11 +387,15 @@ Solution
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><img src="../../exercises/larry.png" class="img-fluid" width="167"></p>
+<p>The variance of a sample mean is always of the form <span class="math display">\[
+\mathbb{V}(\bar X) = \frac{\sigma^2}{n},
+\]</span> where <span class="math inline">\(\sigma^2\)</span> is the variance of each observation <span class="math inline">\(X_i \sim \mathrm{Uniform}(\theta-1/2,\theta+1/2)\)</span>. The variance of <span class="math inline">\(\mathrm{Uniform}(a,b)\)</span> variable is <span class="math inline">\(\frac{(b-a)^2}{2}\)</span>, so here we have <span class="math inline">\(\sigma^2 = \frac{1}{12}\)</span> and the sampling variance of the estimator is <span class="math display">\[
+\mathbb{V}(\bar X) = \frac{1}{12n}
+\]</span></p>
 </div>
 </div>
 </div>
-<p><strong>b)</strong> Derive the posterior distribution for <span class="math inline">\(\theta\)</span> assuming a uniform prior distribution.</p>
+<p><strong>b)</strong> Derive the posterior distribution for <span class="math inline">\(\theta\)</span> assuming a uniform prior distribution over the whole real line.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: once you have observed some data, some values for <span class="math inline">\(\theta\)</span> are no longer possible.</p>
 <div id="q:iid_uniform_b" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -369,11 +409,22 @@ Solution
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><img src="../../exercises/larry.png" class="img-fluid" width="167"></p>
+<p>The density for each observation in the sample is <span class="math display">\[
+p(x \vert \theta) = I\Big(\theta- \frac{1}{2} \leq x \leq \theta + \frac{1}{2}\Big).
+\]</span> The likelihood based a <strong>single</strong> observation is therefore zero whenever <span class="math inline">\(\theta \geq x-\frac{1}{2}\)</span> or when <span class="math inline">\(\theta \leq x + \frac{1}{2}\)</span>. So, to highlight that we care about <span class="math inline">\(p(x\vert\theta)\)</span> as function of <span class="math inline">\(\theta\)</span>, we can write <span class="math display">\[
+p(x \vert \theta) = I\Big(x - \frac{1}{2} \leq \theta \leq x + \frac{1}{2}\Big).
+\]</span></p>
+<p>The likelihood from an iid sample of <span class="math inline">\(n\)</span> observation can therefore be written <span class="math display">\[
+p(x_1,\ldots,x_n \vert \theta) = \prod_{i=1}^n p(x_i \vert \theta) = \prod_{i=1}^n I\Big(x_i - \frac{1}{2} \leq \theta \leq x_i + \frac{1}{2}\Big)
+\]</span> The likelihood is non-zero only for the <span class="math inline">\(\theta\)</span> values where <span class="math inline">\(x_i - \frac{1}{2} \leq \theta \leq x_i + \frac{1}{2}\)</span> for <strong>all</strong> data observations <span class="math inline">\(i=1,2,\ldots,n\)</span>. This means that the likelihood is non-zero only when <span class="math inline">\(x_\max - \frac{1}{2} \leq \theta \leq x_\min + \frac{1}{2}\)</span>, where <span class="math inline">\(x_\min\)</span> and <span class="math inline">\(x_\max\)</span> are the minimum and maximum of the sample. With a uniform prior on <span class="math inline">\(\theta\)</span>, the posterior is proportional to the likelihood, so <span class="math display">\[
+p(\theta \vert x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \propto I\Big( x_\max - \frac{1}{2} \leq \theta \leq x_\min + \frac{1}{2} \Big)
+\]</span> So the posterior distribution is <span class="math display">\[
+\theta \vert x_1,\ldots,x_n \sim \mathrm{Uniform}\Big(x_\max - \frac{1}{2} , \leq x_\min + \frac{1}{2} \Big)
+\]</span></p>
 </div>
 </div>
 </div>
-<p><strong>c)</strong> Assume that you have observed three data observations: <span class="math inline">\(x_1 = 1.1, x_2 = 2.09, x_3 = 1.4\)</span>. What would a frequentist conclude about <span class="math inline">\(\theta\)</span>? What would a Bayesian conclude? Discuss.</p>
+<p><strong>c)</strong> Assume that you have observed three data observations: <span class="math inline">\(x_1 = 1.1, x_2 = 2.05, x_3 = 1.21\)</span>. What would a frequentist conclude about <span class="math inline">\(\theta\)</span>? What would a Bayesian conclude? Discuss.</p>
 <div id="q:iid_uniform_c" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -386,7 +437,50 @@ Solution
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><img src="../../exercises/larry.png" class="img-fluid" width="167"></p>
+<p>The frequentist with <span class="math inline">\(\bar X\)</span> as the estimator of <span class="math inline">\(\theta\)</span> obtains the estimate <span class="math inline">\(\bar x \approx 1.453\)</span>. The sampling standard deviation is <span class="math inline">\(\mathbb{S}(\bar X) = \sqrt{\frac{1}{12n}} = \sqrt{\frac{1}{3\cdot 12}} \approx 0.1666\)</span>, which is the variability of the sample mean estimator <em>on average</em> over all possible datasets of size <span class="math inline">\(n=3\)</span>. The variability is rather large since we only have three observations, so we can easily obtain a sample with three extreme (all small or all large) observations. Here is a plot of the simulated sampling distribution for <span class="math inline">\(\bar X\)</span> from a sample with three observations:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="dv">1</span>  <span class="co"># any value is ok, it will be the center of the sampling distr.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>nRep <span class="ot">=</span> <span class="dv">50000</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>xbar <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, nRep)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nRep){</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  x_rep <span class="ot">=</span> <span class="fu">runif</span>(n, <span class="at">min =</span> theta <span class="sc">-</span> <span class="fl">0.5</span>, <span class="at">max =</span> theta <span class="sc">+</span> <span class="fl">0.5</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  xbar[i] <span class="ot">=</span> <span class="fu">mean</span>(x_rep)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(xbar, <span class="dv">50</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"sampling distribution of the sample mean"</span>, </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"sample mean"</span>, <span class="at">ylab =</span> <span class="st">"density"</span>, <span class="at">col =</span> <span class="st">"cornflowerblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="iid_uniform_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>(As a side-note: note how fast the central limit theorem is here, the sampling distribution is already close to normal as <span class="math inline">\(n=3\)</span>)</p>
+<p>For the given dataset we have <span class="math inline">\(x_\min = 1.1\)</span> and <span class="math inline">\(x_\max = 2.05\)</span> and the posterior is therefore <span class="math display">\[
+\theta \vert x_1,x_2,x_3 \sim \mathrm{Uniform}\big(1.55 , 1.60 \big)
+\]</span> Since we were lucky to obtain a wide range of the data that is close to <span class="math inline">\(1\)</span> (difference between maximum and minimum observation: <span class="math inline">\(2.05-1.1 = 0.95\)</span>), the Bayesian gets a tight posterior which is uniform between <span class="math inline">\(1.55\)</span> and <span class="math inline">\(1.60\)</span>. The posterior is plotted here:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.10</span>, <span class="fl">2.05</span>, <span class="fl">1.21</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> <span class="cn">NA</span>, <span class="at">y =</span> <span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>), </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(theta), <span class="at">ylab =</span> <span class="st">"posterior density"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>post_low <span class="ot">=</span> <span class="fu">max</span>(x) <span class="sc">-</span><span class="fl">0.5</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>post_high <span class="ot">=</span> <span class="fu">min</span>(x) <span class="sc">+</span> <span class="fl">0.5</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(post_low, post_high), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">"orange"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(post_low, post_low), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">"orange"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(post_high, post_high), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="at">col =</span> <span class="st">"orange"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="iid_uniform_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The difference between the frequentist and Bayesian solutions is that the Bayesian solution <strong>conditions on the observed data</strong>, while the frequentist inferences are unconditional on the data, measuring the variability of the estimator <strong>over all possible datasets</strong>. In the one dataset we actually have, we got lucky with a wide range, so we now almost know the true <span class="math inline">\(\theta\)</span>.</p>
 </div>
 </div>
 </div>

@@ -5,8 +5,14 @@
 
 ::: {#q:iid_uniform_a .callout-note icon="false" collapse="true"}
 ## Solution
-
-![](/exercises/larry.png){width="167"}
+The variance of a sample mean is always of the form
+$$
+\mathbb{V}(\bar X) = \frac{\sigma^2}{n},
+$$
+where $\sigma^2$ is the variance of each observation $X_i \sim \mathrm{Uniform}(\theta-1/2,\theta+1/2)$. The variance of $\mathrm{Uniform}(a,b)$ variable is $\frac{(b-a)^2}{2}$, so here we have $\sigma^2 = \frac{1}{12}$ and the sampling variance of the estimator is
+$$
+\mathbb{V}(\bar X) = \frac{1}{12n}
+$$
 :::
 
 **b)** 
@@ -15,7 +21,27 @@
 ::: {#q:iid_uniform_b .callout-note icon="false" collapse="true"}
 ## Solution
 
-![](/exercises/larry.png){width="167"}
+The density for each observation in the sample is
+$$
+p(x \vert \theta) = I\Big(\theta- \frac{1}{2} \leq x \leq \theta + \frac{1}{2}\Big).
+$$
+The likelihood based a **single** observation is therefore zero whenever $\theta \geq x-\frac{1}{2}$ or when $\theta \leq x + \frac{1}{2}$. So, to highlight that we care about $p(x\vert\theta)$ as function of $\theta$, we can write
+$$
+p(x \vert \theta) = I\Big(x - \frac{1}{2} \leq \theta \leq x + \frac{1}{2}\Big).
+$$
+
+The likelihood from an iid sample of $n$ observation can therefore be written
+$$
+p(x_1,\ldots,x_n \vert \theta) = \prod_{i=1}^n p(x_i \vert \theta) = \prod_{i=1}^n I\Big(x_i - \frac{1}{2} \leq \theta \leq x_i + \frac{1}{2}\Big)
+$$
+The likelihood is non-zero only for the $\theta$ values where $x_i - \frac{1}{2} \leq \theta \leq x_i + \frac{1}{2}$ for **all** data observations $i=1,2,\ldots,n$. This means that the likelihood is non-zero only when $x_\max - \frac{1}{2} \leq \theta \leq x_\min + \frac{1}{2}$, where $x_\min$ and $x_\max$ are the minimum and maximum of the sample. With a uniform prior on $\theta$, the posterior is proportional to the likelihood, so
+$$
+p(\theta \vert x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \propto I\Big( x_\max - \frac{1}{2} \leq \theta \leq x_\min + \frac{1}{2} \Big)
+$$
+So the posterior distribution is
+$$
+\theta \vert x_1,\ldots,x_n \sim \mathrm{Uniform}\Big(x_\max - \frac{1}{2} , \leq x_\min + \frac{1}{2} \Big)
+$$
 :::
 
 **c)** 
@@ -24,5 +50,38 @@
 ::: {#q:iid_uniform_c .callout-note icon="false" collapse="true"}
 ## Solution
 
-![](/exercises/larry.png){width="167"}
+The frequentist with $\bar X$ as the estimator of $\theta$ obtains the estimate $\bar x \approx 1.453$. The sampling standard deviation is $\mathbb{S}(\bar X) = \sqrt{\frac{1}{12n}} = \sqrt{\frac{1}{3\cdot 12}} \approx 0.1666$, which is the variability of the sample mean estimator *on average* over all possible datasets of size $n=3$. The variability is rather large since we only have three observations, so we can easily obtain a sample with three extreme (all small or all large) observations. Here is a plot of the simulated sampling distribution for $\bar X$ from a sample with three observations:
+```{r}
+theta = 1  # any value is ok, it will be the center of the sampling distr.
+nRep = 50000
+n = 3
+xbar = rep(0, nRep)
+for (i in 1:nRep){
+  x_rep = runif(n, min = theta - 0.5, max = theta + 0.5)
+  xbar[i] = mean(x_rep)
+}
+hist(xbar, 50, freq = FALSE, 
+     main = "sampling distribution of the sample mean", 
+     xlab = "sample mean", ylab = "density", col = "cornflowerblue")
+```
+(As a side-note: note how fast the central limit theorem is here, the sampling distribution is already close to normal as $n=3$)
+
+
+For the given dataset we have $x_\min = 1.1$ and $x_\max = 2.05$ and the posterior is therefore
+$$
+\theta \vert x_1,x_2,x_3 \sim \mathrm{Uniform}\big(1.55 , 1.60 \big)
+$$
+Since we were lucky to obtain a wide range of the data that is close to $1$ (difference between maximum and minimum observation: $2.05-1.1 = 0.95$), the Bayesian gets a tight posterior which is uniform between $1.55$ and $1.60$. The posterior is plotted here:
+```{r}
+x = c(1.10, 2.05, 1.21)
+plot(x = NA, y = NA, xlim = c(1,2), ylim = c(-1,1), 
+     xlab = expression(theta), ylab = "posterior density")
+post_low = max(x) -0.5
+post_high = min(x) + 0.5
+lines(c(post_low, post_high), c(1, 1), col = "orange")
+lines(c(post_low, post_low), c(0, 1), col = "orange")
+lines(c(post_high, post_high), c(1, 0), col = "orange")
+abline(h=0, lty = "dashed")
+```
+The difference between the frequentist and Bayesian solutions is that the Bayesian solution **conditions on the observed data**, while the frequentist inferences are unconditional on the data, measuring the variability of the estimator **over all possible datasets**. In the one dataset we actually have, we got lucky with a wide range, so we now almost know the true $\theta$.
 :::

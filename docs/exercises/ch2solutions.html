@@ -579,7 +579,7 @@ p(\theta|x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \
 <section id="exercise-2.5" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.5">Exercise 2.5</h3>
 <p><strong>a)</strong> Let <span class="math inline">\(x_{1},\ldots,x_{10}\)</span> be a sample with mean <span class="math inline">\(\bar{x}=1.873\)</span>. Assume the model <span class="math inline">\(X_1,\ldots,X_n \overset{\mathrm{iid}}{\sim} N(\theta,1)\)</span>. Use the prior <span class="math inline">\(\theta \sim N(0,5)\)</span>. Note that the second parameter of the normal distribution is a variance, not a standard deviation. Compute the posterior distribution of <span class="math inline">\(\theta\)</span>.</p>
-<div id="q:iid_truncated_normal_a" class="callout callout-style-default callout-note no-icon callout-titled">
+<div id="q:iid_censored_normal_a" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -601,7 +601,7 @@ Solution
 </div>
 <p><strong>b)</strong> You now get hold of a second sample <span class="math inline">\(Y_1,\ldots,Y_{10} | \theta \overset{\mathrm{iid}}{\sim} N(\theta ,2)\)</span>, where <span class="math inline">\(\theta\)</span> is the same quantity as in (a) but the measurements have a larger variance. The sample mean in this second sample is <span class="math inline">\(\bar{y}=0.582\)</span>. Compute the posterior distribution of <span class="math inline">\(\theta\)</span> using both samples (the <span class="math inline">\(x\)</span>’s and the <span class="math inline">\(y\)</span>’s) under the assumption that the two samples are independent.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: batch learning.</p>
-<div id="q:iid_truncated_normal_b" class="callout callout-style-default callout-note no-icon callout-titled">
+<div id="q:iid_censored_normal_b" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -624,8 +624,8 @@ Solution
 </div>
 </div>
 <p><strong>c)</strong> You finally obtain a third sample <span class="math inline">\(Z_{1},\ldots,Z_{10} | \theta \overset{\mathrm{iid}}{\sim} N(\theta,3)\)</span>, with mean <span class="math inline">\(\bar{z}=1.221\)</span>. Unfortunately, the measuring device for this latter sample was defective and any measurement above <span class="math inline">\(3\)</span> was recorded as exactly <span class="math inline">\(3\)</span>. There were two such measurements. Give an expression for the unnormalized posterior distribution (likelihood times prior) for <span class="math inline">\(\theta\)</span> based on all three samples (<span class="math inline">\(x,y\)</span> and <span class="math inline">\(z\)</span>). Plot this unnormalized posterior over a grid of <span class="math inline">\(\theta\)</span> values.</p>
-<p><span class="math inline">\(\textit{Hint}\)</span>: the posterior distribution is not normal anymore when the measurements are truncated at <span class="math inline">\(3\)</span>.</p>
-<div id="q:iid_truncated_normal_c" class="callout callout-style-default callout-note no-icon callout-titled">
+<p><span class="math inline">\(\textit{Hint}\)</span>: the posterior distribution is not normal anymore when the measurements are censored at <span class="math inline">\(3\)</span>.</p>
+<div id="q:iid_censored_normal_c" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -638,12 +638,12 @@ Solution
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Let us do as before, using the posterior from the first two samples (obtained in problem b) above) as the prior. The prior is therefore <span class="math inline">\(\theta\sim N\left(1.4237,\frac{5}{76}\right)\)</span>.</p>
-<p>Let us first use these eight observations to update the posterior, and then add the information from the two measurements that where truncated at <span class="math inline">\(3\)</span>. The mean of the eight measurements which were correctly recorded is <span class="math inline">\(1.221\cdot10-3\cdot2=0.77625\)</span>. The eight correctly recorded observations gives the following updating of the <span class="math inline">\(N\left(1.4237,\frac{5}{76}\right)\)</span> prior: <span class="math display">\[\begin{align*}
+<p>Let us first use these eight observations to update the posterior, and then add the information from the two measurements that where censored at <span class="math inline">\(3\)</span>. The mean of the eight measurements which were correctly recorded is <span class="math inline">\(1.221\cdot10-3\cdot2=0.77625\)</span>. The eight correctly recorded observations gives the following updating of the <span class="math inline">\(N\left(1.4237,\frac{5}{76}\right)\)</span> prior: <span class="math display">\[\begin{align*}
       w &amp;=\frac{\frac{8}{3}}{\frac{8}{3}+\frac{1}{5/76}}=\frac{10}{67} \\
       \mu_{n}   &amp;=\frac{10}{67}\cdot0.77625+\left(1-\frac{10}{67}\right)\cdot1.4237=1.3271 \\
       \tau_{n}^{2} &amp;=\left(\frac{8}{3}+\frac{1}{5/76}\right)^{-1}=\frac{15}{268}=0.05597.
     \end{align*}\]</span> Note that most of the weight is now given to the prior, i.e.&nbsp;the posterior after the updates in (a) and (b). This is reasonable since the <span class="math inline">\(8\)</span> new observations have relatively large variance, <span class="math inline">\(\sigma^{2}=3\)</span>.</p>
-<p>We are now ready for the final piece of information: the two truncated observations. We do not know their exact values, but we know that they were equal to or larger than <span class="math inline">\(3\)</span>. This is important information which we cannot ignore. The likelihood of these two observations (let’s call them <span class="math inline">\(z_{1}\)</span> and <span class="math inline">\(z_{2}\)</span>) is <span class="math display">\[\begin{align*}
+<p>We are now ready for the final piece of information: the two censored observations. We do not know their exact values, but we know that they were equal to or larger than <span class="math inline">\(3\)</span>. This is important information which we cannot ignore. The likelihood of these two observations (let’s call them <span class="math inline">\(z_{1}\)</span> and <span class="math inline">\(z_{2}\)</span>) is <span class="math display">\[\begin{align*}
       p(z_{1},z_{2}\vert\theta) &amp;=\mathrm{Pr}(z_{1}\geq3\vert\theta)\mathrm{Pr}(z_{2}\geq3\vert\theta) \\
       &amp;=\Big(1-\mathrm{Pr}(z_{1}\leq 3\vert\theta)\Big) \Big(1-\mathrm{Pr}(z_{2}\leq3\vert\theta)\Big) \\
       &amp;=\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]  \\
@@ -651,7 +651,7 @@ Solution
     \end{align*}\]</span> where <span class="math inline">\(\Phi(\cdot)\)</span> is the CDF of the <span class="math inline">\(\mathrm{N}(0,1)\)</span> distribution. The posterior based on all <span class="math inline">\(30\)</span> data points is now obtained by multiplying this likelihood with the prior at this stage, that is the posterior based on the first <span class="math inline">\(28\)</span> correctly recorded data: <span class="math inline">\(N(1.3271,0.05597)\)</span>. The posterior is therefore proportional to <span class="math display">\[\begin{equation*}
       \left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}\exp\left[-\frac{1}{2\cdot0.05597}\left(\mu-1.3271\right)^{2}\right].
     \end{equation*}\]</span></p>
-<p>The code below plots the prior (which is the posterior based on the <span class="math inline">\(28\)</span> correctly recorded observations), the likelihood from the two truncated observations and the posterior based on all <span class="math inline">\(30\)</span> data points. Note the form of the likelihood function from the two truncated observations: the probability of observing them increases monotonically with <span class="math inline">\(\theta\)</span> since all we know about these observations is that they are larger or equal to <span class="math inline">\(3\)</span>.</p>
+<p>The code below plots the prior (which is the posterior based on the <span class="math inline">\(28\)</span> correctly recorded observations), the likelihood from the two censored observations and the posterior based on all <span class="math inline">\(30\)</span> data points. Note the form of the likelihood function from the two censored observations: the probability of observing them increases monotonically with <span class="math inline">\(\theta\)</span> since all we know about these observations is that they are larger or equal to <span class="math inline">\(3\)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>theta_grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">2.5</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>bin_width <span class="ot">=</span> theta_grid[<span class="dv">2</span>] <span class="sc">-</span> theta_grid[<span class="dv">1</span>]</span>

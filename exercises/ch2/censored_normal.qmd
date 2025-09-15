@@ -1,0 +1,84 @@
+### Exercise 2.5
+
+
+**a)** 
+{{< include /exercises/book_exercises/oneparam/censored_normal_a.tex >}}
+
+::: {#q:iid_censored_normal_a .callout-note icon="false" collapse="true"}
+## Solution
+
+We have $n=10,\bar{x}=1.873,\sigma^{2}=1,\mu_{0}=0,\tau_{0}^{2}=5$. The posterior is normal with
+    \begin{align*}
+      w &= \frac{\frac{10}{1}}{\frac{10}{1}+\frac{1}{5}}=\frac{50}{51}\approx0.98039 \\
+      \mu_{n}	&= \frac{50}{51}\cdot1.873+\frac{1}{51}\cdot0=1.8363 \\
+      \tau_{n}^{2}	&= \left(\frac{10}{1}+\frac{1}{5}\right)^{-1}=\frac{5}{51}.
+    \end{align*}
+:::
+
+**b)** 
+{{< include /exercises/book_exercises/oneparam/censored_normal_b.tex >}}
+
+::: {#q:iid_censored_normal_b .callout-note icon="false" collapse="true"}
+## Solution
+
+The easiest way to do this is use the posterior from the first sample as a prior for the second sample. That is, for this second sample we use the prior
+    \begin{equation*}
+      \theta\sim N\left(1.836,\frac{5}{51}\right),
+    \end{equation*}
+    which gives the posterior
+    \begin{align*}
+      w	&= \frac{\frac{10}{2}}{\frac{10}{2}+\frac{1}{5/51}}=\frac{25}{76} \\
+\mu_{n}	&= \frac{25}{76}\cdot0.582+\left(1-\frac{25}{76}\right)\cdot1.836=1.4237\\ 
+\tau_{n}^{2}	&= \left(\frac{10}{2}+\frac{5}{51}\right)^{-1}=\frac{5}{76}.
+    \end{align*}
+
+:::
+
+**c)** 
+{{< include /exercises/book_exercises/oneparam/censored_normal_c.tex >}}
+
+::: {#q:iid_censored_normal_c .callout-note icon="false" collapse="true"}
+## Solution
+
+Let us do as before, using the posterior from the first two samples (obtained in problem b) above) as the prior. The prior is therefore $\theta\sim N\left(1.4237,\frac{5}{76}\right)$. 
+
+Let us first use these eight observations to update the posterior, and then add the information from the two measurements that where censored at $3$. The mean of the eight measurements which were correctly recorded is $1.221\cdot10-3\cdot2=0.77625$. The eight correctly recorded observations gives the following updating of the $N\left(1.4237,\frac{5}{76}\right)$ prior: 
+    \begin{align*}
+      w	&=\frac{\frac{8}{3}}{\frac{8}{3}+\frac{1}{5/76}}=\frac{10}{67} \\
+      \mu_{n}	&=\frac{10}{67}\cdot0.77625+\left(1-\frac{10}{67}\right)\cdot1.4237=1.3271 \\
+      \tau_{n}^{2} &=\left(\frac{8}{3}+\frac{1}{5/76}\right)^{-1}=\frac{15}{268}=0.05597.
+    \end{align*}
+    Note that most of the weight is now given to the prior, i.e. the posterior after the updates in (a) and (b). This is reasonable since the $8$ new observations have relatively large variance, $\sigma^{2}=3$.
+    
+We are now ready for the final piece of information: the two censored observations. We do not know their exact values, but we \textbf{do} know that they were equal to or larger than $3$. This is important information which we cannot ignore. The likelihood of these two observations (let’s call them $z_{1}$ and $z_{2}$) is
+    \begin{align*}
+      p(z_{1},z_{2}\vert\theta) &=\mathrm{Pr}(z_{1}\geq3\vert\theta)\mathrm{Pr}(z_{2}\geq3\vert\theta) \\
+      &=\Big(1-\mathrm{Pr}(z_{1}\leq 3\vert\theta)\Big) \Big(1-\mathrm{Pr}(z_{2}\leq3\vert\theta)\Big) \\
+      &=\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]  \\
+      &=\left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}
+    \end{align*}
+    where $\Phi(\cdot)$ is the CDF of the $\mathrm{N}(0,1)$ distribution.
+    The posterior based on all $30$ data points is now obtained by multiplying this likelihood with the prior at this stage, that is the posterior based on the first $28$ correctly recorded data: $N(1.3271,0.05597)$. The posterior is therefore proportional to
+    \begin{equation*}
+      \left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}\exp\left[-\frac{1}{2\cdot0.05597}\left(\mu-1.3271\right)^{2}\right].
+    \end{equation*}
+    
+The code below plots the prior (which is the posterior based on the $28$ correctly recorded observations), the likelihood from the two censored observations and the posterior based on all $30$ data points. Note the form of the likelihood function from the two censored observations: the probability of observing them increases monotonically with $\theta$ since all we know about these observations is that they are larger or equal to $3$.
+```{r}
+theta_grid = seq(0.5, 2.5, length = 1000)
+bin_width = theta_grid[2] - theta_grid[1]
+like = (1 - pnorm(3, theta_grid, sqrt(3)))^2 
+prior = dnorm(theta_grid, 1.3271, sqrt(0.05597))
+post = like * prior # unnormalized
+post = post / sum(post * bin_width)
+like = like / sum(like * bin_width)
+plot(theta_grid, prior, type = "l", col = "orange", lwd = 3, xlab = expression(theta), ylab = "density")
+lines(theta_grid, like, col = "steelblue", lwd = 3)
+lines(theta_grid, post, col = "indianred", lwd = 3)
+legend("topleft", legend = c("Prior", "Likelihood", "Posterior"),
+       col = c("orange", "steelblue", "indianred"), lwd = 3, bty = "n")
+```
+
+
+:::
+

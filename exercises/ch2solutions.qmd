@@ -30,7 +30,7 @@ Click on the arrow to see a solution.
 
 ---
 
-{{< include ch2/truncated_normal.qmd >}}
+{{< include ch2/censored_normal.qmd >}}
 
 ---
 

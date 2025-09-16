@@ -109,8 +109,9 @@ For the given dataset we have $x_\min = 1.1$ and $x_\max = 2.05$ and the posteri
 $$
 \theta \vert x_1,x_2,x_3 \sim \mathrm{Uniform}\big(1.55 , 1.60 \big)
 $$
-Since we were lucky to obtain a wide range of the data that is close to $1$ (difference between maximum and minimum observation: $2.05-1.1 = 0.95$), the Bayesian gets a tight posterior which is uniform between $1.55$ and $1.60$. The posterior is plotted here:
+Since we were lucky to obtain a range of the data close to $1$ (the range is the difference between the maximum and minimum observations: $2.05-1.1 = 0.95$), the Bayesian gets a tight posterior which is uniform between $1.55$ and $1.60$. The posterior is plotted here:
 ```{r}
+#| code-fold: true
 x = c(1.10, 2.05, 1.21)
 plot(x = NA, y = NA, xlim = c(1,2), ylim = c(-1,1), 
      xlab = expression(theta), ylab = "posterior density")
@@ -121,5 +122,5 @@ lines(c(post_low, post_low), c(0, 1), col = "orange")
 lines(c(post_high, post_high), c(1, 0), col = "orange")
 abline(h=0, lty = "dashed")
 ```
-The difference between the frequentist and Bayesian solutions is that the Bayesian solution **conditions on the observed data**, while the frequentist inferences are unconditional on the data, measuring the variability of the estimator **over all possible datasets**. In the one dataset we actually have, we got lucky with a wide range, so we now almost know the true $\theta$.
+The difference between the frequentist and Bayesian solutions is that the Bayesian solution **conditions on the observed data**, while the frequentist inferences are unconditional on the data, measuring the variability of the estimator **over all possible datasets**. We got lucky with a wide range in the actually observed data, so the Bayesian can provide a tight posterior for $\theta$ with little uncertainty.
 :::

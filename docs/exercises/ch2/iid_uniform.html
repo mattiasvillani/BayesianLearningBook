@@ -506,8 +506,10 @@ Solution
 <p>(As a side-note: note how fast the central limit theorem is here, the sampling distribution is already close to normal as <span class="math inline">\(n=3\)</span>)</p>
 <p>For the given dataset we have <span class="math inline">\(x_\min = 1.1\)</span> and <span class="math inline">\(x_\max = 2.05\)</span> and the posterior is therefore <span class="math display">\[
 \theta \vert x_1,x_2,x_3 \sim \mathrm{Uniform}\big(1.55 , 1.60 \big)
-\]</span> Since we were lucky to obtain a wide range of the data that is close to <span class="math inline">\(1\)</span> (difference between maximum and minimum observation: <span class="math inline">\(2.05-1.1 = 0.95\)</span>), the Bayesian gets a tight posterior which is uniform between <span class="math inline">\(1.55\)</span> and <span class="math inline">\(1.60\)</span>. The posterior is plotted here:</p>
+\]</span> Since we were lucky to obtain a range of the data close to <span class="math inline">\(1\)</span> (the range is the difference between the maximum and minimum observations: <span class="math inline">\(2.05-1.1 = 0.95\)</span>), the Bayesian gets a tight posterior which is uniform between <span class="math inline">\(1.55\)</span> and <span class="math inline">\(1.60\)</span>. The posterior is plotted here:</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.10</span>, <span class="fl">2.05</span>, <span class="fl">1.21</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> <span class="cn">NA</span>, <span class="at">y =</span> <span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>), </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(theta), <span class="at">ylab =</span> <span class="st">"posterior density"</span>)</span>
@@ -517,6 +519,7 @@ Solution
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(post_low, post_low), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">"orange"</span>)</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(post_high, post_high), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="at">col =</span> <span class="st">"orange"</span>)</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -525,7 +528,7 @@ Solution
 </div>
 </div>
 </div>
-<p>The difference between the frequentist and Bayesian solutions is that the Bayesian solution <strong>conditions on the observed data</strong>, while the frequentist inferences are unconditional on the data, measuring the variability of the estimator <strong>over all possible datasets</strong>. In the one dataset we actually have, we got lucky with a wide range, so we now almost know the true <span class="math inline">\(\theta\)</span>.</p>
+<p>The difference between the frequentist and Bayesian solutions is that the Bayesian solution <strong>conditions on the observed data</strong>, while the frequentist inferences are unconditional on the data, measuring the variability of the estimator <strong>over all possible datasets</strong>. We got lucky with a wide range in the actually observed data, so the Bayesian can provide a tight posterior for <span class="math inline">\(\theta\)</span> with little uncertainty.</p>
 </div>
 </div>
 </div>

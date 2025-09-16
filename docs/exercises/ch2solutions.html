@@ -618,7 +618,7 @@ Solution
     \end{equation*}\]</span> which gives the posterior <span class="math display">\[\begin{align*}
       w &amp;= \frac{\frac{10}{2}}{\frac{10}{2}+\frac{1}{5/51}}=\frac{25}{76} \\
 \mu_{n} &amp;= \frac{25}{76}\cdot0.582+\left(1-\frac{25}{76}\right)\cdot1.836=1.4237\\
-\tau_{n}^{2}    &amp;= \left(\frac{10}{2}+\frac{5}{51}\right)^{-1}=\frac{5}{76}.
+\tau_{n}^{2}    &amp;= \left(\frac{10}{2}+\frac{1}{5/51}\right)^{-1}=\frac{5}{76}.
     \end{align*}\]</span></p>
 </div>
 </div>
@@ -638,12 +638,12 @@ Solution
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Let us do as before, using the posterior from the first two samples (obtained in problem b) above) as the prior. The prior is therefore <span class="math inline">\(\theta\sim N\left(1.4237,\frac{5}{76}\right)\)</span>.</p>
-<p>Let us first use these eight observations to update the posterior, and then add the information from the two measurements that where censored at <span class="math inline">\(3\)</span>. The mean of the eight measurements which were correctly recorded is <span class="math inline">\(1.221\cdot10-3\cdot2=0.77625\)</span>. The eight correctly recorded observations gives the following updating of the <span class="math inline">\(N\left(1.4237,\frac{5}{76}\right)\)</span> prior: <span class="math display">\[\begin{align*}
+<p>Let us first use these eight observations to update the posterior, and then afterwards add the information from the two measurements that where censored at <span class="math inline">\(3\)</span>. The mean of the eight measurements which were correctly recorded is <span class="math inline">\(\frac{1.221\cdot10-3\cdot 2}{8} = 0.77625\)</span>. The eight correctly recorded observations gives the following updating of the <span class="math inline">\(N\left(1.4237,\frac{5}{76}\right)\)</span> prior: <span class="math display">\[\begin{align*}
       w &amp;=\frac{\frac{8}{3}}{\frac{8}{3}+\frac{1}{5/76}}=\frac{10}{67} \\
       \mu_{n}   &amp;=\frac{10}{67}\cdot0.77625+\left(1-\frac{10}{67}\right)\cdot1.4237=1.3271 \\
       \tau_{n}^{2} &amp;=\left(\frac{8}{3}+\frac{1}{5/76}\right)^{-1}=\frac{15}{268}=0.05597.
-    \end{align*}\]</span> Note that most of the weight is now given to the prior, i.e.&nbsp;the posterior after the updates in (a) and (b). This is reasonable since the <span class="math inline">\(8\)</span> new observations have relatively large variance, <span class="math inline">\(\sigma^{2}=3\)</span>.</p>
-<p>We are now ready for the final piece of information: the two censored observations. We do not know their exact values, but we know that they were equal to or larger than <span class="math inline">\(3\)</span>. This is important information which we cannot ignore. The likelihood of these two observations (let’s call them <span class="math inline">\(z_{1}\)</span> and <span class="math inline">\(z_{2}\)</span>) is <span class="math display">\[\begin{align*}
+    \end{align*}\]</span> Note that most of the weight is now given to the prior, i.e.&nbsp;the posterior after the updates in (a) and (b). This is reasonable since the <span class="math inline">\(8\)</span> new observations have a relatively large variance, <span class="math inline">\(\sigma^{2}=3\)</span>, and the prior at this step is based on <span class="math inline">\(20\)</span> previous observations.</p>
+<p>We are now ready for the final piece of information: the two censored observations. We do not know their exact values, but we know that they were equal to or larger than <span class="math inline">\(3\)</span>. This is important information which we cannot ignore. The likelihood from these two observations (let’s call them <span class="math inline">\(z_{1}\)</span> and <span class="math inline">\(z_{2}\)</span>) is <span class="math display">\[\begin{align*}
       p(z_{1},z_{2}\vert\theta) &amp;=\mathrm{Pr}(z_{1}\geq3\vert\theta)\mathrm{Pr}(z_{2}\geq3\vert\theta) \\
       &amp;=\Big(1-\mathrm{Pr}(z_{1}\leq 3\vert\theta)\Big) \Big(1-\mathrm{Pr}(z_{2}\leq3\vert\theta)\Big) \\
       &amp;=\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]  \\
@@ -651,7 +651,7 @@ Solution
     \end{align*}\]</span> where <span class="math inline">\(\Phi(\cdot)\)</span> is the CDF of the <span class="math inline">\(\mathrm{N}(0,1)\)</span> distribution. The posterior based on all <span class="math inline">\(30\)</span> data points is now obtained by multiplying this likelihood with the prior at this stage, that is the posterior based on the first <span class="math inline">\(28\)</span> correctly recorded data: <span class="math inline">\(N(1.3271,0.05597)\)</span>. The posterior is therefore proportional to <span class="math display">\[\begin{equation*}
       \left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}\exp\left[-\frac{1}{2\cdot0.05597}\left(\mu-1.3271\right)^{2}\right].
     \end{equation*}\]</span></p>
-<p>The code below plots the prior (which is the posterior based on the <span class="math inline">\(28\)</span> correctly recorded observations), the likelihood from the two censored observations and the posterior based on all <span class="math inline">\(30\)</span> data points. Note the form of the likelihood function from the two censored observations: the probability of observing them increases monotonically with <span class="math inline">\(\theta\)</span> since all we know about these observations is that they are larger or equal to <span class="math inline">\(3\)</span>.</p>
+<p>The code below plots the prior (which is the posterior based on the <span class="math inline">\(28\)</span> correctly recorded observations), the (normalized) likelihood from the two censored observations and the posterior based on all <span class="math inline">\(30\)</span> data points. Note the form of the likelihood function from the two censored observations: the probability of observing them increases monotonically with <span class="math inline">\(\theta\)</span> since all we know about these observations is that they are larger or equal to <span class="math inline">\(3\)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>theta_grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">2.5</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>bin_width <span class="ot">=</span> theta_grid[<span class="dv">2</span>] <span class="sc">-</span> theta_grid[<span class="dv">1</span>]</span>
@@ -663,7 +663,7 @@ Solution
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(theta_grid, prior, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(theta), <span class="at">ylab =</span> <span class="st">"density"</span>)</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(theta_grid, like, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(theta_grid, post, <span class="at">col =</span> <span class="st">"indianred"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Prior"</span>, <span class="st">"Likelihood"</span>, <span class="st">"Posterior"</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Prior"</span>, <span class="st">"Likelihood (normalized)"</span>, <span class="st">"Posterior"</span>),</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"orange"</span>, <span class="st">"steelblue"</span>, <span class="st">"indianred"</span>), <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
@@ -835,8 +835,10 @@ Solution
 <p>(As a side-note: note how fast the central limit theorem is here, the sampling distribution is already close to normal as <span class="math inline">\(n=3\)</span>)</p>
 <p>For the given dataset we have <span class="math inline">\(x_\min = 1.1\)</span> and <span class="math inline">\(x_\max = 2.05\)</span> and the posterior is therefore <span class="math display">\[
 \theta \vert x_1,x_2,x_3 \sim \mathrm{Uniform}\big(1.55 , 1.60 \big)
-\]</span> Since we were lucky to obtain a wide range of the data that is close to <span class="math inline">\(1\)</span> (difference between maximum and minimum observation: <span class="math inline">\(2.05-1.1 = 0.95\)</span>), the Bayesian gets a tight posterior which is uniform between <span class="math inline">\(1.55\)</span> and <span class="math inline">\(1.60\)</span>. The posterior is plotted here:</p>
+\]</span> Since we were lucky to obtain a range of the data close to <span class="math inline">\(1\)</span> (the range is the difference between the maximum and minimum observations: <span class="math inline">\(2.05-1.1 = 0.95\)</span>), the Bayesian gets a tight posterior which is uniform between <span class="math inline">\(1.55\)</span> and <span class="math inline">\(1.60\)</span>. The posterior is plotted here:</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.10</span>, <span class="fl">2.05</span>, <span class="fl">1.21</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> <span class="cn">NA</span>, <span class="at">y =</span> <span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>), </span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(theta), <span class="at">ylab =</span> <span class="st">"posterior density"</span>)</span>
@@ -846,6 +848,7 @@ Solution
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(post_low, post_low), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">"orange"</span>)</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(post_high, post_high), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="at">col =</span> <span class="st">"orange"</span>)</span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -854,7 +857,7 @@ Solution
 </div>
 </div>
 </div>
-<p>The difference between the frequentist and Bayesian solutions is that the Bayesian solution <strong>conditions on the observed data</strong>, while the frequentist inferences are unconditional on the data, measuring the variability of the estimator <strong>over all possible datasets</strong>. In the one dataset we actually have, we got lucky with a wide range, so we now almost know the true <span class="math inline">\(\theta\)</span>.</p>
+<p>The difference between the frequentist and Bayesian solutions is that the Bayesian solution <strong>conditions on the observed data</strong>, while the frequentist inferences are unconditional on the data, measuring the variability of the estimator <strong>over all possible datasets</strong>. We got lucky with a wide range in the actually observed data, so the Bayesian can provide a tight posterior for <span class="math inline">\(\theta\)</span> with little uncertainty.</p>
 </div>
 </div>
 </div>

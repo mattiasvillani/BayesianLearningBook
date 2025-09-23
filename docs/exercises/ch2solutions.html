@@ -369,8 +369,8 @@ window.Quarto = {
   <li><a href="#exercise-2.6" id="toc-exercise-2.6" class="nav-link" data-scroll-target="#exercise-2.6">Exercise 2.6</a></li>
   <li><a href="#exercise-2.7" id="toc-exercise-2.7" class="nav-link" data-scroll-target="#exercise-2.7">Exercise 2.7</a></li>
   <li><a href="#exercise-2.8" id="toc-exercise-2.8" class="nav-link" data-scroll-target="#exercise-2.8">Exercise 2.8</a></li>
-  <li><a href="#exercise-2.9" id="toc-exercise-2.9" class="nav-link" data-scroll-target="#exercise-2.9">Exercise 2.9</a></li>
   <li><a href="#exercise-2.10" id="toc-exercise-2.10" class="nav-link" data-scroll-target="#exercise-2.10">Exercise 2.10</a></li>
+  <li><a href="#exercise-2.10-1" id="toc-exercise-2.10-1" class="nav-link" data-scroll-target="#exercise-2.10-1">Exercise 2.10</a></li>
   <li><a href="#exercise-2.11" id="toc-exercise-2.11" class="nav-link" data-scroll-target="#exercise-2.11">Exercise 2.11</a></li>
   </ul>
 </nav>
@@ -989,8 +989,8 @@ p(\theta \vert x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\th
 </div>
 <hr>
 </section>
-<section id="exercise-2.9" class="level3">
-<h3 class="anchored" data-anchor-id="exercise-2.9">Exercise 2.9</h3>
+<section id="exercise-2.10" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2.10">Exercise 2.10</h3>
 <p>Show that the <span class="math inline">\(N(\mu,1)\)</span> distribution belongs to the exponential family.</p>
 <div id="q:normal_in_expfamily" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
@@ -1010,8 +1010,8 @@ Solution
 </div>
 <hr>
 </section>
-<section id="exercise-2.10" class="level3">
-<h3 class="anchored" data-anchor-id="exercise-2.10">Exercise 2.10</h3>
+<section id="exercise-2.10-1" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2.10-1">Exercise 2.10</h3>
 Exercise modelled the survival times of uncensored lung cancer patients with an iid exponential model. Here we extend that analysis to the more general Weibull distribution: <span class="math display">\[
 X_1,\ldots,X_n \vert \lambda, k \overset{\mathrm{iid}}{\sim} \mathrm{Weibull}(\lambda,k).
 \]</span> The value of <span class="math inline">\(k\)</span> determines how the failure rate changes with time:
@@ -1162,7 +1162,7 @@ p(\lambda^{(j)} \vert x_1,\ldots,x_n) =
 <p>Let <span class="math display">\[
 X_1,\ldots,X_n \overset{iid}{\sim } \mathrm{Uniform}(0,\theta).
 \]</span> Show that the Pareto prior <span class="math inline">\(\theta \sim \mathrm{Pareto}(\alpha, \beta)\)</span>, is conjugate to the Uniform model by deriving the posterior distribution. See Box~ for a definition of the Pareto distribution and properties; note the support of the Pareto distribution.</p>
-<p><span class="math inline">\(\textit{Hint}\)</span>: Do not forget to include an indicator function when you write up the likelihood function since the <span class="math inline">\(\mathrm{Uniform}(0,\theta)\)</span> distribution is zero for outcomes larger than <span class="math inline">\(\theta\)</span>.</p>
+<p><span class="math inline">\(\textit{Hint}\)</span>: Do not forget to include an indicator function when you write up the likelihood function since the <span class="math inline">\(\mathrm{Uniform}(0,\theta)\)</span> distribution is zero for outcomes larger than <span class="math inline">\(\theta\)</span>. Also, the Pareto prior is zero for values of <span class="math inline">\(\theta &lt; \beta\)</span>, so you need another indicator function for that.</p>
 <div id="ex:iid_uniform_conj" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">

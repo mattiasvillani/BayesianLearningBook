@@ -1,0 +1,69 @@
+### Exercise 3.1
+
+{{< include /exercises/book_exercises/multiparam/iid_normal_pesticide.tex >}}
+
+::: {#q:iid_normal_pesticide .callout-note icon="false" collapse="true"}
+## Solution
+The posterior distribution is given by 
+$$
+\begin{aligned}
+\theta | \sigma^2 , \boldsymbol{x} &\sim N\Big(\mu_n,\frac{\sigma^2}{\kappa_n}\Big) \\
+\sigma^2 | \boldsymbol{x} &\sim \mathrm{Inv-}\chi^2(\nu_n,\sigma_n^2)
+\end{aligned}
+$$
+where 
+$$
+\begin{aligned}
+\mu_n &= w \bar x + (1-w)\mu_0 \\
+w &= \frac{n}{\kappa_0+n} \\
+\kappa_n &= \kappa_0 + n \\
+\nu_n &= \nu_0 + n  \\
+\nu_n\sigma_n^2 &= \nu_0\sigma_0^2 + (n-1)s^2 + \frac{\kappa_0 n}{\kappa_0+n}(\bar x -\mu_0)^2
+\end{aligned}
+$$
+We have
+```{r}
+
+# data 
+n = 24
+xBar = 12.5
+s2 = 3.1^2
+
+# prior
+mu0 = 8
+kappa0 = 5
+nu0 = 3
+sigma02 = 1^2
+
+# posterior
+w = n/(kappa0 + n)
+mun = w*xBar + (1-w)*mu0
+kappan = kappa0 + n
+nun = nu0 + n
+sigman2 = (nu0*sigma02 + (n-1)*s2  + 
+             (kappa0*n/(kappa0 + n))*(xBar - mu0)^2 )/nun
+```
+So the joint posterior is 
+$$
+\begin{aligned}
+\theta | \sigma^2 , \boldsymbol{x} &\sim N\Big(`r round(mun, 3)`,\frac{\sigma^2}{`r kappan`}\Big) \\
+\sigma^2 | \boldsymbol{x} &\sim \mathrm{Inv-}\chi^2(`r nun`,`r round(sigman2, 3)`)
+\end{aligned}
+$$
+The marginal posterior for $\theta$ is 
+$$
+\theta \vert \boldsymbol{x} \sim t\Big(\mu_n,\frac{\sigma_n^2}{\kappa_n},\nu_n\Big) = t\Big(`r nun`,\frac{`r round(sigman2, 3)`}{`r kappan`},`r nun`\Big) 
+$$
+Plotting the marginal posterior of $\theta$:
+```{r}
+thetaGrid = seq(7, 18, length = 1000)
+sigma2Grid = seq(0.001, 30, length = 1000)
+dtdist <- function(x, mu, sigma2, nu){
+  return((1/sqrt(sigma2))*dt(x = (x - mu)/sqrt(sigma2), df = nu))
+}
+plot(thetaGrid, dtdist(thetaGrid, mun, sigman2/kappan, nun), type = "l", 
+     xlab = expression(theta), ylab = "posterior density", 
+     col = "indianred", main = expression(theta))
+```
+
+:::

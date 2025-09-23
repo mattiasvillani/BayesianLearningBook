@@ -14,3 +14,14 @@ colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE666
 
 Click on the arrow to see a solution.
 
+{{< include ch3/iid_normal_pesticide.qmd >}}
+
+---
+
+{{< include ch3/iid_normal_mean_known.qmd >}}
+
+---
+
+{{< include ch3/multinomial_dirichlet_voting.qmd >}}
+
+---

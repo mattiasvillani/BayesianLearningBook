@@ -1,4 +1,4 @@
-### Exercise 2.9
+### Exercise 2.10
 
 {{< include /exercises/book_exercises/oneparam/normal_in_expfamily.tex >}}
 

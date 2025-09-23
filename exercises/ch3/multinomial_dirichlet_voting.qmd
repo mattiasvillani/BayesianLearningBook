@@ -1,0 +1,86 @@
+### Exercise 3.6
+
+{{< include /exercises/book_exercises/multiparam/multinomial_dirichlet_voting.tex >}}
+
+**a)** 
+{{< include /exercises/book_exercises/multiparam/multinomial_dirichlet_voting_a.tex >}}
+
+::: {#q:iid_normal_mean_known_a .callout-note icon="false" collapse="true"}
+## Solution
+
+Set up data for the current poll, and the results from the election in 2022:
+```{r}
+y = c(410, 88, 83, 81, 721, 196, 238, 434, 60)
+election2022 = c(19.10, 4.61, 6.71, 5.34, 30.33, 6.75, 5.08, 20.54, 1.54)
+proportionElection2022 = election2022/100
+alphaPrior = 400*proportionElection2022 # not integers, but that's OK
+```
+
+Compute the posterior hyperparameters by adding up the data count $y_c$ in each category with its corresponding prior count $\alpha_c$:
+```{r}
+alphaPost = alphaPrior + y
+```
+So the (joint) posterior distribution for the Swedish voting shares are
+$$
+\boldsymbol{\theta} \vert \boldsymbol{y} \sim \mathrm{Dirichlet}\Big(`r alphaPost`\Big)
+$$
+:::
+
+**b)** 
+{{< include /exercises/book_exercises/multiparam/multinomial_dirichlet_voting_b.tex >}}
+
+::: {#q:iid_normal_mean_known_b .callout-note icon="false" collapse="true"}
+## Solution
+
+From the properties of the Dirichlet distribution box in the Bayesian Learning book, we know that if $(\theta_1,\ldots,\theta_C) \sim \mathrm{Dirichlet}(\alpha_1,\ldots,\alpha_C)$, then marginal distribution for the probability/proportion in category $c$ is  
+$$
+\theta_c \sim \mathrm{Beta}(\alpha_c, \alpha_+ -\alpha_c).
+$$
+We can apply this result to get the marginal **posterior** for $\theta_5$ (the proportion of S-voters), we just need to remember that the parameters in the posterior are $\alpha_c + y_c$ for $c=1,\ldots,C$, or `alphaPost` in the code. The marginal posterior for the proportion of S-party voters is
+$$
+\theta_5 \vert \boldsymbol{y} \sim \mathrm{Beta}\Big(`r alphaPost[5]`, `r sum(alphaPost) - alphaPost[5]` \Big),
+$$
+which we can plot:
+```{r}
+thetaGrid = seq(0, 1, length = 1000)
+plot(thetaGrid, dbeta(thetaGrid, alphaPost[5], sum(alphaPost) - alphaPost[5]), 
+     xlab = "proportion of S-voters", ylab = "posterior density", type = "l", 
+     lwd = 3, col = "indianred")
+```
+
+
+:::
+
+**c)** 
+{{< include /exercises/book_exercises/multiparam/multinomial_dirichlet_voting_c.tex >}}
+
+::: {#q:iid_normal_mean_known_c .callout-note icon="false" collapse="true"}
+## Solution
+
+Define a Dirichlet random number generator using the algorithm in Chapter 3.
+
+```{r}
+rdirichlet <- function(nIter, param){
+  nCat <- length(param)
+  thetaDraws <- matrix(0,nIter,nCat) #Storage
+  for (j in 1:nCat){
+    thetaDraws[,j] <- rgamma(nIter, param[j], 1)
+  }
+  for (i in 1:nIter){
+    thetaDraws[i,] = thetaDraws[i,]/sum(thetaDraws[i,])
+  }
+  return(thetaDraws)
+}
+```
+
+Use the simulator to simulate $10000$ draws from the posterior distribution. For each draw check if both the L and KD party each have less than 4\% of the votes.
+```{r}
+nSim = 10000
+postDraws = rdirichlet(nSim, alphaPost)
+bothPartyInParliament = rep(NA, nSim)
+for (i in 1:nSim){
+  bothPartyInParliament[i] = all(postDraws[i,c(2,4)] < 0.04)
+}
+```
+The posterior probability that both parties are below $4\%$ is `r mean(bothPartyInParliament)`.
+:::

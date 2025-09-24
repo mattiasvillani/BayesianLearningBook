@@ -8,7 +8,7 @@
 
 <meta name="author" content="Mattias Villani">
 
-<title>Exercise Solutions - Bayesian Learning book – Bayesian Learning Book</title>
+<title>Chapter 4 - Priors: Exercise solutions – Bayesian Learning Book</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,27 +24,27 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-7c9b27349e03c13da50bda67412940ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-7c9b27349e03c13da50bda67412940ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -73,8 +73,37 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -246,7 +275,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Bayesian Learning Book</span>
     </a>
   </div>
@@ -257,27 +286,27 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./exercise_solutions.html" aria-current="page"> 
+    <a class="nav-link" href="../exercise_solutions.html"> 
 <span class="menu-text">Exercises</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./notebooks.html"> 
+    <a class="nav-link" href="../notebooks.html"> 
 <span class="menu-text">Notebooks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./code.html"> 
+    <a class="nav-link" href="../code.html"> 
 <span class="menu-text">Code</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./interactive.html"> 
+    <a class="nav-link" href="../interactive.html"> 
 <span class="menu-text">Interactive</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./halloferrors.html"> 
+    <a class="nav-link" href="../halloferrors.html"> 
 <span class="menu-text">Hall of Typos</span></a>
   </li>  
 </ul>
@@ -292,8 +321,14 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#exercise-4.3" id="toc-exercise-4.3" class="nav-link active" data-scroll-target="#exercise-4.3">Exercise 4.3</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -301,7 +336,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Exercise Solutions - Bayesian Learning book</h1>
+<h1 class="title">Chapter 4 - Priors: Exercise solutions</h1>
 </div>
 
 
@@ -324,10 +359,89 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><img src="figs/linocut_mountaintops.png" class="img-fluid"></p>
-<p><a href="./exercises/ch1solutions.html">Chapter 1</a><br> <a href="./exercises/ch2solutions.html">Chapter 2</a><br> <a href="./exercises/ch3solutions.html">Chapter 3</a><br> <a href="./exercises/ch4solutions.html">Chapter 4</a><br> Chapter 5<br> Chapter 6<br> <a href="./exercises/ch7solutions.html">Chapter 7</a><br> Chapter 8<br> Chapter 9<br> <a href="./exercises/ch10solutions.html">Chapter 10</a><br> Chapter 11<br> Chapter 12<br> Chapter 13<br> Chapter 14<br> Chapter 15<br> Chapter 16<br> Chapter 17</p>
+<p>Click on the arrow to see a solution.</p>
+<section id="exercise-4.3" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-4.3">Exercise 4.3</h3>
+Let <span class="math inline">\(X_1,\ldots,X_n \vert \theta \overset{\mathrm{iid}}{\sim} \mathrm{Expon}(\theta)\)</span>.
+<p><strong>a)</strong></p>
+<p>Show that Jeffreys’ prior is <span class="math inline">\(p(\theta)\propto1/\theta\)</span>. Is it proper?</p>
+<div id="q:jeffreys_expon_a" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The likelihood is <span class="math display">\[
+p(x_1,\ldots,x_n\mid\theta) = \prod_{i=1}^n \theta e^{-\theta x_i} = \theta^{n}e^{-\theta\sum_{i=1}^{n}x_{i}}
+\]</span> with log likelihood <span class="math display">\[
+\log p(x_1,\ldots,x_n\mid\theta)=n\log\theta-\theta\sum_{i=1}^{n}x_{i}
+\]</span> and first derivative <span class="math display">\[
+\frac{d\log p(x_1,\ldots,x_n\mid\theta)}{d\theta}=\frac{n}{\theta}-\sum_{i=1}^{n}x_{i}
+\]</span> and second derivative <span class="math display">\[
+\frac{d^{2}\log p(x_1,\ldots,x_n\mid\theta)}{d\theta^{2}}=-\frac{n}{\theta^{2}}
+\]</span> so the Fisher information is <span class="math display">\[
+I(\theta)=E\left(-\frac{d^{2}\log p(x_1,\ldots,x_n\mid\theta)}{d\theta^{2}}\right)=\frac{n}{\theta^{2}}
+\]</span> and Jeffreys’ prior is therefore <span class="math display">\[
+p(\theta) = I(\theta)^{1/2} = \frac{\sqrt{n}}{\theta} \propto \frac{1}{\theta}.
+\]</span> Jeffreys’ prior is not proper for the iid exponential model since the integral of the prior diverges. Since <span class="math inline">\(1/\theta &gt; 0\)</span> for all <span class="math inline">\(\theta\)</span>, we can see that the integral diverges as follows: <span class="math display">\[
+\int_{0}^{\infty}\frac{1}{\theta}d\theta \, \leq
+\int_{1}^{\infty}\frac{1}{\theta}d\theta :=   
+\lim_{a\rightarrow \infty} \int_1^a \frac{1}{\theta}d\theta
+= \lim_{a\rightarrow \infty} [\log(\theta)]_1^a = \lim_{a \rightarrow \infty}\big(\log(a) - 0 \big) = \infty.
+\]</span></p>
+</div>
+</div>
+</div>
+<p><strong>b)</strong></p>
+<p>Derive the posterior of <span class="math inline">\(\theta\)</span> for Jeffreys’ prior. Is it proper?</p>
+<div id="q:jeffreys_expon_b" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The posterior distribution is obtain in the usual way with Bayes’ theorem <span class="math display">\[
+p(\theta \vert x_1,\ldots,x_n) = \theta^{n}e^{-\theta\sum_{i=1}^{n}x_{i}} \cdot \frac{1}{\theta} \propto \theta^{n-1}e^{-\theta\sum_{i=1}^{n}x_{i}}
+\]</span> which is proportional to a <span class="math inline">\(\mathrm{Gamma}(n,\sum_{i=1}^n x_i)\)</span> density. A Gamma density is proper when both its hyperparameters are strictly positive, i.e.&nbsp;for any <span class="math inline">\(n \geq 1\)</span> since all <span class="math inline">\(x_i&gt;0\)</span> with probability one in a gamma distribution and any realized data will therefore have <span class="math inline">\(\sum_{i=1}^n x_i &gt; 0\)</span>.</p>
+</div>
+</div>
+</div>
+<p><strong>c)</strong></p>
+<p>Find a way to motivate the particular form of the Jeffreys prior as non-informative prior, in addition to its inherent invariance property.</p>
+<div id="q:jeffreys_expon_c" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>One way to view the Jeffreys’ prior as non-informative is to consider the posterior from the conjugate prior <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha,\beta)\)</span>, which from Exercise <span class="citation" data-cites="q:iid_exp_conj">@q:iid_exp_conj</span> is known to be <span class="math display">\[
+\theta \vert x_1,\ldots,x_n \sim \mathrm{Gamma}(\alpha + n, \beta +\sum_{i=1}^n x_i).
+\]</span> The conjugate prior can therefore be seen to contain the information equivalent to a prior sample of <span class="math inline">\(\alpha\)</span> (imaginary) observations with a data sum equal to <span class="math inline">\(\beta\)</span>. Given the form of the Jeffreys’ posterior <span class="math inline">\(\mathrm{Gamma}(n,\sum_{i=1}^n x_i)\)</span>, we see that Jeffreys’ prior is equivalent to a prior sample of <span class="math inline">\(\alpha = 0\)</span> observations.</p>
+</div>
+</div>
+</div>
+<hr>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

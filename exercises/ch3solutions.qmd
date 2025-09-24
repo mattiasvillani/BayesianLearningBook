@@ -3,7 +3,7 @@ title: "Chapter 3 - Multi-parameter models: Exercise solutions"
 author: "Mattias Villani"
 format:
   html: default
-  pdf: default
+  #pdf: default
 ---
 
 ```{r}
@@ -23,5 +23,9 @@ Click on the arrow to see a solution.
 ---
 
 {{< include ch3/multinomial_dirichlet_voting.qmd >}}
+
+---
+
+{{< include ch3/gini.qmd >}}
 
 ---

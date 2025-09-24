@@ -1,0 +1,79 @@
+
+### Exercise 3.7
+
+{{< include /exercises/book_exercises/multiparam/gini.tex >}}
+
+**a)** 
+
+{{< include /exercises/book_exercises/multiparam/gini_a.tex >}}
+
+::: {#q:gini_a .callout-note icon="false" collapse="true"}
+## Solution
+```{r}
+y = c(14, 25, 45, 25, 30, 33, 19, 50, 34, 67)
+logy = log(y)
+n = length(y)
+theta = log(33)
+tau2 = sum(logy - theta)^2/n
+
+# Defining a function that simulates nSim draws
+# from the scaled inverse Chi-square distribution
+rScaledInvChi2 <- function(nSim, df, scale){
+  return((df*scale)/rchisq(nSim, df=df))
+}
+nSim = 10000
+sigma2Draws = rScaledInvChi2(nSim, n, tau2)
+hist(sqrt(sigma2Draws), 100, col = "steelblue", main = "", freq = FALSE,
+     xlab = expression(sigma), ylab = "posterior density")
+```
+
+:::
+
+**b)** 
+
+{{< include /exercises/book_exercises/multiparam/gini_b.tex >}}
+
+::: {#q:gini_b .callout-note icon="false" collapse="true"}
+## Solution
+
+```{r}
+gini = rep(0, nSim)
+for (i in 1:nSim){
+  gini[i] = 2*pnorm(sqrt(sigma2Draws[i])/sqrt(2)) - 1
+} 
+hist(gini, 100, col = "cornsilk", main = "", freq = FALSE,
+     xlab = "Gini coefficient, G", ylab = "posterior density")
+```
+
+
+:::
+
+**c)** 
+
+{{< include /exercises/book_exercises/multiparam/gini_c.tex >}}
+
+::: {#q:gini_c .callout-note icon="false" collapse="true"}
+## Solution
+
+We first estimate the posterior density from the posterior draws using a kernel density estimator, and plotting it on top of the histogram:
+```{r}
+kde = density(gini)
+giniGrid = kde$x
+postDens = kde$y
+hist(gini, 100, col = "cornsilk", main = "", freq = FALSE,
+     xlab = "Gini coefficient, G", ylab = "posterior density")
+lines(giniGrid, postDens, lwd = 3, col = "indianred")
+```
+Now that we have the posterior density, and we can see that it is unimodal, we can use the same code as in the Solution to Exercise @q:iid_poisson_ambulance_b.
+```{r}
+binWidth = giniGrid[2]- giniGrid[1]
+# first, sort the density values from highest to lowest
+postDensOrdered = sort(postDens, decreasing = TRUE)  
+# reorder the thetaValues so that they still match the density values
+giniOrdered = giniGrid[order(postDens, decreasing = TRUE)] 
+cumsumPostDens = cumsum(binWidth*postDensOrdered) # posterior cdf 
+inHPD = which(cumsumPostDens < 0.95) # find highest pdf vals up to 95% quota.
+hpd = c(min(giniOrdered[inHPD]), max(giniOrdered[inHPD]))
+message(paste0("The 95% HPD interval for the Gini coefficient is (", hpd[1], ",", hpd[2],")"))
+```
+:::

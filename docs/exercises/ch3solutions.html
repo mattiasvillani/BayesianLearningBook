@@ -364,8 +364,9 @@ window.Quarto = {
   <li><a href="#exercise-3.1" id="toc-exercise-3.1" class="nav-link active" data-scroll-target="#exercise-3.1">Exercise 3.1</a></li>
   <li><a href="#exercise-3.3" id="toc-exercise-3.3" class="nav-link" data-scroll-target="#exercise-3.3">Exercise 3.3</a></li>
   <li><a href="#exercise-3.6" id="toc-exercise-3.6" class="nav-link" data-scroll-target="#exercise-3.6">Exercise 3.6</a></li>
+  <li><a href="#exercise-3.7" id="toc-exercise-3.7" class="nav-link" data-scroll-target="#exercise-3.7">Exercise 3.7</a></li>
   </ul>
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="ch3solutions.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -400,7 +401,7 @@ window.Quarto = {
 <section id="exercise-3.1" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-3.1">Exercise 3.1</h3>
 <p>A dataset contains observations on measurements of pesticide for <span class="math inline">\(n=24\)</span> pike fish in a lake in southern Italy. The sample mean pesticide level is <span class="math inline">\(\bar{x} = 12.5\)</span> with a sample standard deviation of <span class="math inline">\(s=3.1\)</span>. Assume that the pesticide levels <span class="math inline">\(X_1,\ldots,X_n|\theta,\sigma^2 \sim \mathrm{N}(\theta,\sigma^2)\)</span> are independent and identically distributed normal random variables with unknown mean <span class="math inline">\(\theta\)</span> and unknown variance <span class="math inline">\(\sigma^2\)</span>.</p>
-<p>Compute the joint posterior distribution for <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\sigma^2\)</span> using a conjugate prior distribution. Use a prior mean for <span class="math inline">\(\theta\)</span> of <span class="math inline">\(8\)</span> and an (imaginary) prior sample size of <span class="math inline">\(5\)</span>. Use <span class="math inline">\(\sigma_0^2 = 1^2\)</span> and <span class="math inline">\(\nu_0 = 3\)</span> degrees of freedom in your prior for <span class="math inline">\(\sigma^2\)</span>. Plot both the marginal posterior distributions for <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>Compute the joint posterior distribution for <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\sigma^2\)</span> using a conjugate prior distribution. Use a prior mean for <span class="math inline">\(\theta\)</span> of <span class="math inline">\(8\)</span> and an (imaginary) prior sample size of <span class="math inline">\(5\)</span>. Use <span class="math inline">\(\sigma_0^2 = 1^2\)</span> and <span class="math inline">\(\nu_0 = 3\)</span> degrees of freedom in your prior for <span class="math inline">\(\sigma^2\)</span>. Plot the marginal posterior distribution of <span class="math inline">\(\theta\)</span>.</p>
 <div id="q:iid_normal_pesticide" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -628,7 +629,135 @@ Solution
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  bothPartyInParliament[i] <span class="ot">=</span> <span class="fu">all</span>(postDraws[i,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">4</span>)] <span class="sc">&lt;</span> <span class="fl">0.04</span>)</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The posterior probability that both parties are below <span class="math inline">\(4\%\)</span> is 0.4202.</p>
+<p>The posterior probability that both parties are below <span class="math inline">\(4\%\)</span> is 0.428.</p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="exercise-3.7" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-3.7">Exercise 3.7</h3>
+<p>The monthly income (in thousands Swedish Krona) of ten randomly selected persons are: 14, 25, 45, 25, 30, 33, 19, 50, 34 and 67. The log-normal distribution (see Box~ and ) is a commonly used model for income distributions. Let <span class="math inline">\(Y_1,\ldots,Y_n \vert \theta,\sigma^{2}\overset{\mathrm{iid}}{\sim}\mathrm{LN}(\theta,\sigma^{2})\)</span>, where <span class="math inline">\(\theta=\log(33)\)</span> is assumed to be known but <span class="math inline">\(\sigma^{2}\)</span> is unknown with non-informative prior <span class="math inline">\(p(\sigma^{2})\propto1/\sigma^{2}\)</span>. The posterior for <span class="math inline">\(\sigma^{2}\)</span> given <span class="math inline">\(\theta\)</span> is the <span class="math inline">\(\mathrm{Inv-}\chi^{2}(n,\tau^{2})\)</span> distribution, where <span class="math display">\[\begin{equation*}
+    \tau^{2}=\frac{\sum_{i=1}^{n}(\log y_{i}-\theta)^{2}}{n}.
+  \end{equation*}\]</span></p>
+<p><strong>a)</strong></p>
+<p>Simulate <span class="math inline">\(10,000\)</span> draws from the posterior of <span class="math inline">\(\sigma^{2}\)</span>, assuming <span class="math inline">\(\theta=\log(33)\)</span> is known. Plot a histogram of the posterior draws of the <span class="math inline">\(\sigma\)</span>.</p>
+<div id="q:gini_a" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">25</span>, <span class="dv">45</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">33</span>, <span class="dv">19</span>, <span class="dv">50</span>, <span class="dv">34</span>, <span class="dv">67</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>logy <span class="ot">=</span> <span class="fu">log</span>(y)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">length</span>(y)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">log</span>(<span class="dv">33</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>tau2 <span class="ot">=</span> <span class="fu">sum</span>(logy <span class="sc">-</span> theta)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>n</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Defining a function that simulates nSim draws</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># from the scaled inverse Chi-square distribution</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>rScaledInvChi2 <span class="ot">&lt;-</span> <span class="cf">function</span>(nSim, df, scale){</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>((df<span class="sc">*</span>scale)<span class="sc">/</span><span class="fu">rchisq</span>(nSim, <span class="at">df=</span>df))</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>nSim <span class="ot">=</span> <span class="dv">10000</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>sigma2Draws <span class="ot">=</span> <span class="fu">rScaledInvChi2</span>(nSim, n, tau2)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">sqrt</span>(sigma2Draws), <span class="dv">100</span>, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">main =</span> <span class="st">""</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(sigma), <span class="at">ylab =</span> <span class="st">"posterior density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch3solutions_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>b)</strong></p>
+<p>A commonly used measure of income inequality is the Gini coefficient, <span class="math inline">\(0\leq G\leq1\)</span>, where <span class="math inline">\(G=0\)</span> is complete income equality, and <span class="math inline">\(G=1\)</span> means complete income inequality. It can be shown that <span class="math inline">\(G=2\Phi\left(\sigma/\sqrt{2}\right)-1\)</span> when incomes follow a <span class="math inline">\(\mathrm{LN}(\theta,\sigma^{2})\)</span> distribution, where <span class="math inline">\(\Phi(z)\)</span> is the cumulative distribution function (CDF) for the standard normal distribution. Use the posterior draws from a) to compute the posterior distribution of the Gini coefficient <span class="math inline">\(G\)</span>. Plot a histogram of the posterior draws of <span class="math inline">\(G\)</span>.</p>
+<div id="q:gini_b" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>gini <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, nSim)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nSim){</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  gini[i] <span class="ot">=</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pnorm</span>(<span class="fu">sqrt</span>(sigma2Draws[i])<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">2</span>)) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>} </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(gini, <span class="dv">100</span>, <span class="at">col =</span> <span class="st">"cornsilk"</span>, <span class="at">main =</span> <span class="st">""</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Gini coefficient, G"</span>, <span class="at">ylab =</span> <span class="st">"posterior density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch3solutions_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>c)</strong></p>
+<p>Compute a <span class="math inline">\(95\)</span>% Highest Posterior Density (HPD) interval for <span class="math inline">\(G\)</span>. To compute the HPD interval you will need an estimate of the posterior density for <span class="math inline">\(G\)</span>; a common approach is to use a kernel density estimator, for example the <code>density</code> function in R.</p>
+<div id="q:gini_c" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We first estimate the posterior density from the posterior draws using a kernel density estimator, and plotting it on top of the histogram:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>kde <span class="ot">=</span> <span class="fu">density</span>(gini)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>giniGrid <span class="ot">=</span> kde<span class="sc">$</span>x</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>postDens <span class="ot">=</span> kde<span class="sc">$</span>y</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(gini, <span class="dv">100</span>, <span class="at">col =</span> <span class="st">"cornsilk"</span>, <span class="at">main =</span> <span class="st">""</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Gini coefficient, G"</span>, <span class="at">ylab =</span> <span class="st">"posterior density"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(giniGrid, postDens, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"indianred"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch3solutions_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now that we have the posterior density, and we can see that it is unimodal, we can use the same code as in the Solution to Exercise <span class="citation" data-cites="q:iid_poisson_ambulance_b">@q:iid_poisson_ambulance_b</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>binWidth <span class="ot">=</span> giniGrid[<span class="dv">2</span>]<span class="sc">-</span> giniGrid[<span class="dv">1</span>]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># first, sort the density values from highest to lowest</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>postDensOrdered <span class="ot">=</span> <span class="fu">sort</span>(postDens, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)  </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># reorder the thetaValues so that they still match the density values</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>giniOrdered <span class="ot">=</span> giniGrid[<span class="fu">order</span>(postDens, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)] </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>cumsumPostDens <span class="ot">=</span> <span class="fu">cumsum</span>(binWidth<span class="sc">*</span>postDensOrdered) <span class="co"># posterior cdf </span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>inHPD <span class="ot">=</span> <span class="fu">which</span>(cumsumPostDens <span class="sc">&lt;</span> <span class="fl">0.95</span>) <span class="co"># find highest pdf vals up to 95% quota.</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>hpd <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">min</span>(giniOrdered[inHPD]), <span class="fu">max</span>(giniOrdered[inHPD]))</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="fu">paste0</span>(<span class="st">"The 95% HPD interval for the Gini coefficient is ("</span>, hpd[<span class="dv">1</span>], <span class="st">","</span>, hpd[<span class="dv">2</span>],<span class="st">")"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The 95% HPD interval for the Gini coefficient is (0.0677500326771769,0.17168505672965)</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

@@ -31,4 +31,5 @@ format:
     callout-collapse: true       # all callouts collapsed by default
 filters:
   - ref2crossref.lua
+  - texttt.lua
 

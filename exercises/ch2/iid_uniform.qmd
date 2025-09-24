@@ -25,7 +25,7 @@ The density for each observation in the sample is
 $$
 p(x \vert \theta) = I\Big(\theta- \frac{1}{2} \leq x \leq \theta + \frac{1}{2}\Big).
 $$
-The likelihood based a **single** observation is therefore zero whenever $\theta \geq x-\frac{1}{2}$ or when $\theta \leq x + \frac{1}{2}$. So, to highlight that we care about $p(x\vert\theta)$ as function of $\theta$, we can write
+where $I()$ is an *indicator function* that returns the value one when the condition inside the parenthesis is true, and zero otherwise. The likelihood based a **single** observation is therefore zero whenever $\theta \geq x-\frac{1}{2}$ or when $\theta \leq x + \frac{1}{2}$. So, to highlight that we care about $p(x\vert\theta)$ as function of $\theta$, we can write
 $$
 p(x \vert \theta) = I\Big(x - \frac{1}{2} \leq \theta \leq x + \frac{1}{2}\Big).
 $$

@@ -49,7 +49,7 @@ $$
 
 ::: {#q:jeffreys_expon_b .callout-note icon="false" collapse="true"}
 ## Solution
-The posterior distribution is obtain in the usual way with Bayes' theorem
+The posterior distribution is obtained in the usual way with Bayes' theorem
 $$
 p(\theta \vert x_1,\ldots,x_n) = \theta^{n}e^{-\theta\sum_{i=1}^{n}x_{i}} \cdot \frac{1}{\theta} \propto \theta^{n-1}e^{-\theta\sum_{i=1}^{n}x_{i}}
 $$

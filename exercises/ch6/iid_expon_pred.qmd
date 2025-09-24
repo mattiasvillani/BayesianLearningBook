@@ -1,0 +1,87 @@
+### Exercise 6.2
+
+{{< include /exercises/book_exercises/predictiondecision/iid_expon_pred.tex >}}
+<br>
+**a)**
+{{< include /exercises/book_exercises/predictiondecision/iid_expon_pred_a.tex >}}
+
+::: {#q:iid_expon_pred_a .callout-note icon="false" collapse="true"}
+## Solution
+
+The predictive distribution for the next observation $\tilde{X}_{n+1}$ is
+$$
+p(\tilde{x}_{n+1} \vert x_1,\ldots,x_n) = \int p(\tilde{x}_{n+1} \vert \theta) p(\theta \vert x_1,\ldots,x_n) d\theta
+$$
+where $\theta \vert x_1,\ldots,x_n \sim \mathrm{Gamma}(\alpha + n, \beta + \sum_{i=1}^n x_i)$ and $p(\tilde{x}_{n+1} \vert \theta)$ is the pdf of the exponential distribution. So,
+$$
+\begin{aligned}
+p(\tilde{x}_{n+1} \vert x_1,\ldots,x_n) &= \int \theta e^{-\theta\tilde{x}_{n+1}}\cdot\frac{\left(\beta+n\bar{x}\right)^{\alpha+n}}{\Gamma(\alpha+n)}\theta^{\alpha+n-1}e^{-(\beta+n\bar{x})\theta}d\theta \\
+&= \frac{\left(\beta+n\bar{x}\right)^{\alpha+n}}{\Gamma(\alpha+n)}\int \theta^{(\alpha+n + 1) -1}e^{-(\beta+n\bar{x} + \tilde{x}_{n+1})\theta}d\theta \\
+\end{aligned}
+$$
+The integral $\int \theta^{(\alpha+n + 1) -1}e^{-(\beta+n\bar{x} + \tilde{x}_{n+1})\theta}d\theta$ is the integral of the unnormalized density function of the $\mathrm{Gamma}(\alpha+n + 1, \beta+n\bar{x} + \tilde{x}_{n+1})$ distribution. Hence the integral can be directly obtained from the normalizing constant of this distribution and we obtain
+$$
+p(\tilde{x}_{n+1} \vert x_1,\ldots,x_n) = \frac{\left(\beta+n\bar{x}\right)^{\alpha+n}}{\Gamma(\alpha+n)}\frac{\Gamma(\alpha+n+1)}{(\beta+n\bar{x} + \tilde{x}_{n+1})^{\alpha+n+1}}
+$$
+This density is not among the really famous ones, but it has a name, the **Compound Gamma distribution**; see the [Compound Gamma distribution](https://observablehq.com/@mattiasvillani/compound-gamma-distribution) widget, if you are curious. The distribution in the widget is actually a little more general, but set the hyperparameter $\kappa=1$ to get the distribution here. Hence, using the notation in the widget, the predictive distribution is
+$$
+\tilde{X}_{n+1} \sim \mathrm{CompoundGamma}(\alpha+n, \beta + n\bar{x}, 1)
+$$
+Note that the density expression above is a little messy mainly because of the normalizing constant. We can remove normalization constants and write
+$$
+p(\tilde{x}_{n+1} \vert x_1,\ldots,x_n) \propto \frac{1}{(\beta+n\bar{x} + \tilde{x}_{n+1})^{\alpha+n+1}}
+$$
+where it is important to rememeber that we are here interested in the distribution of $\tilde{x}_{n+1}$, so all terms involving $\tilde{x}_{n+1}$ must be kept.
+:::
+
+**b)**
+{{< include /exercises/book_exercises/predictiondecision/iid_expon_pred_b.tex >}}
+
+::: {#q:iid_expon_pred_b .callout-note icon="false" collapse="true"}
+## Solution
+
+The following code plots the predictive density using both simulation and with the analytical result from a). 
+
+The simulation from the predictive distribution is performed by :
+
+- first simulating $m$ draws from the posterior of the parameter $\theta \vert x_1,\ldots,x_5 \sim \mathrm{Gamma}(\alpha+n, \beta + n\bar{x})$, and then 
+- for each parameter draw $\theta^{(i)}$ simulating predictive draws $\tilde{X}_6^{(i)}$ from the exponential model $\tilde{X}_6^{(i)} \vert x_1,\ldots,x_5 \sim \mathrm{Expon}(\theta^{(i)})$ for $i=1,\ldots,m$.
+```{r}
+
+# Set up data and compute posterior hyperparameters
+x = c(1.58, 7.02, 8.28, 4.67, 4.05)
+n = length(x)
+xbar = mean(x)
+alphaPrior = 1/3
+betaPrior = 1
+alphaPost = alphaPrior + n
+betaPost = betaPrior + n*xbar
+
+# Simulate from predictive distribution and plot histogram
+nSim = 10000
+thetaDraws = rgamma(nSim, alphaPost, betaPost)
+xPredDraws = rexp(nSim, thetaDraws)
+hist(xPredDraws, 100, col = "cornsilk", freq = FALSE,  xlim = c(0,50),
+     main = "Predictive density", 
+     xlab = "Months until next release", ylab = "Preditive density")
+
+# Defining the general Compound-Gamma density even though we have kappa = 1
+dCompoundGamma <- function(x, alpha, beta_, kappa){
+  dens = (beta_^alpha/gamma(alpha)) * 
+    (gamma(alpha + kappa)/gamma(kappa)) * 
+    x^(kappa-1)/(beta_ + x)^(alpha + kappa)
+  return(dens)
+}
+
+# Overlaying the analytical density for the Compound Gamma distribution
+xPredGrid = seq(0, 30, length = 1000)
+lines(xPredGrid, dCompoundGamma(xPredGrid, alphaPost, betaPost, 1), 
+      lwd = 3, col = "indianred")
+```
+The predictive probability that the release takes more than 18 months is not very likely, but cannot be completely ruled out:
+```{r}
+mean(xPredDraws > 18)
+```
+
+
+:::

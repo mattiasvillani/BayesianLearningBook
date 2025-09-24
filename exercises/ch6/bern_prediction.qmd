@@ -1,0 +1,30 @@
+### Exercise 6.1
+
+{{< include /exercises/book_exercises/predictiondecision/bern_prediction.tex >}}
+
+**a)**
+{{< include /exercises/book_exercises/predictiondecision/bern_prediction_a.tex >}}
+
+::: {#q:bern_prediction_a .callout-note icon="false" collapse="true"}
+## Solution TBD
+
+:::
+
+
+
+**b)**
+{{< include /exercises/book_exercises/predictiondecision/bern_prediction_b.tex >}}
+
+::: {#q:bern_prediction_b .callout-note icon="false" collapse="true"}
+## Solution TBD
+
+:::
+
+**c)**
+{{< include /exercises/book_exercises/predictiondecision/bern_prediction_c.tex >}}
+
+::: {#q:bern_prediction_c .callout-note icon="false" collapse="true"}
+## Solution TBD
+
+:::
+

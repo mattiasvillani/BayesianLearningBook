@@ -1,0 +1,25 @@
+---
+title: "Chapter 6 - Prediction and Decision making: Exercise solutions"
+author: "Mattias Villani"
+format:
+  html: default
+  #pdf: default
+---
+
+```{r}
+#| echo: false
+#| output: false
+colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE6666")
+```
+
+Click on the arrow to see a solution.
+
+{{< include ch6/bern_prediction.qmd >}}
+
+---
+
+{{< include ch6/iid_expon_pred.qmd >}}
+
+---
+
+

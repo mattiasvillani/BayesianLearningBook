@@ -1,0 +1,128 @@
+
+### Exercise 2.12
+
+{{< include /exercises/book_exercises/oneparam/iid_poisson_ambulance.tex >}}
+
+**a)** 
+
+{{< include /exercises/book_exercises/oneparam/iid_poisson_ambulance_a.tex >}}
+
+::: {#q:iid_poisson_ambulance_a .callout-note icon="false" collapse="true"}
+## Solution
+
+We first need to determine the two hyperparameters $\alpha$ and $\beta$ of the $\mathrm{Gamma}(\alpha,\beta)$ prior. From properties of the gamma distribution we have 
+$$
+\mathbb{E}(\theta) = \frac{\alpha}{\beta} = 12
+$$
+to match the prior mean of the head. We must therefore have $\alpha = 12\beta$, leaving the single hyperparameter $\beta$ to be determined from the second condition:
+$$
+\mathrm{Pr}(\theta < 5) = 0.01
+$$
+Let $F(\theta \vert \alpha,\beta)$ denote the cumulative distribution function (cdf) of the $\mathrm{Gamma}(\alpha,\beta)$ prior. Since  $\alpha = 12\beta$ we need to solve the following equation for $\beta$:
+$$
+F(5 \vert 12\beta,\beta) = 0.01
+$$
+In R code, we would like to find the `beta` this `pgamma(5, shape = 12*beta, rate = beta) = 0.01` This cannot be (easily) solved analytically. We can either find the $\beta$ that satisfies `pgamma(5, shape = 12*beta, rate = beta) = 0.01` by trial and error (that is, try different values of `beta` until you get really close to `pgamma(5, shape = 12*beta, rate = beta) = 0.01`). A faster way is to use a numerical method (for example Newton's method) that finds *roots* to equations $f(x) = 0$ (a so called *root-finding algorithm*), since our problem can be formulated as finding the $\beta$ that solves the equation $F(5 \vert 12\beta,\beta) - 0.01 = 0$. The `uniroot` function in R does the job:
+```{r}
+f <- function(x){
+  return(pgamma(5, shape = 12*x, rate = x) - 0.01)
+}
+results = uniroot(f, c(0.001,100)) # second argument is a search interval
+betaPrior = results$root 
+alphaPrior = 12*betaPrior
+```
+The value of $\beta$ that satisfies the equation $F(5 \vert 12\beta,\beta) = 0.01$ is $\beta = `r betaPrior`$. We can check that this $\beta$ indeed gives the correct prior probability $\mathrm{Pr}(\theta < 5) = 0.01$:
+```{r}
+pgamma(5, shape = alphaPrior, rate = betaPrior)
+```
+Bingo!
+
+Since $\alpha = 12\beta$, the complete prior is $\theta \sim \mathrm{Gamma}(\alpha = `r round(alphaPrior, 3)`, `r round(betaPrior,3)`)$. Here is a plot:
+```{r}
+thetaGrid = seq(0, 30, length = 1000)
+plot(thetaGrid, dgamma(thetaGrid, shape = alphaPrior, rate = betaPrior), 
+     type = "l", ylab = "prior density", xlab = expression(theta), 
+     col = "orange", lwd = 2)
+```
+Sanity check: the mean of $12$ seems right, and also that $\mathrm{Pr}(\theta < 5) = 0.01$.
+
+From Chapter 2 of the Bayesian Learning book, we know that the posterior distribution is 
+$$
+\theta \vert \boldsymbol{x} \sim \mathrm{Gamma}(\alpha + \sum_{i=1}^n x_i, \beta + n)
+$$
+So, since $\sum_{i=1}^7 x_i = 58$ we have
+```{r}
+x = c(8,12,6,9,9,9,5)
+n = length(x)
+alphaPost = alphaPrior + sum(x)
+betaPost = betaPrior + n
+nTheta = 1000
+thetaGrid = seq(0, 15, length = nTheta)
+binWidth = thetaGrid[2] - thetaGrid[1] # used to normalize likelihood
+priorDens = dgamma(thetaGrid, alphaPrior, betaPrior)
+postDens = dgamma(thetaGrid, alphaPost, betaPost)
+like = rep(0, nTheta)
+for (i in 1:nTheta){
+  like[i] = prod(dpois(x, thetaGrid[i]))
+}
+like_norm = like/sum(binWidth*like)
+plot(thetaGrid, dgamma(thetaGrid, alphaPost, betaPost), 
+     xlab = expression(theta), ylab = "density", type = "l", 
+     col = "orange", lwd = 3)
+lines(thetaGrid, priorDens, col = "orange", lwd = 3)
+lines(thetaGrid, like_norm, col = "steelblue", lwd = 3)
+lines(thetaGrid, postDens, col = "indianred", lwd = 3)
+legend("topleft", legend = c("Prior", "Likelihood (normalized)", "Posterior"),
+       col = c("orange", "steelblue", "indianred"), lwd = 3, bty = "n")
+```
+
+
+
+:::
+
+
+
+**b)** 
+
+{{< include /exercises/book_exercises/oneparam/iid_poisson_ambulance_b.tex >}}
+
+::: {#q:iid_poisson_ambulance_b .callout-note icon="false" collapse="true"}
+## Solution
+Since the posterior is Gamma, we can look formulas for the mean and mode of a Gamma distribution. If $X\sim \mathrm{Gamma}(\alpha, \beta)$, then
+$$
+\begin{aligned}
+\mathbb{E}(X) &= \frac{\alpha}{\beta} \\
+\mathrm{Mode}(X) &= \frac{\alpha -1}{\beta} \text{ for } \alpha \geq 1, \text{ zero otherwise}
+\end{aligned}  
+$$ 
+The median is not available in closed from, but R gladly computes it with the $qgamma$ function. Here is posterior mean, median and mode in the ambulance data example:
+```{r}
+postMean = alphaPost/betaPost
+postMedian = qgamma(0.5, alphaPost, betaPost)
+postMode = (alphaPost - 1)/betaPost
+message("The posterior mean is ", round(postMean,3))
+message("The posterior median is ", round(postMedian,3))
+message("The posterior mode is ", round(postMode,3))
+```
+Since the posterior distribution is fairly symmetric, these three measures of posterior location are similar.
+
+Finally, a 95% credible interval can be computed by the following code (there are many ways of doing this). The code assumes for simplicity that the HPD interval is truly an interval, and not several disjoint intervals, as would happen when the posterior is multimodal. We know from the plot above that the posterior is unimodal, so the code is safe to use here.
+```{r}
+# first, sort the density values from highest to lowest
+postDensOrdered = sort(postDens, decreasing = TRUE)  
+# reorder the thetaValues so that they still match the density values
+thetaOrdered = thetaGrid[order(postDens, decreasing = TRUE)] 
+cumsumPostDens = cumsum(binWidth*postDensOrdered) # posterior cdf 
+inHPD = which(cumsumPostDens < 0.95) # find highest pdf vals up to 95% quota.
+hpd = c(min(thetaOrdered[inHPD]), max(thetaOrdered[inHPD]))
+message(paste0("The 95% HPD interval for theta is (", hpd[1], ",", hpd[2],")"))
+```
+Plot the HPD as a blue line:
+```{r}
+plot(thetaGrid, postDens, type = "l", col = "indianred", lwd = 2, 
+     xlab = expression(theta), ylab = "posterior density") 
+lines(hpd, c(0,0), col = "steelblue", lwd = 3)
+```
+
+ 
+:::

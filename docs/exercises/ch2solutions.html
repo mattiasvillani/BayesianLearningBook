@@ -372,6 +372,7 @@ window.Quarto = {
   <li><a href="#exercise-2.10" id="toc-exercise-2.10" class="nav-link" data-scroll-target="#exercise-2.10">Exercise 2.10</a></li>
   <li><a href="#exercise-2.10-1" id="toc-exercise-2.10-1" class="nav-link" data-scroll-target="#exercise-2.10-1">Exercise 2.10</a></li>
   <li><a href="#exercise-2.11" id="toc-exercise-2.11" class="nav-link" data-scroll-target="#exercise-2.11">Exercise 2.11</a></li>
+  <li><a href="#exercise-2.12" id="toc-exercise-2.12" class="nav-link" data-scroll-target="#exercise-2.12">Exercise 2.12</a></li>
   </ul>
 </nav>
     </div>
@@ -1197,6 +1198,168 @@ p(x) = \frac{1}{\theta} I(x_i \leq \theta).
                        &amp;=  \frac{\alpha \beta^\alpha }{\theta^{n+\alpha+1}} \cdot  
                             I\big(\tilde \beta \leq \theta \big)        
 \end{align*}\]</span> where <span class="math inline">\(\tilde \beta = \mathrm{max}(x_{\mathrm{max}},\beta)\)</span>. This is proportional to a <span class="math inline">\(\mathrm{Pareto}\big(\alpha + n, \tilde \beta \big)\)</span> density. Since the prior and posterior are both in the Pareto family, the Pareto prior is conjugate to the <span class="math inline">\(\mathrm{Uniform}(0,\theta)\)</span> model.</p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="exercise-2.12" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2.12">Exercise 2.12</h3>
+<p>The number of patients per day in need of an ambulance to a small regional hospital is random following a Poisson distribution with unknown mean <span class="math inline">\(\theta\)</span>. The hospital has collected data from the past <span class="math inline">\(n=7\)</span> days, resulting in the following daily counts of ambulance trips: <span class="math inline">\(8, 12,  6,  9,  9,  9,  5\)</span>. Before collecting the data, the head of the ambulance drivers believed that the mean number of ambulance trips per day is about <span class="math inline">\(12\)</span> and that a mean of less than <span class="math inline">\(5\)</span> trips is very unlikely, “like winning a lottery with only one winning ticket per hundred tickets”.</p>
+<p><strong>a)</strong></p>
+<p>Compute the posterior distribution for <span class="math inline">\(\theta\)</span> using a Gamma prior <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha,\beta)\)</span> with parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> set to reflect the head’s beliefs. Provide a plot of the prior distribution, the normalized likelihood and the posterior distribution.</p>
+<div id="q:iid_poisson_ambulance_a" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution a)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We first need to determine the two hyperparameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> of the <span class="math inline">\(\mathrm{Gamma}(\alpha,\beta)\)</span> prior. From properties of the gamma distribution we have <span class="math display">\[
+\mathbb{E}(\theta) = \frac{\alpha}{\beta} = 12
+\]</span> to match the prior mean of the head. We must therefore have <span class="math inline">\(\alpha = 12\beta\)</span>, leaving the single hyperparameter <span class="math inline">\(\beta\)</span> to be determined from the second condition: <span class="math display">\[
+\mathrm{Pr}(\theta &lt; 5) = 0.01
+\]</span> Let <span class="math inline">\(F(\theta \vert \alpha,\beta)\)</span> denote the cumulative distribution function (cdf) of the <span class="math inline">\(\mathrm{Gamma}(\alpha,\beta)\)</span> prior. Since <span class="math inline">\(\alpha = 12\beta\)</span> we need to solve the following equation for <span class="math inline">\(\beta\)</span>: <span class="math display">\[
+F(5 \vert 12\beta,\beta) = 0.01
+\]</span> In R code, we would like to find the <code>beta</code> this <code>pgamma(5, shape = 12*beta, rate = beta) = 0.01</code> This cannot be (easily) solved analytically. We can either find the <span class="math inline">\(\beta\)</span> that satisfies <code>pgamma(5, shape = 12*beta, rate = beta) = 0.01</code> by trial and error (that is, try different values of <code>beta</code> until you get really close to <code>pgamma(5, shape = 12*beta, rate = beta) = 0.01</code>). A faster way is to use a numerical method (for example Newton’s method) that finds <em>roots</em> to equations <span class="math inline">\(f(x) = 0\)</span> (a so called <em>root-finding algorithm</em>), since our problem can be formulated as finding the <span class="math inline">\(\beta\)</span> that solves the equation <span class="math inline">\(F(5 \vert 12\beta,\beta) - 0.01 = 0\)</span>. The <code>uniroot</code> function in R does the job:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">pgamma</span>(<span class="dv">5</span>, <span class="at">shape =</span> <span class="dv">12</span><span class="sc">*</span>x, <span class="at">rate =</span> x) <span class="sc">-</span> <span class="fl">0.01</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>results <span class="ot">=</span> <span class="fu">uniroot</span>(f, <span class="fu">c</span>(<span class="fl">0.001</span>,<span class="dv">100</span>)) <span class="co"># second argument is a search interval</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>betaPrior <span class="ot">=</span> results<span class="sc">$</span>root </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>alphaPrior <span class="ot">=</span> <span class="dv">12</span><span class="sc">*</span>betaPrior</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The value of <span class="math inline">\(\beta\)</span> that satisfies the equation <span class="math inline">\(F(5 \vert 12\beta,\beta) = 0.01\)</span> is <span class="math inline">\(\beta = 0.8472998\)</span>. We can check that this <span class="math inline">\(\beta\)</span> indeed gives the correct prior probability <span class="math inline">\(\mathrm{Pr}(\theta &lt; 5) = 0.01\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pgamma</span>(<span class="dv">5</span>, <span class="at">shape =</span> alphaPrior, <span class="at">rate =</span> betaPrior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01000101</code></pre>
+</div>
+</div>
+<p>Bingo!</p>
+<p>Since <span class="math inline">\(\alpha = 12\beta\)</span>, the complete prior is <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha = 10.168, 0.847)\)</span>. Here is a plot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>thetaGrid <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">30</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(thetaGrid, <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> alphaPrior, <span class="at">rate =</span> betaPrior), </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">ylab =</span> <span class="st">"prior density"</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(theta), </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch2solutions_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Sanity check: the mean of <span class="math inline">\(12\)</span> seems right, and also that <span class="math inline">\(\mathrm{Pr}(\theta &lt; 5) = 0.01\)</span>.</p>
+<p>From Chapter 2 of the Bayesian Learning book, we know that the posterior distribution is <span class="math display">\[
+\theta \vert \boldsymbol{x} \sim \mathrm{Gamma}(\alpha + \sum_{i=1}^n x_i, \beta + n)
+\]</span> So, since <span class="math inline">\(\sum_{i=1}^7 x_i = 58\)</span> we have</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">8</span>,<span class="dv">12</span>,<span class="dv">6</span>,<span class="dv">9</span>,<span class="dv">9</span>,<span class="dv">9</span>,<span class="dv">5</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">length</span>(x)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>alphaPost <span class="ot">=</span> alphaPrior <span class="sc">+</span> <span class="fu">sum</span>(x)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>betaPost <span class="ot">=</span> betaPrior <span class="sc">+</span> n</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>nTheta <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>thetaGrid <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">15</span>, <span class="at">length =</span> nTheta)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>binWidth <span class="ot">=</span> thetaGrid[<span class="dv">2</span>] <span class="sc">-</span> thetaGrid[<span class="dv">1</span>] <span class="co"># used to normalize likelihood</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>priorDens <span class="ot">=</span> <span class="fu">dgamma</span>(thetaGrid, alphaPrior, betaPrior)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>postDens <span class="ot">=</span> <span class="fu">dgamma</span>(thetaGrid, alphaPost, betaPost)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>like <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, nTheta)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nTheta){</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  like[i] <span class="ot">=</span> <span class="fu">prod</span>(<span class="fu">dpois</span>(x, thetaGrid[i]))</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>like_norm <span class="ot">=</span> like<span class="sc">/</span><span class="fu">sum</span>(binWidth<span class="sc">*</span>like)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(thetaGrid, <span class="fu">dgamma</span>(thetaGrid, alphaPost, betaPost), </span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(theta), <span class="at">ylab =</span> <span class="st">"density"</span>, <span class="at">type =</span> <span class="st">"l"</span>, </span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(thetaGrid, priorDens, <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(thetaGrid, like_norm, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(thetaGrid, postDens, <span class="at">col =</span> <span class="st">"indianred"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Prior"</span>, <span class="st">"Likelihood (normalized)"</span>, <span class="st">"Posterior"</span>),</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"orange"</span>, <span class="st">"steelblue"</span>, <span class="st">"indianred"</span>), <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch2solutions_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>b)</strong></p>
+<p>Compare the posterior mean, median and mode, and summarize the posterior distribution by a 95% credible interval.</p>
+<div id="q:iid_poisson_ambulance_b" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution b)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Since the posterior is Gamma, we can look formulas for the mean and mode of a Gamma distribution. If <span class="math inline">\(X\sim \mathrm{Gamma}(\alpha, \beta)\)</span>, then <span class="math display">\[
+\begin{aligned}
+\mathbb{E}(X) &amp;= \frac{\alpha}{\beta} \\
+\mathrm{Mode}(X) &amp;= \frac{\alpha -1}{\beta} \text{ for } \alpha \geq 1, \text{ zero otherwise}
+\end{aligned}  
+\]</span> The median is not available in closed from, but R gladly computes it with the <span class="math inline">\(qgamma\)</span> function. Here is posterior mean, median and mode in the ambulance data example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>postMean <span class="ot">=</span> alphaPost<span class="sc">/</span>betaPost</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>postMedian <span class="ot">=</span> <span class="fu">qgamma</span>(<span class="fl">0.5</span>, alphaPost, betaPost)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>postMode <span class="ot">=</span> (alphaPost <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>betaPost</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"The posterior mean is "</span>, <span class="fu">round</span>(postMean,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The posterior mean is 8.687</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"The posterior median is "</span>, <span class="fu">round</span>(postMedian,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The posterior median is 8.644</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"The posterior mode is "</span>, <span class="fu">round</span>(postMode,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The posterior mode is 8.559</code></pre>
+</div>
+</div>
+<p>Since the posterior distribution is fairly symmetric, these three measures of posterior location are similar.</p>
+<p>Finally, a 95% credible interval can be computed by the following code (there are many ways of doing this). The code assumes for simplicity that the HPD interval is truly an interval, and not several disjoint intervals, as would happen when the posterior is multimodal. We know from the plot above that the posterior is unimodal, so the code is safe to use here.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first, sort the density values from highest to lowest</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>postDensOrdered <span class="ot">=</span> <span class="fu">sort</span>(postDens, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)  </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># reorder the thetaValues so that they still match the density values</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>thetaOrdered <span class="ot">=</span> thetaGrid[<span class="fu">order</span>(postDens, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)] </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>cumsumPostDens <span class="ot">=</span> <span class="fu">cumsum</span>(binWidth<span class="sc">*</span>postDensOrdered) <span class="co"># posterior cdf </span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>inHPD <span class="ot">=</span> <span class="fu">which</span>(cumsumPostDens <span class="sc">&lt;</span> <span class="fl">0.95</span>) <span class="co"># find highest pdf vals up to 95% quota.</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>hpd <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">min</span>(thetaOrdered[inHPD]), <span class="fu">max</span>(thetaOrdered[inHPD]))</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="fu">paste0</span>(<span class="st">"The 95% HPD interval for theta is ("</span>, hpd[<span class="dv">1</span>], <span class="st">","</span>, hpd[<span class="dv">2</span>],<span class="st">")"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The 95% HPD interval for theta is (6.68168168168168,10.7657657657658)</code></pre>
+</div>
+</div>
+<p>Plot the HPD as a blue line:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(thetaGrid, postDens, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"indianred"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(theta), <span class="at">ylab =</span> <span class="st">"posterior density"</span>) </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(hpd, <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch2solutions_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

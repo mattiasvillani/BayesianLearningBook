@@ -57,3 +57,6 @@ Click on the arrow to see a solution.
 
 {{< include ch2/iid_uniform_conj.qmd >}}
 
+---
+
+{{< include ch2/iid_poisson_ambulance.qmd >}}

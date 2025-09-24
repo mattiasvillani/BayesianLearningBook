@@ -1,0 +1,89 @@
+### Exercise 6.3
+
+{{< include /exercises/book_exercises/predictiondecision/bridgedecision.tex >}}
+
+**a)**
+{{< include /exercises/book_exercises/predictiondecision/bridgedecision_a.tex >}}
+
+
+::: {#q:bridgedecision_a .callout-note icon="false" collapse="true"}
+## Solution
+The predictive distribution for the maximal weight on a future day is 
+$$
+\tilde{X} \sim N(\mu_n, \sigma^2 + \tau_n^2),
+$$
+where $\mu_n$ and $\tau_n^2$ are computed using the formula for the posterior in the iid normal model with known variance in Chapter 2:
+```{r}
+y = c(190,193, 192, 197, 188)
+n = length(y)
+yBar = mean(y)
+sigma = 10
+mu0 = 200
+tau0 = 10
+w = (n/sigma^2)/(n/sigma^2 + 1/tau0^2)
+mun = w*yBar + (1-w)*mu0
+taun2 = 1/( n/sigma^2 +  1/tau0^2 )
+predDraws = rnorm(10000, mun, sqrt(sigma^2 + taun2))
+hist(predDraws, xlim = c(150,250),
+     xlab = "Max weight on a future day", ylab = "Predictive density", 
+     main = "Predictive density max weight - single day", col = "cornflowerblue")
+```
+
+:::
+
+**b)**
+{{< include /exercises/book_exercises/predictiondecision/bridgedecision_b.tex >}}
+
+::: {#q:bridgedecision_b .callout-note icon="false" collapse="true"}
+## Solution
+
+To obtain the predictive distribution for the maximal weight over a whole year we just simulate max weight for $365$ independent days and take the maximum over all days. 
+```{r}
+nSim = 10000
+maxWeightYear = rep(0, nSim)
+for (i in 1:nSim){
+  maxWeightYear[i] = max(rnorm(365, mun, sqrt(sigma^2 + taun2)))
+}
+par(mfrow = c(2,1))
+hist(predDraws, xlim = c(150,250),
+     xlab = "Max weight on a future day", ylab = "Predictive density", 
+     main = "Predictive density max weight - single day", col = "cornflowerblue")
+hist(maxWeightYear, , xlim = c(150,250), xlab = "Max weight over a full year day", 
+     ylab = "Predictive density", 
+     main = "Predictive density max weight - whole year", col = "cornsilk")
+```
+
+
+:::
+
+**c)**
+{{< include /exercises/book_exercises/predictiondecision/bridgedecision_c.tex >}}
+
+
+::: {#q:bridgedecision_c .callout-note icon="false" collapse="true"}
+## Solution
+We choose the action (building cost $a$, hence the action space is all $a>0$) that minimizes the expected loss, $EL(a) = \mathbb{E}(L(a,\tilde{Y}))$. The only uncertain factor is maximal weight in the coming year: $\tilde{Y}$. 
+$$
+\begin{aligned}
+EL(a) = E\left[L(c,\tilde{Y} )\right] & = a\cdot\mathrm{Pr}(\text{bridge holds}\vert a,y_{1},...,y_{5})+(100+a)\cdot\mathrm{Pr}(\text{bridge collapses}\vert a,y_{1},...,y_{5}) \\
+& = a\cdot\mathrm{Pr}(\tilde{Y} \leq 10a \vert a,y_{1},...,y_{5})+(100+a)\cdot\mathrm{Pr}(\tilde{Y} > 10a \vert a,y_{1},...,y_{5})
+\end{aligned}
+$$
+We can compute the expected loss for a range of actions $a$ using the simulated draws of the maximal weight during the coming year, $\tilde{Y}$, from b). The expected loss (EL) is plotted as function of $a$ below.
+```{r}
+aGrid = seq(0, 50, length = 1000)
+EL = rep(length(aGrid))
+for (i in 1:length(aGrid)){
+  a = aGrid[i]
+  EL[i] = a*mean(maxWeightYear <= 10*a) + (100+a)*mean(maxWeightYear > 10*a)
+}
+plot(aGrid, EL, xlab = "building cost, a", ylab = "Expected loss", type = "l", 
+     lwd = 3, col = "indianred")
+abline(v = aGrid[which.min(EL)], lty = "dotted")
+```
+ The optimal building cost `r round(aGrid[which.min(EL)],3)` is marked out by a dotted vertical line.
+
+
+:::
+
+

@@ -22,4 +22,8 @@ Click on the arrow to see a solution.
 
 ---
 
+{{< include ch6/bridgedecision.qmd >}}
+
+---
+
 

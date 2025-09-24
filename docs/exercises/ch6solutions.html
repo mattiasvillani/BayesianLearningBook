@@ -363,6 +363,7 @@ window.Quarto = {
   <ul>
   <li><a href="#exercise-6.1" id="toc-exercise-6.1" class="nav-link active" data-scroll-target="#exercise-6.1">Exercise 6.1</a></li>
   <li><a href="#exercise-6.2" id="toc-exercise-6.2" class="nav-link" data-scroll-target="#exercise-6.2">Exercise 6.2</a></li>
+  <li><a href="#exercise-6.3" id="toc-exercise-6.3" class="nav-link" data-scroll-target="#exercise-6.3">Exercise 6.3</a></li>
   </ul>
 </nav>
     </div>
@@ -455,7 +456,7 @@ Solution TBD
 <section id="exercise-6.2" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-6.2">Exercise 6.2</h3>
 Let <span class="math inline">\(X_1,\ldots,X_n \vert \theta \overset{\mathrm{iid}}{\sim} \mathrm{Expon}(\theta)\)</span>, and assume the conjugate <span class="math inline">\(\mathrm{Gamma}(\alpha,\beta)\)</span> prior for <span class="math inline">\(\theta\)</span>.
-<p><strong>a)</strong> Derive the predictive distribution for a new observation <span class="math inline">\(\tilde{X}_{n+1}\)</span> conditional on having observed <span class="math inline">\(x_1,\ldots,x_n\)</span>.</p>
+<p><br> <strong>a)</strong> Derive the predictive distribution for a new observation <span class="math inline">\(\tilde{X}_{n+1}\)</span> conditional on having observed <span class="math inline">\(x_1,\ldots,x_n\)</span>.</p>
 <div id="q:iid_expon_pred_a" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -547,9 +548,142 @@ Solution
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(xPredDraws <span class="sc">&gt;</span> <span class="dv">18</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0621</code></pre>
+<pre><code>[1] 0.0626</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="exercise-6.3" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-6.3">Exercise 6.3</h3>
+A city considers building a new road bridge for a total cost of <span class="math inline">\(a\)</span> dollars. The weight that the bridge can hold (<span class="math inline">\(y\)</span>) at any given time is related to the build cost (<span class="math inline">\(a\)</span>) as follows <span class="math display">\[
+y = 10a
+\]</span> The city has collected data on the maximal weight on the road during five different days: <span class="math inline">\(y_{1}=190,y_{2}=193,y_{3}=192,y_{4}=197\)</span> and <span class="math inline">\(y_{5}=188\)</span>. Assume the model <span class="math inline">\(Y_{1},...,Y_{5}\vert\theta \sim N(\theta,\sigma^{2})\)</span>, where <span class="math inline">\(\sigma^{2}\)</span> is assumed known at <span class="math inline">\(\sigma^{2}=10^{2}\)</span>. Assume a <span class="math inline">\(N(200,10^2)\)</span> prior for <span class="math inline">\(\theta\)</span>.
+<p><strong>a)</strong> Simulate from the predictive distribution of the maximal weight on . Plot a histogram of the simulated values.</p>
+<div id="q:bridgedecision_a" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The predictive distribution for the maximal weight on a future day is <span class="math display">\[
+\tilde{X} \sim N(\mu_n, \sigma^2 + \tau_n^2),
+\]</span> where <span class="math inline">\(\mu_n\)</span> and <span class="math inline">\(\tau_n^2\)</span> are computed using the formula for the posterior in the iid normal model with known variance in Chapter 2:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">190</span>,<span class="dv">193</span>, <span class="dv">192</span>, <span class="dv">197</span>, <span class="dv">188</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">length</span>(y)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>yBar <span class="ot">=</span> <span class="fu">mean</span>(y)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>mu0 <span class="ot">=</span> <span class="dv">200</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>tau0 <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>w <span class="ot">=</span> (n<span class="sc">/</span>sigma<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>(n<span class="sc">/</span>sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>tau0<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>mun <span class="ot">=</span> w<span class="sc">*</span>yBar <span class="sc">+</span> (<span class="dv">1</span><span class="sc">-</span>w)<span class="sc">*</span>mu0</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>taun2 <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>( n<span class="sc">/</span>sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span>  <span class="dv">1</span><span class="sc">/</span>tau0<span class="sc">^</span><span class="dv">2</span> )</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>predDraws <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>, mun, <span class="fu">sqrt</span>(sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> taun2))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(predDraws, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">150</span>,<span class="dv">250</span>),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Max weight on a future day"</span>, <span class="at">ylab =</span> <span class="st">"Predictive density"</span>, </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Predictive density max weight - single day"</span>, <span class="at">col =</span> <span class="st">"cornflowerblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch6solutions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>b)</strong> Simulate from the predictive distribution of the maximal weight <span class="math inline">\(\tilde{Y}\)</span> over . Plot a histogram of the simulated values.</p>
+<div id="q:bridgedecision_b" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To obtain the predictive distribution for the maximal weight over a whole year we just simulate max weight for <span class="math inline">\(365\)</span> independent days and take the maximum over all days.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nSim <span class="ot">=</span> <span class="dv">10000</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>maxWeightYear <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, nSim)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nSim){</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  maxWeightYear[i] <span class="ot">=</span> <span class="fu">max</span>(<span class="fu">rnorm</span>(<span class="dv">365</span>, mun, <span class="fu">sqrt</span>(sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> taun2)))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(predDraws, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">150</span>,<span class="dv">250</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Max weight on a future day"</span>, <span class="at">ylab =</span> <span class="st">"Predictive density"</span>, </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Predictive density max weight - single day"</span>, <span class="at">col =</span> <span class="st">"cornflowerblue"</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(maxWeightYear, , <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">150</span>,<span class="dv">250</span>), <span class="at">xlab =</span> <span class="st">"Max weight over a full year day"</span>, </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Predictive density"</span>, </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Predictive density max weight - whole year"</span>, <span class="at">col =</span> <span class="st">"cornsilk"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch6solutions_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>c)</strong> The loss function for the building project is <span class="math display">\[
+L(a, \tilde{Y}) =
+\begin{cases}
+a &amp; \text{if } \tilde{Y} \leq 10a \,\,\text{ (bridge holds up)}\\
+a + 100 &amp; \text{if } \tilde{Y} &gt; 10a \,\,\text{ (bridge collapses)}
+\end{cases}
+\]</span> where <span class="math inline">\(\tilde{Y}\)</span> is the maximal weight on the bridge during the first year. Hence, we assume that there is no loss after the first year, regardless of what happens. Determine the optimal build cost (<span class="math inline">\(a\)</span>) using a Bayesian approach.</p>
+<div id="q:bridgedecision_c" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We choose the action (building cost <span class="math inline">\(a\)</span>, hence the action space is all <span class="math inline">\(a&gt;0\)</span>) that minimizes the expected loss, <span class="math inline">\(EL(a) = \mathbb{E}(L(a,\tilde{Y}))\)</span>. The only uncertain factor is maximal weight in the coming year: <span class="math inline">\(\tilde{Y}\)</span>. <span class="math display">\[
+\begin{aligned}
+EL(a) = E\left[L(c,\tilde{Y} )\right] &amp; = a\cdot\mathrm{Pr}(\text{bridge holds}\vert a,y_{1},...,y_{5})+(100+a)\cdot\mathrm{Pr}(\text{bridge collapses}\vert a,y_{1},...,y_{5}) \\
+&amp; = a\cdot\mathrm{Pr}(\tilde{Y} \leq 10a \vert a,y_{1},...,y_{5})+(100+a)\cdot\mathrm{Pr}(\tilde{Y} &gt; 10a \vert a,y_{1},...,y_{5})
+\end{aligned}
+\]</span> We can compute the expected loss for a range of actions <span class="math inline">\(a\)</span> using the simulated draws of the maximal weight during the coming year, <span class="math inline">\(\tilde{Y}\)</span>, from b). The expected loss (EL) is plotted as function of <span class="math inline">\(a\)</span> below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>aGrid <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>EL <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">length</span>(aGrid))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(aGrid)){</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">=</span> aGrid[i]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  EL[i] <span class="ot">=</span> a<span class="sc">*</span><span class="fu">mean</span>(maxWeightYear <span class="sc">&lt;=</span> <span class="dv">10</span><span class="sc">*</span>a) <span class="sc">+</span> (<span class="dv">100</span><span class="sc">+</span>a)<span class="sc">*</span><span class="fu">mean</span>(maxWeightYear <span class="sc">&gt;</span> <span class="dv">10</span><span class="sc">*</span>a)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(aGrid, EL, <span class="at">xlab =</span> <span class="st">"building cost, a"</span>, <span class="at">ylab =</span> <span class="st">"Expected loss"</span>, <span class="at">type =</span> <span class="st">"l"</span>, </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"indianred"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> aGrid[<span class="fu">which.min</span>(EL)], <span class="at">lty =</span> <span class="st">"dotted"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch6solutions_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The optimal building cost 23.974 is marked out by a dotted vertical line.</p>
 </div>
 </div>
 </div>

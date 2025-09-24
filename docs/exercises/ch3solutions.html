@@ -629,7 +629,7 @@ Solution
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  bothPartyInParliament[i] <span class="ot">=</span> <span class="fu">all</span>(postDraws[i,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">4</span>)] <span class="sc">&lt;</span> <span class="fl">0.04</span>)</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The posterior probability that both parties are below <span class="math inline">\(4\%\)</span> is 0.428.</p>
+<p>The posterior probability that both parties are below <span class="math inline">\(4\%\)</span> is 0.4214.</p>
 </div>
 </div>
 </div>
@@ -659,7 +659,7 @@ Solution
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>logy <span class="ot">=</span> <span class="fu">log</span>(y)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">length</span>(y)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">log</span>(<span class="dv">33</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>tau2 <span class="ot">=</span> <span class="fu">sum</span>(logy <span class="sc">-</span> theta)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>n</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>tau2 <span class="ot">=</span> <span class="fu">sum</span>((logy <span class="sc">-</span> theta)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>n</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Defining a function that simulates nSim draws</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># from the scaled inverse Chi-square distribution</span></span>
@@ -755,7 +755,7 @@ Solution
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>hpd <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">min</span>(giniOrdered[inHPD]), <span class="fu">max</span>(giniOrdered[inHPD]))</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="fu">paste0</span>(<span class="st">"The 95% HPD interval for the Gini coefficient is ("</span>, hpd[<span class="dv">1</span>], <span class="st">","</span>, hpd[<span class="dv">2</span>],<span class="st">")"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>The 95% HPD interval for the Gini coefficient is (0.0677500326771769,0.17168505672965)</code></pre>
+<pre><code>The 95% HPD interval for the Gini coefficient is (0.16010534594887,0.390638675548585)</code></pre>
 </div>
 </div>
 </div>

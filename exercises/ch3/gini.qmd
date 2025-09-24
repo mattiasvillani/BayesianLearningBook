@@ -14,7 +14,7 @@ y = c(14, 25, 45, 25, 30, 33, 19, 50, 34, 67)
 logy = log(y)
 n = length(y)
 theta = log(33)
-tau2 = sum(logy - theta)^2/n
+tau2 = sum((logy - theta)^2)/n
 
 # Defining a function that simulates nSim draws
 # from the scaled inverse Chi-square distribution

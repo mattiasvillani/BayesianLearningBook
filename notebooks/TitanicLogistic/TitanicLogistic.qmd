@@ -27,9 +27,16 @@ X <- as.matrix(cbind(1,X))
 p <- dim(X)[2]
 varNames = c("intercept", "age", "sex", "firstclass")
 
-# Setting up the prior
-mu <- as.vector(rep(0,p)) # Prior mean vector
-Sigma <- tau^2*diag(p)
+# Setting up the prior - choose between the two priors in the book
+noninformative = TRUE
+if (noninformative){
+  mu <- as.vector(rep(0,p)) # Prior mean vector
+  Sigma <- tau^2*diag(p)
+}else{
+  mu <- c(-1, -1/80, 1, 1)
+  Sigma <- diag(c(0.25, 1/(80^2), 0.5, 1))
+}
+
 ```
 
 ### Coding up the log posterior function
@@ -38,7 +45,7 @@ LogPostLogistic <- function(betaVect, y, X, mu, Sigma){
   p <- length(betaVect)
   linPred <- X%*%betaVect
   logLik <- sum( linPred*y - log(1 + exp(linPred)))
-  logPrior <- dmvnorm(betaVect, matrix(0,p,1), Sigma, log=TRUE)
+  logPrior <- dmvnorm(betaVect, mu, Sigma, log=TRUE)
   return(logLik + logPrior)
 }
 ```

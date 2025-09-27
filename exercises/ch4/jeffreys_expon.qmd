@@ -36,7 +36,7 @@ p(\theta) = I(\theta)^{1/2} = \frac{\sqrt{n}}{\theta} \propto \frac{1}{\theta}.
 $$
 Jeffreys' prior is not proper for the iid exponential model since the integral of the prior diverges. Since $1/\theta > 0$ for all $\theta$, we can see that the integral diverges as follows:
 $$
-\int_{0}^{\infty}\frac{1}{\theta}d\theta \, \leq 
+\int_{0}^{\infty}\frac{1}{\theta}d\theta \, \geq 
 \int_{1}^{\infty}\frac{1}{\theta}d\theta :=   
 \lim_{a\rightarrow \infty} \int_1^a \frac{1}{\theta}d\theta 
 = \lim_{a\rightarrow \infty} [\log(\theta)]_1^a = \lim_{a \rightarrow \infty}\big(\log(a) - 0 \big) = \infty.

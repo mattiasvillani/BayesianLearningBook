@@ -390,7 +390,7 @@ I(\theta)=E\left(-\frac{d^{2}\log p(x_1,\ldots,x_n\mid\theta)}{d\theta^{2}}\righ
 \]</span> and Jeffreys’ prior is therefore <span class="math display">\[
 p(\theta) = I(\theta)^{1/2} = \frac{\sqrt{n}}{\theta} \propto \frac{1}{\theta}.
 \]</span> Jeffreys’ prior is not proper for the iid exponential model since the integral of the prior diverges. Since <span class="math inline">\(1/\theta &gt; 0\)</span> for all <span class="math inline">\(\theta\)</span>, we can see that the integral diverges as follows: <span class="math display">\[
-\int_{0}^{\infty}\frac{1}{\theta}d\theta \, \leq
+\int_{0}^{\infty}\frac{1}{\theta}d\theta \, \geq
 \int_{1}^{\infty}\frac{1}{\theta}d\theta :=   
 \lim_{a\rightarrow \infty} \int_1^a \frac{1}{\theta}d\theta
 = \lim_{a\rightarrow \infty} [\log(\theta)]_1^a = \lim_{a \rightarrow \infty}\big(\log(a) - 0 \big) = \infty.
@@ -412,7 +412,7 @@ Solution
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The posterior distribution is obtain in the usual way with Bayes’ theorem <span class="math display">\[
+<p>The posterior distribution is obtained in the usual way with Bayes’ theorem <span class="math display">\[
 p(\theta \vert x_1,\ldots,x_n) = \theta^{n}e^{-\theta\sum_{i=1}^{n}x_{i}} \cdot \frac{1}{\theta} \propto \theta^{n-1}e^{-\theta\sum_{i=1}^{n}x_{i}}
 \]</span> which is proportional to a <span class="math inline">\(\mathrm{Gamma}(n,\sum_{i=1}^n x_i)\)</span> density. A Gamma density is proper when both its hyperparameters are strictly positive, i.e.&nbsp;for any <span class="math inline">\(n \geq 1\)</span> since all <span class="math inline">\(x_i&gt;0\)</span> with probability one in a gamma distribution and any realized data will therefore have <span class="math inline">\(\sum_{i=1}^n x_i &gt; 0\)</span>.</p>
 </div>

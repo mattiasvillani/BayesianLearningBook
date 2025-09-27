@@ -741,7 +741,7 @@ Solution
 <div class="callout-body-container callout-body">
 <p>The density for each observation in the sample is <span class="math display">\[
 p(x \vert \theta) = I\Big(\theta- \frac{1}{2} \leq x \leq \theta + \frac{1}{2}\Big).
-\]</span> The likelihood based a <strong>single</strong> observation is therefore zero whenever <span class="math inline">\(\theta \geq x-\frac{1}{2}\)</span> or when <span class="math inline">\(\theta \leq x + \frac{1}{2}\)</span>. So, to highlight that we care about <span class="math inline">\(p(x\vert\theta)\)</span> as function of <span class="math inline">\(\theta\)</span>, we can write <span class="math display">\[
+\]</span> where <span class="math inline">\(I()\)</span> is an <em>indicator function</em> that returns the value one when the condition inside the parenthesis is true, and zero otherwise. The likelihood based a <strong>single</strong> observation is therefore zero whenever <span class="math inline">\(\theta \geq x-\frac{1}{2}\)</span> or when <span class="math inline">\(\theta \leq x + \frac{1}{2}\)</span>. So, to highlight that we care about <span class="math inline">\(p(x\vert\theta)\)</span> as function of <span class="math inline">\(\theta\)</span>, we can write <span class="math display">\[
 p(x \vert \theta) = I\Big(x - \frac{1}{2} \leq \theta \leq x + \frac{1}{2}\Big).
 \]</span></p>
 <p>The likelihood from an iid sample of <span class="math inline">\(n\)</span> observation can therefore be written <span class="math display">\[
@@ -1214,7 +1214,7 @@ p(x) = \frac{1}{\theta} I(x_i \leq \theta).
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution a)
+Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1303,7 +1303,7 @@ F(5 \vert 12\beta,\beta) = 0.01
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution b)
+Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>

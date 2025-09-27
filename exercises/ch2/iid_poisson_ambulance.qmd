@@ -4,7 +4,6 @@
 {{< include /exercises/book_exercises/oneparam/iid_poisson_ambulance.tex >}}
 
 **a)** 
-
 {{< include /exercises/book_exercises/oneparam/iid_poisson_ambulance_a.tex >}}
 
 ::: {#q:iid_poisson_ambulance_a .callout-note icon="false" collapse="true"}
@@ -83,7 +82,6 @@ legend("topleft", legend = c("Prior", "Likelihood (normalized)", "Posterior"),
 
 
 **b)** 
-
 {{< include /exercises/book_exercises/oneparam/iid_poisson_ambulance_b.tex >}}
 
 ::: {#q:iid_poisson_ambulance_b .callout-note icon="false" collapse="true"}

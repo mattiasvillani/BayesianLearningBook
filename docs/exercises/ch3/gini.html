@@ -376,8 +376,7 @@ window.Quarto = {
 <p>The monthly income (in thousands Swedish Krona) of ten randomly selected persons are: 14, 25, 45, 25, 30, 33, 19, 50, 34 and 67. The log-normal distribution (see Box~ and ) is a commonly used model for income distributions. Let <span class="math inline">\(Y_1,\ldots,Y_n \vert \theta,\sigma^{2}\overset{\mathrm{iid}}{\sim}\mathrm{LN}(\theta,\sigma^{2})\)</span>, where <span class="math inline">\(\theta=\log(33)\)</span> is assumed to be known but <span class="math inline">\(\sigma^{2}\)</span> is unknown with non-informative prior <span class="math inline">\(p(\sigma^{2})\propto1/\sigma^{2}\)</span>. The posterior for <span class="math inline">\(\sigma^{2}\)</span> given <span class="math inline">\(\theta\)</span> is the <span class="math inline">\(\mathrm{Inv-}\chi^{2}(n,\tau^{2})\)</span> distribution, where <span class="math display">\[\begin{equation*}
     \tau^{2}=\frac{\sum_{i=1}^{n}(\log y_{i}-\theta)^{2}}{n}.
   \end{equation*}\]</span></p>
-<p><strong>a)</strong></p>
-<p>Simulate <span class="math inline">\(10,000\)</span> draws from the posterior of <span class="math inline">\(\sigma^{2}\)</span>, assuming <span class="math inline">\(\theta=\log(33)\)</span> is known. Plot a histogram of the posterior draws of the <span class="math inline">\(\sigma\)</span>.</p>
+<p><strong>a)</strong> Simulate <span class="math inline">\(10,000\)</span> draws from the posterior of <span class="math inline">\(\sigma^{2}\)</span>, assuming <span class="math inline">\(\theta=\log(33)\)</span> is known. Plot a histogram of the posterior draws of the <span class="math inline">\(\sigma\)</span>.</p>
 <div id="q:gini_a" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -417,8 +416,7 @@ Solution
 </div>
 </div>
 </div>
-<p><strong>b)</strong></p>
-<p>A commonly used measure of income inequality is the Gini coefficient, <span class="math inline">\(0\leq G\leq1\)</span>, where <span class="math inline">\(G=0\)</span> is complete income equality, and <span class="math inline">\(G=1\)</span> means complete income inequality. It can be shown that <span class="math inline">\(G=2\Phi\left(\sigma/\sqrt{2}\right)-1\)</span> when incomes follow a <span class="math inline">\(\mathrm{LN}(\theta,\sigma^{2})\)</span> distribution, where <span class="math inline">\(\Phi(z)\)</span> is the cumulative distribution function (CDF) for the standard normal distribution. Use the posterior draws from a) to compute the posterior distribution of the Gini coefficient <span class="math inline">\(G\)</span>. Plot a histogram of the posterior draws of <span class="math inline">\(G\)</span>.</p>
+<p><strong>b)</strong> A commonly used measure of income inequality is the Gini coefficient, <span class="math inline">\(0\leq G\leq1\)</span>, where <span class="math inline">\(G=0\)</span> is complete income equality, and <span class="math inline">\(G=1\)</span> means complete income inequality. It can be shown that <span class="math inline">\(G=2\Phi\left(\sigma/\sqrt{2}\right)-1\)</span> when incomes follow a <span class="math inline">\(\mathrm{LN}(\theta,\sigma^{2})\)</span> distribution, where <span class="math inline">\(\Phi(z)\)</span> is the cumulative distribution function (CDF) for the standard normal distribution. Use the posterior draws from a) to compute the posterior distribution of the Gini coefficient <span class="math inline">\(G\)</span>. Plot a histogram of the posterior draws of <span class="math inline">\(G\)</span>.</p>
 <div id="q:gini_b" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -449,8 +447,7 @@ Solution
 </div>
 </div>
 </div>
-<p><strong>c)</strong></p>
-<p>Compute a <span class="math inline">\(95\)</span>% Highest Posterior Density (HPD) interval for <span class="math inline">\(G\)</span>. To compute the HPD interval you will need an estimate of the posterior density for <span class="math inline">\(G\)</span>; a common approach is to use a kernel density estimator, for example the <code>density</code> function in R.</p>
+<p><strong>c)</strong> Compute a <span class="math inline">\(95\)</span>% Highest Posterior Density (HPD) interval for <span class="math inline">\(G\)</span>. To compute the HPD interval you will need an estimate of the posterior density for <span class="math inline">\(G\)</span>; a common approach is to use a kernel density estimator, for example the <code>density</code> function in R.</p>
 <div id="q:gini_c" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -491,7 +488,7 @@ Solution
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>hpd <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">min</span>(giniOrdered[inHPD]), <span class="fu">max</span>(giniOrdered[inHPD]))</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="fu">paste0</span>(<span class="st">"The 95% HPD interval for the Gini coefficient is ("</span>, hpd[<span class="dv">1</span>], <span class="st">","</span>, hpd[<span class="dv">2</span>],<span class="st">")"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>The 95% HPD interval for the Gini coefficient is (0.159352234843879,0.394917196471723)</code></pre>
+<pre><code>The 95% HPD interval for the Gini coefficient is (0.1611254211642,0.390431555867963)</code></pre>
 </div>
 </div>
 </div>

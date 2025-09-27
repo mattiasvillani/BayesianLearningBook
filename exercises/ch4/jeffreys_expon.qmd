@@ -4,7 +4,6 @@
 {{< include /exercises/book_exercises/priors/jeffreys_expon.tex >}}
 
 **a)** 
-
 {{< include /exercises/book_exercises/priors/jeffreys_expon_a.tex >}}
 
 ::: {#q:jeffreys_expon_a .callout-note icon="false" collapse="true"}
@@ -44,7 +43,6 @@ $$
 :::
 
 **b)** 
-
 {{< include /exercises/book_exercises/priors/jeffreys_expon_b.tex >}}
 
 ::: {#q:jeffreys_expon_b .callout-note icon="false" collapse="true"}
@@ -59,7 +57,6 @@ which is proportional to a $\mathrm{Gamma}(n,\sum_{i=1}^n x_i)$ density. A Gamma
 
 
 **c)** 
-
 {{< include /exercises/book_exercises/priors/jeffreys_expon_c.tex >}}
 
 ::: {#q:jeffreys_expon_c .callout-note icon="false" collapse="true"}

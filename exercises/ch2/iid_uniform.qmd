@@ -78,7 +78,7 @@ p(\theta \vert x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \
 $$
 So the posterior distribution is
 $$
-\theta \vert x_1,\ldots,x_n \sim \mathrm{Uniform}\Big(x_\max - \frac{1}{2} , \leq x_\min + \frac{1}{2} \Big)
+\theta \vert x_1,\ldots,x_n \sim \mathrm{Uniform}\Big(x_\max - \frac{1}{2} , x_\min + \frac{1}{2} \Big)
 $$
 :::
 

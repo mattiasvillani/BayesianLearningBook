@@ -464,7 +464,7 @@ p(x_1,\ldots,x_n \vert \theta) = \prod_{i=1}^n p(x_i \vert \theta) = \prod_{i=1}
 <p>The likelihood is non-zero only for the <span class="math inline">\(\theta\)</span> values where <span class="math inline">\(x_i - \frac{1}{2} \leq \theta \leq x_i + \frac{1}{2}\)</span> for <strong>all</strong> data observations <span class="math inline">\(i=1,2,\ldots,n\)</span>. This means that the likelihood is non-zero only when <span class="math inline">\(x_\max - \frac{1}{2} \leq \theta \leq x_\min + \frac{1}{2}\)</span>, where <span class="math inline">\(x_\min\)</span> and <span class="math inline">\(x_\max\)</span> are the minimum and maximum of the sample. With a uniform prior on <span class="math inline">\(\theta\)</span>, the posterior is proportional to the likelihood, so <span class="math display">\[
 p(\theta \vert x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \propto I\Big( x_\max - \frac{1}{2} \leq \theta \leq x_\min + \frac{1}{2} \Big)
 \]</span> So the posterior distribution is <span class="math display">\[
-\theta \vert x_1,\ldots,x_n \sim \mathrm{Uniform}\Big(x_\max - \frac{1}{2} , \leq x_\min + \frac{1}{2} \Big)
+\theta \vert x_1,\ldots,x_n \sim \mathrm{Uniform}\Big(x_\max - \frac{1}{2} , x_\min + \frac{1}{2} \Big)
 \]</span></p>
 </div>
 </div>

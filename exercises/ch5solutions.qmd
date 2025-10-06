@@ -14,5 +14,8 @@ colors = c("#6C8EBF", "#c0a34d", "#780000","#007878","#B5C6DF","#EADAAA","#AE666
 
 Click on the arrow to see a solution.
 
+{{< include ch5/regression_boston.qmd >}}
+
+---
 
 

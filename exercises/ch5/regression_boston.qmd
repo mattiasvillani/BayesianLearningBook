@@ -1,0 +1,88 @@
+
+### Exercise 5.1
+
+{{< include /exercises/book_exercises/regression/regression_boston.tex >}}
+
+
+::: {#q:regression_boston .callout-note icon="false" collapse="true"}
+## Solution
+
+First, we set up the data by loading it and setting up the response vector and matrix of covariates:
+```{r}
+library(mlbench)
+data("BostonHousing", package = "mlbench")
+y = log(BostonHousing$medv)
+X = cbind(1, BostonHousing$crim, BostonHousing$age, BostonHousing$ptratio)
+n = dim(X)[1]
+p = dim(X)[2]
+```
+
+Next we set up the prior
+```{r}
+mu0 = rep(0, p)
+Omega0 = 10^(-2)*diag(p)
+nu0 = 3
+sigma20 = 0.5^2
+```
+
+
+From Chapter 5 in the book, the joint posterior distribution of all $\beta$ coefficients is given by a multivariate-$t$ distribution
+$$
+\boldsymbol{\beta} \vert \boldsymbol{y} \sim t\big(\boldsymbol{\mu}_n, \sigma_n^2\boldsymbol{\Omega}_n^{-1}, \nu_n \big)
+$$
+where 
+
+- $\boldsymbol{\Omega}_n = \boldsymbol{X}^\top\boldsymbol{X} + \boldsymbol{\Omega}_0$
+- $\boldsymbol{\mu}_n = \boldsymbol{\Omega}_n^{-1}(\boldsymbol{X}^\top\boldsymbol{X}\hat{\boldsymbol{\beta}} + \boldsymbol{\Omega}_0\boldsymbol{\mu}_0)$
+- $\hat{\boldsymbol{\beta}} = (\boldsymbol{X}^\top\boldsymbol{X})^{-1}\boldsymbol{X}^\top \mathbf{y}$
+- ${\nu}_n = \nu_0 + n$
+- $\sigma^2_n  = \Big( \nu_0\sigma_0^2 + (n-p)s^2 + (\boldsymbol{\mu}_n -\hat{\boldsymbol{\beta}})^\top \boldsymbol{X}^\top\boldsymbol{X}(\boldsymbol{\mu}_n -\hat{\boldsymbol{\beta}}) + (\boldsymbol{\mu}_n - \boldsymbol{\mu}_0)^\top \boldsymbol{\Omega}_0(\boldsymbol{\mu}_n - \boldsymbol{\mu}_0 ) \Big) / \nu_n$
+
+The marginal posterior distribution for each $\beta_j$ is a univariate student-$t$ distribution
+$$
+\beta_j \sim t(\mu_{n,j}, \sigma^2_{\beta,j}, \nu_n)
+$$
+where $\mu_{n,j}$ is the $j$th element of $\boldsymbol{\mu}_n$ 
+and $\sigma^2_{\beta,j}$ is the $j$th diagonal element of $\sigma_n^2\boldsymbol{\Omega}_n^{-1}$.
+
+We start by computing the hyperparameters of the joint posterior of $\boldsymbol{\beta}$:
+```{r}
+betaHat = solve(t(X)%*%X) %*% (t(X) %*% y) 
+Omegan = t(X)%*%X + Omega0
+mun = solve(Omegan) %*% (t(X)%*%X %*% betaHat + Omega0 %*% mu0)
+nun = nu0 + n
+sigma2n = as.numeric((nu0*sigma20 + ( t(y)%*%y + t(mu0)%*%Omega0%*%mu0 - t(mun)%*%Omegan%*%mun))/nun)
+
+```
+Now we can just extract the relevant element for each marginal posterior of $\beta_j$ and plot each univariate student-$t$ density:
+
+```{r}
+
+# Defining a general student-t distribution with three parameters
+dtgeneral <- function(x, mu, sigma2, nu){
+  t = (x - mu)/sqrt(sigma2) # standardized variable
+  dens = dt(t, nu)/sqrt(sigma2)
+  return(dens)
+}
+
+# quantile function general student-t
+qtgeneral <- function(prob, mu, sigma2, nu){
+  return(mu + sqrt(sigma2)*qt(prob, nu))
+}
+
+covMarginalPost = sigma2n*solve(Omegan)
+stdMarginalPost = sqrt(diag(covMarginalPost))
+par(mfrow = c(2,2))
+CI = matrix(rep(2*p), p, 2)
+for (j in 1:p){
+  betaGrid = seq(mun[j] - 4*stdMarginalPost[j], mun[j] + 4*stdMarginalPost[j], length = 1000)
+  margDens = dtgeneral(betaGrid, mun[j], covMarginalPost[j,j], nun)
+  plot(betaGrid, margDens, type = "l", col = "cornflowerblue")
+  CI[j,1] = qtgeneral(0.025, mun[j], covMarginalPost[j,j], nun)
+  CI[j,2] = qtgeneral(0.975, mun[j], covMarginalPost[j,j], nun)
+  message(paste("The 95% CI for beta", j, " is (", round(CI[j,1],3), " , ", round(CI[j,2],3), ")"))
+}
+```
+
+The value $\beta_j=0$ is not included in any of the 95% credible intervals. The value $\beta_j=0$ is therefore not probable given the data, so we can reject the null hypothesis of no effect for all covariates. Note that this is not a frequentist test, but rather a Bayesian version of such a test. There are other ways to do Bayesian hypothesis testing using Bayes factor and Bayesian variable selection, but the credible interval approach has the advantage of being robust to the choice of prior.
+:::

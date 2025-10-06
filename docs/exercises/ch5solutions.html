@@ -401,7 +401,12 @@ window.Quarto = {
 \beta_j \vert \sigma^2 &amp; \sim N(\boldsymbol{0},10^2\sigma^2 \boldsymbol{I}_p)\\
 \sigma^2 &amp; \sim \mathrm{Inv}-\chi^2(3,0.5^2).
 \end{align*}\]</span> where <span class="math inline">\(\boldsymbol{I}_p\)</span> is a <span class="math inline">\(p \times p\)</span> identity matrix and <span class="math inline">\(p=4\)</span> is the number of regression coefficients including the intercept. </p>
-<p>Compute the marginal posterior distribution for <span class="math inline">\(\beta_2\)</span>, the regression coefficient on <code>age</code> and plot it. Do not use simulation methods, but a computer is advisable for the matrix operations. Compute the posterior mean and a 95% equal-tail credible interval for <span class="math inline">\(\beta_2\)</span>. Use the credible interval to test the hypothesis that <span class="math inline">\(\beta_2 = 0\)</span>.</p>
+<p>Compute the marginal posterior distribution for each <span class="math inline">\(\beta_j, j=1,\ldots,4\)</span> and plot each marginal density. Do not use simulation methods, but a computer is advisable for the matrix operations. Compute the posterior mean and a 95% equal-tail credible interval for each <span class="math inline">\(\beta_j\)</span>. Use the credible intervals to test the four separate hypotheses that <span class="math inline">\(\beta_j = 0\)</span> for <span class="math inline">\(j=1,\ldots,4\)</span>. Which of the covariates are important in the model?</p>
+<p><span class="math inline">\(\textit{Hint}\)</span>: The general student-<span class="math inline">\(t\)</span> is not always available in all programming languages (for example in R and Julia), only the standard student-<span class="math inline">\(t\)</span> <span class="math inline">\(t(0,1,\nu)\)</span> with location <span class="math inline">\(0\)</span> and scale <span class="math inline">\(1\)</span>. However, if <span class="math inline">\(X \sim t(\mu,\sigma^2,\nu)\)</span>, then <span class="math inline">\(Z = (X-\mu)/\sigma \sim t(0,1,\nu)\)</span>, so you can use this transformation to compute the density and quantiles of the general student-<span class="math inline">\(t\)</span> distribution. This means that the density of <span class="math inline">\(X\)</span> can be computed as <span class="math display">\[\begin{equation*}
+p(x) = \frac{1}{\sigma} p\Big(\frac{x-\mu}{\sigma}, \nu \Big),
+\end{equation*}\]</span> where <span class="math inline">\(p(z, \nu)\)</span> is the density of the standard student-<span class="math inline">\(t\)</span> distribution with <span class="math inline">\(\nu\)</span> degrees of freedom. Similarly, the <span class="math inline">\(\alpha\)</span> quantile of <span class="math inline">\(X\)</span> can be computed as <span class="math display">\[\begin{equation*}
+x_\alpha = \mu + \sigma t_\alpha,
+\end{equation*}\]</span> where <span class="math inline">\(t_\alpha\)</span> is the <span class="math inline">\(\alpha\)</span> quantile of the standard student-<span class="math inline">\(t\)</span> distribution.</p>
 <div id="q:regression_boston" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -414,14 +419,90 @@ Solution
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>We can load the data with the command</p>
+<p>First, we set up the data by loading it and setting up the response vector and matrix of covariates:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbench)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"BostonHousing"</span>, <span class="at">package =</span> <span class="st">"mlbench"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"BostonHousing"</span>, <span class="at">package =</span> <span class="st">"mlbench"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">log</span>(BostonHousing<span class="sc">$</span>medv)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">cbind</span>(<span class="dv">1</span>, BostonHousing<span class="sc">$</span>crim, BostonHousing<span class="sc">$</span>age, BostonHousing<span class="sc">$</span>ptratio)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">dim</span>(X)[<span class="dv">1</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="fu">dim</span>(X)[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next we set up the prior</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mu0 <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, p)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Omega0 <span class="ot">=</span> <span class="dv">10</span><span class="sc">^</span>(<span class="sc">-</span><span class="dv">2</span>)<span class="sc">*</span><span class="fu">diag</span>(p)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>nu0 <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sigma20 <span class="ot">=</span> <span class="fl">0.5</span><span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>From Chapter 5 in the book, the joint posterior distribution of all <span class="math inline">\(\beta\)</span> coefficients is given by a multivariate-<span class="math inline">\(t\)</span> distribution <span class="math display">\[
-\boldsymbol{\beta} \vert \*y \sim t\big(\v\mu_n, \sigma_n^2\Omega_n^{-1}, \nu_n \big)
-\]</span> where <span class="math inline">\(\Omega_n = \mathbf{X}^\top\mathbf{X} + \Omega_0\)</span>, <span class="math inline">\(\v\mu_n = \Omega_n^{-1}(\*X^\top\*X\hat\bbeta + \Omega_0\v\mu_0)\)</span>, <span class="math inline">\(\hat\bbeta = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}\)</span>, and $_n = _0 + n $.</p>
+\boldsymbol{\beta} \vert \boldsymbol{y} \sim t\big(\boldsymbol{\mu}_n, \sigma_n^2\boldsymbol{\Omega}_n^{-1}, \nu_n \big)
+\]</span> where</p>
+<ul>
+<li><span class="math inline">\(\boldsymbol{\Omega}_n = \boldsymbol{X}^\top\boldsymbol{X} + \boldsymbol{\Omega}_0\)</span></li>
+<li><span class="math inline">\(\boldsymbol{\mu}_n = \boldsymbol{\Omega}_n^{-1}(\boldsymbol{X}^\top\boldsymbol{X}\hat{\boldsymbol{\beta}} + \boldsymbol{\Omega}_0\boldsymbol{\mu}_0)\)</span></li>
+<li><span class="math inline">\(\hat{\boldsymbol{\beta}} = (\boldsymbol{X}^\top\boldsymbol{X})^{-1}\boldsymbol{X}^\top \mathbf{y}\)</span></li>
+<li><span class="math inline">\({\nu}_n = \nu_0 + n\)</span></li>
+<li><span class="math inline">\(\sigma^2_n  = \Big( \nu_0\sigma_0^2 + (n-p)s^2 + (\boldsymbol{\mu}_n -\hat{\boldsymbol{\beta}})^\top \boldsymbol{X}^\top\boldsymbol{X}(\boldsymbol{\mu}_n -\hat{\boldsymbol{\beta}}) + (\boldsymbol{\mu}_n - \boldsymbol{\mu}_0)^\top \boldsymbol{\Omega}_0(\boldsymbol{\mu}_n - \boldsymbol{\mu}_0 ) \Big) / \nu_n\)</span></li>
+</ul>
+<p>The marginal posterior distribution for each <span class="math inline">\(\beta_j\)</span> is a univariate student-<span class="math inline">\(t\)</span> distribution <span class="math display">\[
+\beta_j \sim t(\mu_{n,j}, \sigma^2_{\beta,j}, \nu_n)
+\]</span> where <span class="math inline">\(\mu_{n,j}\)</span> is the <span class="math inline">\(j\)</span>th element of <span class="math inline">\(\boldsymbol{\mu}_n\)</span> and <span class="math inline">\(\sigma^2_{\beta,j}\)</span> is the <span class="math inline">\(j\)</span>th diagonal element of <span class="math inline">\(\sigma_n^2\boldsymbol{\Omega}_n^{-1}\)</span>.</p>
+<p>We start by computing the hyperparameters of the joint posterior of <span class="math inline">\(\boldsymbol{\beta}\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>betaHat <span class="ot">=</span> <span class="fu">solve</span>(<span class="fu">t</span>(X)<span class="sc">%*%</span>X) <span class="sc">%*%</span> (<span class="fu">t</span>(X) <span class="sc">%*%</span> y) </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Omegan <span class="ot">=</span> <span class="fu">t</span>(X)<span class="sc">%*%</span>X <span class="sc">+</span> Omega0</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mun <span class="ot">=</span> <span class="fu">solve</span>(Omegan) <span class="sc">%*%</span> (<span class="fu">t</span>(X)<span class="sc">%*%</span>X <span class="sc">%*%</span> betaHat <span class="sc">+</span> Omega0 <span class="sc">%*%</span> mu0)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>nun <span class="ot">=</span> nu0 <span class="sc">+</span> n</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sigma2n <span class="ot">=</span> <span class="fu">as.numeric</span>((nu0<span class="sc">*</span>sigma20 <span class="sc">+</span> ( <span class="fu">t</span>(y)<span class="sc">%*%</span>y <span class="sc">+</span> <span class="fu">t</span>(mu0)<span class="sc">%*%</span>Omega0<span class="sc">%*%</span>mu0 <span class="sc">-</span> <span class="fu">t</span>(mun)<span class="sc">%*%</span>Omegan<span class="sc">%*%</span>mun))<span class="sc">/</span>nun)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can just extract the relevant element for each marginal posterior of <span class="math inline">\(\beta_j\)</span> and plot each univariate student-<span class="math inline">\(t\)</span> density:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Defining a general student-t distribution with three parameters</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dtgeneral <span class="ot">&lt;-</span> <span class="cf">function</span>(x, mu, sigma2, nu){</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">=</span> (x <span class="sc">-</span> mu)<span class="sc">/</span><span class="fu">sqrt</span>(sigma2) <span class="co"># standardized variable</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  dens <span class="ot">=</span> <span class="fu">dt</span>(t, nu)<span class="sc">/</span><span class="fu">sqrt</span>(sigma2)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dens)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># quantile function general student-t</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>qtgeneral <span class="ot">&lt;-</span> <span class="cf">function</span>(prob, mu, sigma2, nu){</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(mu <span class="sc">+</span> <span class="fu">sqrt</span>(sigma2)<span class="sc">*</span><span class="fu">qt</span>(prob, nu))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>covMarginalPost <span class="ot">=</span> sigma2n<span class="sc">*</span><span class="fu">solve</span>(Omegan)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>stdMarginalPost <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(covMarginalPost))</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>CI <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">2</span><span class="sc">*</span>p), p, <span class="dv">2</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p){</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  betaGrid <span class="ot">=</span> <span class="fu">seq</span>(mun[j] <span class="sc">-</span> <span class="dv">4</span><span class="sc">*</span>stdMarginalPost[j], mun[j] <span class="sc">+</span> <span class="dv">4</span><span class="sc">*</span>stdMarginalPost[j], <span class="at">length =</span> <span class="dv">1000</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  margDens <span class="ot">=</span> <span class="fu">dtgeneral</span>(betaGrid, mun[j], covMarginalPost[j,j], nun)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(betaGrid, margDens, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"cornflowerblue"</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  CI[j,<span class="dv">1</span>] <span class="ot">=</span> <span class="fu">qtgeneral</span>(<span class="fl">0.025</span>, mun[j], covMarginalPost[j,j], nun)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  CI[j,<span class="dv">2</span>] <span class="ot">=</span> <span class="fu">qtgeneral</span>(<span class="fl">0.975</span>, mun[j], covMarginalPost[j,j], nun)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="fu">paste</span>(<span class="st">"The 95% CI for beta"</span>, j, <span class="st">" is ("</span>, <span class="fu">round</span>(CI[j,<span class="dv">1</span>],<span class="dv">3</span>), <span class="st">" , "</span>, <span class="fu">round</span>(CI[j,<span class="dv">2</span>],<span class="dv">3</span>), <span class="st">")"</span>))</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The 95% CI for beta 1  is ( 4.273  ,  4.742 )</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The 95% CI for beta 2  is ( -0.02  ,  -0.013 )</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The 95% CI for beta 3  is ( -0.005  ,  -0.003 )</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch5solutions_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The 95% CI for beta 4  is ( -0.076  ,  -0.051 )</code></pre>
+</div>
+</div>
+<p>The value <span class="math inline">\(\beta_j=0\)</span> is not included in any of the 95% credible intervals. The value <span class="math inline">\(\beta_j=0\)</span> is therefore not probable given the data, so we can reject the null hypothesis of no effect for all covariates. Note that this is not a frequentist test, but rather a Bayesian version of such a test. There are other ways to do Bayesian hypothesis testing using Bayes factor and Bayesian variable selection, but the credible interval approach has the advantage of being robust to the choice of prior.</p>
 </div>
 </div>
 </div>

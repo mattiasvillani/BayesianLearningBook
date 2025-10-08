@@ -1,0 +1,76 @@
+
+### Exercise 8.1
+
+{{< include /exercises/book_exercises/classification/expon_reg_approx.tex >}}
+
+Loading the data and mvtnorm package
+```{r}
+library(mvtnorm)
+data = read.csv("https://raw.githubusercontent.com/mattiasvillani/BayesianLearningBook/main/data/runningtime.csv")
+y = data$time
+X = cbind(1, data$performance, data$os)
+hist(y, 30, freq = FALSE, main = "The running time data", xlab = "running time")
+```
+
+
+**a)** 
+{{< include /exercises/book_exercises/classification/expon_reg_approx_a.tex >}}
+
+
+::: {#q:expon_reg_approx_a .callout-note icon="false" collapse="true"}
+## Solution
+We will use optim to get the posterior mode and posterior observed information matrix for the normal approximation. The log posterior function is
+```{r}
+logPostExpon <- function(betaVect, y, X, tau){
+  p <- length(betaVect)
+  linPred <- X%*%betaVect
+  logLik <- sum(dexp(y, rate = 1/exp(linPred), log = TRUE) )
+  logPrior <- dmvnorm(betaVect, rep(0, p), tau^2*diag(p), log=TRUE)
+  return(logLik + logPrior)
+}
+```
+We use optim to find the posterior mode and posterior information matrix:
+```{r}
+p = dim(X)[2]
+tau = 10
+initVal <- as.vector(rep(0,p))
+OptimResults<-optim(initVal, logPostExpon,gr=NULL, y, X, tau,
+  method=c("BFGS"), control=list(fnscale=-1), hessian=TRUE)
+postMode = OptimResults$par
+postCov = -solve(OptimResults$hessian) # inv(J) - Approx posterior covariance matrix
+postStd = sqrt(diag(postCov))
+```
+Simulating from the normal approximation and plotting histograms of the marginal posteriors:
+```{r}
+nSim = 10000
+library(mvtnorm)
+betaDraws = rmvnorm(nSim, postMode, postCov)
+par(mfrow = c(1,p))
+varNames = c("intercept", "performance", "os")
+for (j in 1:p){
+hist(betaDraws[,j], 30, freq = FALSE, main = varNames[j], 
+     xlab = "", col = "cornflowerblue")
+}
+```
+
+
+:::
+
+**b)** 
+{{< include /exercises/book_exercises/classification/expon_reg_approx_b.tex >}}
+
+::: {#q:expon_reg_approx_b .callout-note icon="false" collapse="true"}
+## Solution
+
+```{r}
+xPred = c(1, 1.3, 1)
+yPredDraws = rep(0, nSim)
+for (i in 1:nSim){
+  yPredDraws[i] = rexp(1, 1/exp(xPred %*% betaDraws[i,]))
+}
+hist(yPredDraws, 30, freq = FALSE, main = "Predictive density", 
+     xlab = "yPred", col = "cornsilk", xlim = c(0,20))
+```
+
+
+:::

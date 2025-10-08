@@ -1,0 +1,96 @@
+
+### Exercise 7.1
+
+{{< include /exercises/book_exercises/normalapprox/gamma_approx.tex >}}
+
+We start off by loading the data:
+```{r}
+data = read.csv("https://raw.githubusercontent.com/mattiasvillani/BayesianLearningBook/main/data/ebaybids.csv")
+y = data$FinalPrice[!is.na(data$FinalPrice) & (data$FinalPrice>0)]
+hist(y, 30, freq = FALSE, col ="cornsilk", 
+     xlab = "Final price", ylab = "density", main = "")
+```
+
+
+**a)** 
+{{< include /exercises/book_exercises/normalapprox/gamma_approx_a.tex >}}
+
+::: {#q:gamma_approx_a .callout-note icon="false" collapse="true"}
+## Solution
+
+We use the normal approximation suggested by the Bernstein-von Mises theorem:
+$$
+\boldsymbol{\theta} \overset{\mathrm{approx}}{\sim} N(\tilde{\boldsymbol{\theta}}, \boldsymbol{J}^{-1}_{\mathbf{y}})
+$$
+where the posterior mode $\tilde{\boldsymbol{\theta}}$ and posterior information matrix $\boldsymbol{J}^{-1}_{\mathbf{y}}$ are obtained by numerical optimization. To use optim in R we need to code up the log posterior function
+```{r}
+logPostGamma <- function(theta, y, tau){
+  alpha = exp(theta[1])
+  beta_ = exp(theta[2])
+  logLik = sum(dgamma(y, alpha, beta_, log = TRUE))
+  logPrior = dnorm(0, tau, log = TRUE) + dnorm(0, tau, log = TRUE)
+  return(logLik + logPrior)
+}
+```
+
+We can then find all the quantities needed for the normal approximation by running optim. 
+```{r}
+tau = 10
+initVal <- c(0,0) # these initial values imply a Gamma(1,1) distribution.
+OptimResults<-optim(initVal, logPostGamma, gr=NULL, y[1:260], tau,
+  method = c("BFGS"), control = list(fnscale=-1), hessian=TRUE)
+postMode = OptimResults$par
+postCov = -solve(OptimResults$hessian)
+```
+The normal posterior approximation thus has mean vector
+```{r}
+postMode
+```
+
+and covariance matrix
+```{r}
+postCov
+```
+from which we can compute the approximate posterior standard deviations:
+```{r}
+postStd = sqrt(diag(postCov))
+```
+
+:::
+
+**b)** 
+{{< include /exercises/book_exercises/normalapprox/gamma_approx_b.tex >}}
+
+::: {#q:gamma_approx_b .callout-note icon="false" collapse="true"}
+## Solution
+We use the `mvtnorm` package to simulate from the normal approximation and then compute the transformation for each draw for $j=1,\ldots,m$:
+$$
+\begin{aligned}
+\alpha^{(i)} &= \exp\big(\theta_1^{(i)} \big) \\
+\beta^{(i)} &= \exp\big(\theta_2^{(i)} \big)
+\end{aligned}
+$$
+We can then further compute the mean $\alpha/\beta$ and standard deviation $\sqrt{\alpha}/\beta$ for each draw.
+Here is the code:
+```{r}
+library(mvtnorm)
+nSim = 10000
+thetaDraws = rmvnorm(nSim, postMode, postCov)
+alphaDraws = exp(thetaDraws[,1])
+betaDraws = exp(thetaDraws[,2])
+meanDraws = alphaDraws/betaDraws
+stdDraws = sqrt(alphaDraws) / betaDraws
+par(mfrow = c(2,2))
+hist(alphaDraws, 30, freq = FALSE, main = expression(alpha), 
+     xlab = expression(alpha), col = "cornflowerblue")
+hist(betaDraws, 30, freq = FALSE, main = expression(beta), 
+     xlab = expression(beta), col = "cornflowerblue")
+hist(meanDraws, 30, freq = FALSE, main = "Expected value", xlab = "mean", 
+     col = "cornsilk")
+hist(stdDraws, 30, freq = FALSE, main = "Standard deviation", 
+     xlab = "st dev", col = "cornsilk")
+
+```
+
+
+:::

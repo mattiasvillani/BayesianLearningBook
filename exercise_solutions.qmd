@@ -14,7 +14,8 @@ editor:
 [Chapter 4](/exercises/ch4solutions.qmd)<br>
 [Chapter 5](/exercises/ch5solutions.qmd)<br>
 [Chapter 6](/exercises/ch6solutions.qmd)<br>
-[Chapter 7](/exercises/ch7solutions.qmd)<br> Chapter 8<br>
+[Chapter 7](/exercises/ch7solutions.qmd)<br> 
+[Chapter 8](/exercises/ch8solutions.qmd)<br> 
 Chapter 9<br> 
 [Chapter 10](/exercises/ch10solutions.qmd)<br>
 Chapter 11<br> 

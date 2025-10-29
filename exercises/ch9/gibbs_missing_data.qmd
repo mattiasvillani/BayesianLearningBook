@@ -1,0 +1,102 @@
+
+### Exercise 9.1
+
+{{< include /exercises/book_exercises/gibbs/gibbs_missing_data.tex >}}
+
+**a)** 
+{{< include /exercises/book_exercises/classification/gibbs_missing_data_a.tex >}}
+
+
+::: {#q:gibbs_missing_data_a .callout-note icon="false" collapse="true"}
+## Solution
+Let us start by loading the data and locate the missing values
+```{r}
+data = read.csv(file = "https://github.com/mattiasvillani/BayesianLearningBook/raw/main/data/bivarmissing.csv", 
+                header = TRUE, row.names = NULL)
+n = dim(data)[1]
+# Finding the observations with at least on missing value
+missing_obs = c()
+for (i in 1:n){
+  if (any(is.na(data[i,]))) missing_obs = c(missing_obs, i)
+}
+```
+
+The update step for the mean vector conditional on all the data, including draws of the missing values, is given in Chapter 3 of the Bayesian Learning book:
+$$
+\boldsymbol{\theta} \vert \boldsymbol{x}_{\mathrm{obs}},  \boldsymbol{x}_{\mathrm{mis}} \sim N(\boldsymbol{\theta}_n, \boldsymbol{\Lambda}_n)
+$$
+where 
+$$
+\begin{aligned}
+  \boldsymbol{\theta}_n &= (\boldsymbol{\Lambda}_0^{-1}+n\boldsymbol{\Sigma}^{-1})^{-1}(\boldsymbol{\Lambda}_{0}^{-1}\boldsymbol{\theta}_{0}+n\boldsymbol{\Sigma}^{-1}\bar{\mathbf{x}}) \\
+  \boldsymbol{\Lambda}_n^{-1} &= {\boldsymbol{\Lambda}_0}^{-1}+n\boldsymbol{\Sigma}^{-1}.
+\end{aligned}
+$$
+where prior mean $\boldsymbol{\theta}_0 = \boldsymbol{0}$ and the prior covariance matrix $\boldsymbol{\Lambda}_0 = 10^2 \boldsymbol{I}$. 
+
+We implement this updating step as a separate function
+```{r}
+Sigma = matrix(c(1, 1.5, 1.5, 4), 2, 2)
+Lambda0 = 10^2*diag(2)
+invSigma = solve(Sigma)
+invLambda0 = solve(Lambda0)
+library(mvtnorm) # We need rmvnorm to simulate from bivariate normal distr
+
+UpdateMeanVector <- function(X, invSigma, theta0, invLambda0){
+  n = dim(X)[1]
+  xBar = colMeans(X) # sample mean of all data, including draws of missing
+  Lambda_n  = solve(invLambda0 + n*invSigma) # post covariance
+  theta_n = Lambda_n %*% n*invSigma %*% xBar # prior mean is zero
+  thetaDraw = rmvnorm(1, theta_n, Lambda_n)
+  return(as.vector(thetaDraws))
+}
+
+```
+
+Next, we define a function that samples all the missing values
+```{r}
+UpdateMissing <- function(X, missing_obs, data, theta, Sigma){
+  for (i in missing_obs){
+    misvar = which(is.na(data[i, ]))
+    if (length(misvar) == 1){
+      thetaCond = theta[misvar] + 
+        (Sigma[misvar,-misvar]/Sigma[-misvar,-misvar])*(data[,-misvar] - theta[-misvar])
+      SigmaCond = Sigma[misvar,misvar] - Sigma[misvar,-misvar]^2/Sigma[-misvar, -misvar]
+      X[i, misvar] = rnorm(1, thetaCond, SigmaCond)
+    }else
+    {
+      X[i, ] = rmvnorm(1, theta, Sigma)
+    }
+  }
+}
+```
+And finally we set define the complete Gibbs sampler
+
+```{r}
+GibbsMultiNormalMissing <- function(data, theta0, Lambda0, Sigma, nSim){
+  X = data
+  n = dim(data)[1]
+  # Finding the observations with at least on missing value
+  missing_obs = c()
+  for (i in 1:n){
+    if (any(is.na(data[i,]))) missing_obs = c(missing_obs, i)
+  }
+  for (i in 1:nSim){
+    
+    # Update mean vector
+    
+    # Update missing values
+  }
+}
+```
+
+:::
+
+**b)** 
+{{< include /exercises/book_exercises/classification/gibbs_missing_data_b.tex >}}
+
+::: {#q:gibbs_missing_data_b .callout-note icon="false" collapse="true"}
+## Solution
+
+
+:::

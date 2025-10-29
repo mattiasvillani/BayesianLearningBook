@@ -374,7 +374,7 @@ window.Quarto = {
 <section id="exercise-9.1" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-9.1">Exercise 9.1</h3>
 <p>NOT COMPLETE!</p>
-<p>The dataset contains <span class="math inline">\(n = 20\)</span> observations on the two variables <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>. Note that four observations are missing in the dataset (coded with NA). Assume the bivariate norml model for the data: <span class="math inline">\(\mathbf{x}_1,...,\mathbf{x}_n vert \boldsymbol{\theta}, \boldsymbol{\Sigma} \overset{iid}{\sim}\mathrm{N}(\boldsymbol{\theta},\boldsymbol{\Sigma})\)</span>, with mean vector <span class="math inline">\(\boldsymbol{\theta} = (\theta_1,\theta_2)^\top\)</span> and covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span>.</p>
+<p>The dataset contains <span class="math inline">\(n = 20\)</span> observations on the two variables <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>. Note that four observations are missing in the dataset (coded with NA). Assume the bivariate normal model for the data: <span class="math inline">\(\mathbf{x}_1,...,\mathbf{x}_n \vert \boldsymbol{\theta}, \boldsymbol{\Sigma} \overset{iid}{\sim}\mathrm{N}(\boldsymbol{\theta},\boldsymbol{\Sigma})\)</span>, with mean vector <span class="math inline">\(\boldsymbol{\theta} = (\theta_1,\theta_2)^\top\)</span> and covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span>.</p>
 <p><strong>a)</strong> We first assume that the covariance matrix is known to be <span class="math display">\[
 \boldsymbol{\Sigma} =
 \left(\begin{array}{cc}
@@ -382,9 +382,13 @@ window.Quarto = {
 1.5 &amp; 4
 \end{array}\right).
 \]</span></p>
-Let the complete dataset <span class="math inline">\(\boldsymbol{X}\)</span> be partitioned in observed and missing parts, <span class="math inline">\(\boldsymbol{X} = (\boldsymbol{X}_{\mathrm{obs}}, \boldsymbol{X}_{\mathrm{mis}})\)</span>. Implement a Gibbs sampling algorithm with two update steps:
+<p>Let the complete dataset <span class="math inline">\(\boldsymbol{X}\)</span> be partitioned in observed and missing parts, <span class="math inline">\(\boldsymbol{X} = (\boldsymbol{X}_{\mathrm{obs}}, \boldsymbol{X}_{\mathrm{mis}})\)</span>. Implement a Gibbs sampling algorithm with two update steps:</p>
+<ol type="1">
+<li><p>draw the mean vector <span class="math inline">\(\boldsymbol{\theta}\)</span> conditional on all data, <span class="math inline">\(\boldsymbol{X}\)</span>.</p></li>
+<li><p>draw the missing data <span class="math inline">\(\boldsymbol{X}_{\mathrm{mis}}\)</span> conditional on the observed data <span class="math inline">\(\boldsymbol{X}_{\mathrm{obs}}\)</span> and the mean vector <span class="math inline">\(\boldsymbol{\theta}\)</span>.</p></li>
+</ol>
 <p>Simulate <span class="math inline">\(7000\)</span> iterations of the Gibbs sampler, discard the first <span class="math inline">\(2000\)</span> as burn-in and plot the marginal posterior distributions of <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span>. Use the prior <span class="math inline">\(\boldsymbol{\theta} \sim N(\boldsymbol{0},10^2 \boldsymbol{I})\)</span>. Compare with the posterior obtained by simply discarding observations where at least one of the two variables have missing values.</p>
-<p>: use the formulas for the conditional distributions in a bivariate normal in Step 2 above.</p>
+<p><span class="math inline">\(\textit{Hint}\)</span>: use the formulas for the conditional distributions in a bivariate normal in Step 2 above.</p>
 <div id="q:gibbs_missing_data_a" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">

@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Mattias Villani">
 
-<title>Hall of Typos – Bayesian Learning Book</title>
+<title>Chapter 9 - Gibbs sampling: Exercise solutions – Bayesian Learning Book</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,30 +21,65 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-7c9b27349e03c13da50bda67412940ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-7c9b27349e03c13da50bda67412940ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,8 +108,37 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -245,7 +310,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Bayesian Learning Book</span>
     </a>
   </div>
@@ -256,27 +321,27 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./exercise_solutions.html"> 
+    <a class="nav-link" href="../exercise_solutions.html"> 
 <span class="menu-text">Exercises</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./notebooks.html"> 
+    <a class="nav-link" href="../notebooks.html"> 
 <span class="menu-text">Notebooks</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./code.html"> 
+    <a class="nav-link" href="../code.html"> 
 <span class="menu-text">Code</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./interactive.html"> 
+    <a class="nav-link" href="../interactive.html"> 
 <span class="menu-text">Interactive</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./halloferrors.html" aria-current="page"> 
+    <a class="nav-link" href="../halloferrors.html"> 
 <span class="menu-text">Hall of Typos</span></a>
   </li>  
 </ul>
@@ -291,8 +356,14 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#exercise-9.1" id="toc-exercise-9.1" class="nav-link active" data-scroll-target="#exercise-9.1">Exercise 9.1</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="ch9solutions.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -300,13 +371,19 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Hall of Typos</h1>
+<h1 class="title">Chapter 9 - Gibbs sampling: Exercise solutions</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Mattias Villani </p>
+          </div>
+  </div>
     
   
     
@@ -317,30 +394,137 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><img src="figs/linocut_water.png" class="img-fluid"></p>
-<p>The following people 🙏 have kindly reported typos and errors (ordered by the number of typos found, weighted by severity. Affiliation/student university when error was found):</p>
-<p><strong>Bayesian Learning</strong></p>
-<ul>
-<li>Alice Jonason, Stockholm University</li>
-<li>Tea Unnebäck, Stockholm University</li>
-<li>Sune Karlsson, Örebro University</li>
-<li>Jinzhe Yang, Stockholm University</li>
-<li>Joachim Tscherpel, Stockholm University</li>
-<li>Federico M. Stefanini, University of Milan</li>
-<li>Dagmar Kallenberg, Stockholm University</li>
-<li>Mona Sfaxi, Stockholm University</li>
-<li>Michael Sederlin, KTH Royal Institute of Technology</li>
-<li>Per Gösta Andersson, Stockholm University</li>
-<li>Patrik Mirzai</li>
-<li>Toni Dumitriu, Stockholm University</li>
-</ul>
-<p><strong>Bayesian Learning - the prequel</strong></p>
-<ul>
-<li>Joachim Tscherpel, Stockholm University</li>
-</ul>
-<p>Please email me any typos and errors at my obvious gmail address. Thanks!</p>
+<p>Click on the arrow to see a solution.</p>
+<section id="exercise-9.1" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-9.1">Exercise 9.1</h3>
+<p>The dataset contains <span class="math inline">\(n = 20\)</span> observations on the two variables <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>. N ote that four observations are missing in the dataset (coded with NA). Assume the bivariate norml model for the data: <span class="math inline">\(\mathbf{x}_1,...,\mathbf{x}_n vert \boldsymbol{\theta}, \boldsymbol{\Sigma} \overset{iid}{\sim}\mathrm{N}(\boldsymbol{\theta},\boldsymbol{\Sigma})\)</span>, with mean vector <span class="math inline">\(\boldsymbol{\theta} = (\theta_1,\theta_2)^\top\)</span> and covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span>.</p>
+<p><strong>a)</strong> We first assume that the covariance matrix is known to be <span class="math display">\[
+\boldsymbol{\Sigma} =
+\left(\begin{array}{cc}
+1 &amp; 1.5\\
+1.5 &amp; 4
+\end{array}\right).
+\]</span></p>
+Let the complete dataset <span class="math inline">\(\boldsymbol{X}\)</span> be partitioned in observed and missing parts, <span class="math inline">\(\boldsymbol{X} = (\boldsymbol{X}_{\mathrm{obs}}, \boldsymbol{X}_{\mathrm{mis}})\)</span>. Implement a Gibbs sampling algorithm with two update steps:
+<p>Simulate <span class="math inline">\(7000\)</span> iterations of the Gibbs sampler, discard the first <span class="math inline">\(2000\)</span> as burn-in and plot the marginal posterior distributions of <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span>. Use the prior <span class="math inline">\(\boldsymbol{\theta} \sim N(\boldsymbol{0},10^2 \boldsymbol{I})\)</span>. Compare with the posterior obtained by simply discarding observations where at least one of the two variables have missing values.</p>
+<p>: use the formulas for the conditional distributions in a bivariate normal in Step 2 above.</p>
+<div id="q:gibbs_missing_data_a" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Let us start by loading the data and locate the missing values</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">"https://github.com/mattiasvillani/BayesianLearningBook/raw/main/data/bivarmissing.csv"</span>, </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">row.names =</span> <span class="cn">NULL</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">dim</span>(data)[<span class="dv">1</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding the observations with at least on missing value</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>missing_obs <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">is.na</span>(data[i,]))) missing_obs <span class="ot">=</span> <span class="fu">c</span>(missing_obs, i)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The update step for the mean vector conditional on all the data, including draws of the missing values, is given in Chapter 3 of the Bayesian Learning book: <span class="math display">\[
+\boldsymbol{\theta} \vert \boldsymbol{x}_{\mathrm{obs}},  \boldsymbol{x}_{\mathrm{mis}} \sim N(\boldsymbol{\theta}_n, \boldsymbol{\Lambda}_n)
+\]</span> where <span class="math display">\[
+\begin{aligned}
+  \boldsymbol{\theta}_n &amp;= (\boldsymbol{\Lambda}_0^{-1}+n\boldsymbol{\Sigma}^{-1})^{-1}(\boldsymbol{\Lambda}_{0}^{-1}\boldsymbol{\theta}_{0}+n\boldsymbol{\Sigma}^{-1}\bar{\mathbf{x}}) \\
+  \boldsymbol{\Lambda}_n^{-1} &amp;= {\boldsymbol{\Lambda}_0}^{-1}+n\boldsymbol{\Sigma}^{-1}.
+\end{aligned}
+\]</span> where prior mean <span class="math inline">\(\boldsymbol{\theta}_0 = \boldsymbol{0}\)</span> and the prior covariance matrix <span class="math inline">\(\boldsymbol{\Lambda}_0 = 10^2 \boldsymbol{I}\)</span>.</p>
+<p>We implement this updating step as a separate function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">1.5</span>, <span class="fl">1.5</span>, <span class="dv">4</span>), <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Lambda0 <span class="ot">=</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">2</span><span class="sc">*</span><span class="fu">diag</span>(<span class="dv">2</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>invSigma <span class="ot">=</span> <span class="fu">solve</span>(Sigma)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>invLambda0 <span class="ot">=</span> <span class="fu">solve</span>(Lambda0)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mvtnorm) <span class="co"># We need rmvnorm to simulate from bivariate normal distr</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>UpdateMeanVector <span class="ot">&lt;-</span> <span class="cf">function</span>(X, invSigma, theta0, invLambda0){</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">=</span> <span class="fu">dim</span>(X)[<span class="dv">1</span>]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  xBar <span class="ot">=</span> <span class="fu">colMeans</span>(X) <span class="co"># sample mean of all data, including draws of missing</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  Lambda_n  <span class="ot">=</span> <span class="fu">solve</span>(invLambda0 <span class="sc">+</span> n<span class="sc">*</span>invSigma) <span class="co"># post covariance</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  theta_n <span class="ot">=</span> Lambda_n <span class="sc">%*%</span> n<span class="sc">*</span>invSigma <span class="sc">%*%</span> xBar <span class="co"># prior mean is zero</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  thetaDraw <span class="ot">=</span> <span class="fu">rmvnorm</span>(<span class="dv">1</span>, theta_n, Lambda_n)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">as.vector</span>(thetaDraws))</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we define a function that samples all the missing values</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>UpdateMissing <span class="ot">&lt;-</span> <span class="cf">function</span>(X, missing_obs, data, theta, Sigma){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> missing_obs){</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    misvar <span class="ot">=</span> <span class="fu">which</span>(<span class="fu">is.na</span>(data[i, ]))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(misvar) <span class="sc">==</span> <span class="dv">1</span>){</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      thetaCond <span class="ot">=</span> theta[misvar] <span class="sc">+</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        (Sigma[misvar,<span class="sc">-</span>misvar]<span class="sc">/</span>Sigma[<span class="sc">-</span>misvar,<span class="sc">-</span>misvar])<span class="sc">*</span>(data[,<span class="sc">-</span>misvar] <span class="sc">-</span> theta[<span class="sc">-</span>misvar])</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      SigmaCond <span class="ot">=</span> Sigma[misvar,misvar] <span class="sc">-</span> Sigma[misvar,<span class="sc">-</span>misvar]<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>Sigma[<span class="sc">-</span>misvar, <span class="sc">-</span>misvar]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      X[i, misvar] <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, thetaCond, SigmaCond)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    }<span class="cf">else</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      X[i, ] <span class="ot">=</span> <span class="fu">rmvnorm</span>(<span class="dv">1</span>, theta, Sigma)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And finally we set define the complete Gibbs sampler</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>GibbsMultiNormalMissing <span class="ot">&lt;-</span> <span class="cf">function</span>(data, theta0, Lambda0, Sigma, nSim){</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">=</span> data</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">=</span> <span class="fu">dim</span>(data)[<span class="dv">1</span>]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Finding the observations with at least on missing value</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  missing_obs <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">is.na</span>(data[i,]))) missing_obs <span class="ot">=</span> <span class="fu">c</span>(missing_obs, i)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nSim){</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Update mean vector</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Update missing values</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>b)</strong> Assume now that <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is unknown. We use the conjugate prior presented in Chapter 3 of the book <span class="math display">\[\begin{align}
+    \v\theta \vert \v\Sigma \sim \mathrm{N}(\v\theta_0,\v\Sigma/\kappa_0) \\
+    \v\Sigma \sim \mathrm{IW}(\nu_0, \nu_0 \v\Sigma_0),
+\end{align}\]</span> where <span class="math inline">\(\nu_0\)</span> is the degrees of freedom and <span class="math inline">\(\boldsymbol{\Sigma}_0\)</span> is our best guess of <span class="math inline">\(\boldsymbol{\Sigma}\)</span> a priori. Use the non-informative choice <span class="math inline">\(\nu_0 = 2\)</span> and set <span class="math display">\[
+\boldsymbol{\Sigma}_0 =
+\left(\begin{array}{cc}
+1 &amp; 1.5\\
+1.5 &amp; 4
+\end{array}\right).
+\]</span></p>
+<div id="q:gibbs_missing_data_b" class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+</div>
+<!-- {{< include ch7/prob_weibull_lung_optim.qmd >}} -->
+<!-- #{{< include ch7/prob_weibullreg_lung_optim.qmd >}} -->
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

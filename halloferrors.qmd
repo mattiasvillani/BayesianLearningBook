@@ -5,7 +5,9 @@ format: html
 
 ![](figs/linocut_water.png)
 
-The following people 🙏 have kindly reported typos and errors (ordered by the number of typos found, weighted by severity. Affiliation/student university when error was found):
+The following people 🙏 have kindly reported typos and errors. <br>
+The errors are ordered by the number of typos found, weighted by severity (text typo, math typo, text error and math error). <br>
+Affiliation of the student is when their latest error was found.
 
 **Bayesian Learning**
 

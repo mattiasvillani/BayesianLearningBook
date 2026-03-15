@@ -25,5 +25,6 @@ The following people 🙏 have kindly reported typos and errors (ordered by the 
 **Bayesian Learning - the prequel**
 
 -   Joachim Tscherpel, Stockholm University
+-   Ganna Fagerberg, Stockholm University
 
 Please email me any typos and errors at my obvious gmail address. Thanks!

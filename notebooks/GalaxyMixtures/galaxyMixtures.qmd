@@ -317,7 +317,7 @@ end
 μdraws = zeros(nIter, K)
 σ²draws = zeros(nIter, K)
 ωdraws = zeros(nIter, K)
-K_occupied = zeros(Int8, nIter) # n. of occupied components
+K_occupied = zeros(Int, nIter) # n. of occupied components
 for j = 1:(nBurn+nIter)
 
     # Update component allocations
@@ -340,7 +340,7 @@ for j = 1:(nBurn+nIter)
     for k = 1:(K-1)
         αpost = 1 + nInComps[k]
         βpost = α₀ + sum(nInComps[k+1:end])
-        V[k] = rand(Beta(αpost, βpost))
+        V[k] = clamp(rand(Beta(αpost, βpost)), eps(), 1 - eps())
         ω[k] = V[k] * stickLength
         stickLength = stickLength * (1 - V[k])
     end
@@ -348,7 +348,7 @@ for j = 1:(nBurn+nIter)
 
     # Update α₀. Scale parameterization for the Gamma
     if estimate_α₀
-        α₀ = rand(Gamma(g + K + 1, 1/(h - sum(log.(1 .- V[1:K-1])))))
+        α₀ = rand(Gamma(g + K - 1, 1/(h - sum(log.(1 .- V[1:(K-1)])))))
     end
 
     if j>nBurn
@@ -407,10 +407,11 @@ plt_bar = bar(0:K_max, [sum(K_occupied .== k) for k in 0:K_max],
     title="Posterior for number of components", size = (400,300))
 ```
 
-For $\alpha_0 = 10$ we get
+For $\alpha_0 = 10$ we have to use a larger upper bound on the number of components, $K$, otherwise we would have substantial probability on components beyond the truncation. $K=50$ is enough for $\alpha_0=10$.
 
 ```{julia}
 α₀ = 10
+K = 50
 μdraws, σ²draws, ωdraws, K_occupied, α₀draws = GibbsDPMixtureOfNormals(velocity, K, 
     nIter, nBurn, P₀, α₀)
 plt_post = deepcopy(plt_data)
@@ -433,10 +434,11 @@ plt_bar = bar(0:K_max, [sum(K_occupied .== k) for k in 0:K_max],
 plot(plt_post, plt_bar, layout = (1,2), size = (800,300), margin = 5mm)
 ```
 
-For $\alpha_=100$
+For $\alpha_=100$ we have to use $K=500$ to avoid truncation issues. Here are the results:
 
 ```{julia}
 α₀ = 100
+K = 500
 μdraws, σ²draws, ωdraws, K_occupied, α₀draws = GibbsDPMixtureOfNormals(velocity, K, 
     nIter, nBurn, P₀, α₀)
 plt_post = deepcopy(plt_data)

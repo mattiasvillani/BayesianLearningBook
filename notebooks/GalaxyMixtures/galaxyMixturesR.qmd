@@ -1,0 +1,526 @@
+---
+title: "Modeling galaxy velocities with a Dirichlet process mixture model"
+author: "Mattias Villani"
+draft: true
+format:
+  html:
+    fig-align: center
+    toc: true
+bibliography: ../notebook.bib
+csl: ../apa.csl
+---
+
+## Introduction
+
+The **galaxy velocity data**[^1] consists of the velocities of 82 galaxies (measured in 1000km/s, after transformation). The scientific question is whether or not the velocities of the galaxies cluster around a few values, which would indicate that the galaxies are part of a few superclusters[^2].
+
+[^1]: Postman, M., Huchra, J. P. and Geller, M. J. (1986) Probes of large-scale structures in the Corona Borealis region. *Astronomical Journal* **92**, 1238–1247.
+
+[^2]: [Roeder, K. (1990). *Density estimation with confidence sets exemplified by superclusters and voids in the galaxies*. Journal of the American Statistical Association, 85(411), 617-624](https://doi.org/10.1080/01621459.1990.10474918)
+
+The analysis here first explores the **Dirichlet process** as a prior directly on the distribution (cdf) of the velocities before moving on to the more interesting **Dirichlet process mixture (DPM) model**. The DP mixture makes it possible to learn about the number of mixture components in the data, i.e. to explore the possibility of superclusters of galaxies.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Code for loading packages and plot settings."
+#| output: false
+#| warning: false
+library(MASS)
+library(ggplot2)
+library(patchwork)
+
+colors <- c("#6C8EBF", "#c0a34d", "#780000", "#007878",
+            "#b5c6df", "#eadaaa", "#AE6666", "#4CA0A0", "#bf9d6c")
+
+theme_set(theme_bw(base_size = 11) + theme(panel.grid = element_blank()))
+set.seed(123)
+```
+
+The data are available in the `galaxies` dataset in the `MASS` package in R. We inspect the data by plotting a histogram and a kernel density estimate using cross-validation to select the optimal bandwidth. At least three clusters are visible in the histogram, while the kernel density estimate suggest up to seven clusters.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| warning: false
+data(galaxies, package = "MASS")
+velocity <- galaxies / 1000
+xlimits  <- c(5, 40)
+xGrid    <- seq(xlimits[1], xlimits[2], length.out = 1000)
+n        <- length(velocity)
+
+kde_fit <- density(velocity, bw = "ucv")
+
+p_data <- ggplot(data.frame(x = velocity), aes(x = x)) +
+  geom_histogram(aes(y = after_stat(density)), fill = colors[6],
+                 color = colors[2], linewidth = 0.5, bins = 20) +
+  geom_line(data = data.frame(x = kde_fit$x, y = kde_fit$y),
+            aes(x = x, y = y), color = colors[1], linewidth = 1.5) +
+  xlim(xlimits) +
+  labs(x = "Velocity (km/s)", y = "density", title = "Kernel density estimate")
+p_data
+```
+
+## Dirichlet process prior for the cdf
+
+We first analyze the cumulative distribution function (cdf) of the velocities using a Dirichlet process prior.
+
+#### Empirical cdf
+
+The empirical cumulative distribution function (cdf) for the data can be computed by
+
+```{r}
+empirical_cdf <- function(x, xlimits) {
+  xs <- sort(x)
+  ps <- (1:length(xs)) / length(xs)
+  xs <- c(xlimits[1], xs, xlimits[2])
+  ps <- c(0, ps, 1)
+  list(xs = xs, ps = ps)
+}
+
+ecdf_vals <- empirical_cdf(velocity, xlimits)
+p_ecdf <- ggplot(data.frame(x = ecdf_vals$xs, y = ecdf_vals$ps), aes(x, y)) +
+  geom_step(color = "black", direction = "hv") +
+  labs(x = "Velocity (km/s)", y = "CDF", title = "Empirical cdf")
+p_ecdf
+```
+
+When we later combine the empirical cdf with a Dirichlet process prior to form the posterior distribution it will be convenient to have a proper distribution object for the empirical cdf. We therefore approximate it with a mixture of normals with components with tiny ($10^{-15}$) variances, effectively making it a mixture of Dirac spikes at the data points with equal weights $1/n$. The plot below shows that the approximation is virtually identical to the true empirical cdf.
+
+```{r}
+# CDF of the normal-mixture approximation to Fn (equivalent to the empirical CDF)
+cdf_Fn <- function(x_vals) {
+  sapply(x_vals, function(xv) mean(pnorm(xv, mean = velocity, sd = 1e-10)))
+}
+
+p_ecdf +
+  geom_line(data = data.frame(x = xGrid, y = cdf_Fn(xGrid)),
+            aes(x, y), color = colors[2], inherit.aes = FALSE,
+            linewidth = 1)
+```
+
+#### Prior distribution
+
+Let $P$ denote the unknown distribution for the galaxy velocities. We use a Dirichlet process for $P$, denoted by $P \sim \mathrm{DP}(\alpha_0P_0)$. The $P_0$ is the so called **base measure** and is our best prior guess (prior expected value) of $P$. We take $P_0$ to be the $N(30,3^2)$ distribution. The scalar parameter $\alpha_0$ is the prior concentration or **prior precision**, which is inversely related to the variance around $P_0$. We start with low prior concentration $\alpha_0=1$ and later explore the effect of changing $\alpha_0$.
+
+```{r}
+#| output: false
+mu0_dp    <- 20
+sigma0_dp <- 3   # P0 = Normal(20, 3)
+alpha0    <- 1
+```
+
+At this stage we would like to simulate draws from the DP prior and plot the resulting distribution realizations, to get a feeling for the effect of $\alpha_0$. The so called stick-breaking representation of the Dirichlet process is a constructive characterization that makes it easy to simulate from a DP. The **stick-breaking representation** of the Dirichlet process is an infinite mixture of point masses $\delta_{\theta_k}$ at locations $\theta_k$ with weights $\omega_k$:
+
+$$
+\begin{align}
+  P(\cdot) &= \sum_{k=1}^{\infty}\omega_{k}\delta_{\theta_{k}} \nonumber \\
+  \omega_{k} &= V_{k}\prod_{\ell<k}(1-V_{\ell})  \nonumber \\
+  V_{k} &\overset{\mathrm{iid}}{\sim}\mathrm{Beta}(1,\alpha_0) \nonumber \\
+  \theta_{k} &\overset{\mathrm{iid}}{\sim}P_{0}
+\end{align}
+$$
+
+The function below simulates from the Dirichlet process using the stick-breaking construction. The input `r_P0` is a function that draws from the base measure $P_0$, and `epsilon` is the remaining stick length when the simulation terminates.
+
+```{r}
+#| output: false
+sim_dir_process <- function(r_P0, alpha0, epsilon = 0.001) {
+  stick_left <- 1
+  theta <- numeric(0)
+  omega <- numeric(0)
+  while (stick_left > epsilon) {
+    theta_k    <- r_P0()
+    V_k        <- rbeta(1, 1, alpha0)
+    omega_k    <- V_k * stick_left
+    stick_left <- stick_left * (1 - V_k)
+    theta      <- c(theta, theta_k)
+    omega      <- c(omega, omega_k)
+  }
+  sort_idx <- order(theta)
+  list(theta = theta[sort_idx], omega = omega[sort_idx])
+}
+
+# Efficient CDF evaluation when theta is sorted
+dp_cdf <- function(dp, x_vals) {
+  cum_omega <- c(0, cumsum(dp$omega))
+  bin_idx   <- findInterval(x_vals, dp$theta)
+  cum_omega[bin_idx + 1]
+}
+```
+
+Here are a few draws from the prior for three different choices of $\alpha_0$.
+
+```{r}
+n_draws <- 3
+r_P0 <- function() rnorm(1, mu0_dp, sigma0_dp)
+
+plts_prior <- lapply(c(1, 10, 100), function(a0) {
+  draws_df <- do.call(rbind, lapply(1:n_draws, function(i) {
+    dp <- sim_dir_process(r_P0, a0)
+    data.frame(x = xGrid, y = dp_cdf(dp, xGrid), draw = factor(i))
+  }))
+  ggplot(draws_df, aes(x, y, color = draw)) +
+    geom_line() +
+    scale_color_manual(values = colors[1:n_draws]) +
+    labs(title = bquote(paste("Prior draws for ", alpha[0], " = ", .(a0))),
+         x = "x", y = "CDF") +
+    theme(legend.position = "none")
+})
+plts_prior[[1]] + plts_prior[[2]] + plts_prior[[3]] + plot_layout(ncol = 3)
+```
+
+We can simulate a large number of draws and construct $95\%$ prior pointwise credible intervals for $P$, showing the variation in the prior. Here are the (pointwise) prior credible intervals for $\alpha_0=1$.
+
+```{r}
+n_sim  <- 10000
+alpha0 <- 1
+prior_draws <- matrix(0, length(xGrid), n_sim)
+for (i in 1:n_sim) {
+  dp <- sim_dir_process(r_P0, alpha0)
+  prior_draws[, i] <- dp_cdf(dp, xGrid)
+}
+prior_q_cdf <- apply(prior_draws, 1, quantile, probs = c(0.025, 0.975))
+
+df_prior_ci <- data.frame(
+  x  = xGrid,
+  P0 = pnorm(xGrid, mu0_dp, sigma0_dp),
+  lo = prior_q_cdf[1, ],
+  hi = prior_q_cdf[2, ]
+)
+ggplot(df_prior_ci, aes(x = x)) +
+  geom_ribbon(aes(ymin = lo, ymax = hi), fill = colors[2], alpha = 0.2) +
+  geom_line(aes(y = P0), color = colors[2]) +
+  labs(title = bquote(alpha[0] == .(alpha0)), x = "x", y = "CDF")
+```
+
+#### Posterior distribution
+
+The posterior distribution for $P$ is also a Dirichlet process
+
+$$
+P \vert x_1,\ldots, x_n \sim \mathrm{DP}(\alpha_nP_n)
+$$where the posterior precision is $\alpha_n = \alpha_0 + n$ and
+
+$$
+P_n = \frac{\alpha_0}{\alpha_n}P_0 + \frac{n}{\alpha_n}F_n
+$$
+
+is a mixture of the prior mean and the empirical cdf. We compute the posterior by combining the two components with weights $\alpha_0/\alpha_n$ and $n/\alpha_n$:
+
+```{r}
+alpha_n <- alpha0 + n
+cdf_Pn <- function(x_vals, a0, n_obs) {
+  an <- a0 + n_obs
+  (a0 / an) * pnorm(x_vals, mu0_dp, sigma0_dp) +
+    (n_obs / an) * ecdf(velocity)(x_vals)
+}
+```
+
+We can now plot the prior-to-posterior mapping. Here is the code and plot for $\alpha_0=100$.
+
+```{r}
+n_sim  <- 5000
+alpha0 <- 100
+
+prior_draws <- matrix(0, length(xGrid), n_sim)
+for (i in 1:n_sim) {
+  dp <- sim_dir_process(r_P0, alpha0)
+  prior_draws[, i] <- dp_cdf(dp, xGrid)
+}
+prior_q_cdf <- apply(prior_draws, 1, quantile, probs = c(0.025, 0.975))
+
+alpha_n_val <- alpha0 + n
+r_Pn <- function() {
+  if (runif(1) < alpha0 / alpha_n_val) rnorm(1, mu0_dp, sigma0_dp)
+  else sample(velocity, 1)
+}
+
+post_draws <- matrix(0, length(xGrid), n_sim)
+for (i in 1:n_sim) {
+  dp <- sim_dir_process(r_Pn, alpha_n_val)
+  post_draws[, i] <- dp_cdf(dp, xGrid)
+}
+post_q_cdf <- apply(post_draws, 1, quantile, probs = c(0.025, 0.975))
+
+df_dp <- data.frame(
+  x        = xGrid,
+  Fn       = ecdf(velocity)(xGrid),
+  P0       = pnorm(xGrid, mu0_dp, sigma0_dp),
+  Pn       = cdf_Pn(xGrid, alpha0, n),
+  prior_lo = prior_q_cdf[1, ],
+  prior_hi = prior_q_cdf[2, ],
+  post_lo  = post_q_cdf[1, ],
+  post_hi  = post_q_cdf[2, ]
+)
+
+ggplot(df_dp, aes(x = x)) +
+  geom_ribbon(aes(ymin = prior_lo, ymax = prior_hi), fill = colors[2], alpha = 0.2) +
+  geom_ribbon(aes(ymin = post_lo,  ymax = post_hi),  fill = colors[3], alpha = 0.2) +
+  geom_line(aes(y = Fn), color = colors[1]) +
+  geom_line(aes(y = P0), color = colors[2]) +
+  geom_line(aes(y = Pn), color = colors[3]) +
+  labs(title = bquote(alpha[0] == .(alpha0)), x = "x", y = "CDF")
+```
+
+## Dirichlet process mixture
+
+The posterior distribution for $P$ in the above analysis is almost surely discrete. This is an undesirable consequence of the Dirichlet process prior whenever $P$ is thought to be a continuous distribution.
+
+However, the almost sure discreteness of the DP can be turned into a useful feature if the DP is used as mixing measure in a mixture model. A mixture model for the random variable $X$ is of the form
+
+$$
+p(x) = \int p(x \vert \mathbf{\theta})dP(\mathbf{\theta})
+$$
+
+where $p(x\vert\theta)$ is the kernel distribution with parameter vector $\mathbf{\theta}$ and $P(\mathbf{\theta})$ is the mixing distribution. The notation $dP(\mathbf{\theta})$ comes from measure theory and $P(\cdot)$ is a probability measure. This more general version of the integral makes it possible for $P(\cdot)$ be both a discrete and continuous probability distribution, or a mixture of the two types. There are three basic types of mixture distributions:
+
+1.  **Continuous mixtures** where $P(\mathbf{\theta})$ is a continuous distribution with density $p(\theta)$ so we can write the more familiar integral $p(x) = \int p(x \vert \mathbf{\theta})p(\mathbf{\theta})d\mathbf{\theta}$. Example: the student $t$ density is a mixture of Gaussian kernels where the variance parameter of the kernel is mixed with respect to a scaled-inverse-chi-square distribution.
+
+2.  **Finite discrete mixtures**\
+    $$p(x) = \sum_{k=1}^K \omega_k \cdot N(x\vert \mu_k, \sigma_k^2),$$\
+    where the kernel is again Gaussian, but the mixing distribution is a mixture of $K$ point masses for the mean and variance of the kernel. Since the mixing distribution $P(\cdot)$ is discrete here, the integral reduces to a sum.
+
+3.  **Infinite discrete mixtures**\
+    $$p(x) = \sum_{k=1}^\infty \omega_k \cdot N(x\vert \mu_k, \sigma_k^2),$$\
+    where the most popular version is the Dirichlet Process Mixture (DPM) model, which is obtained when $P(\mathbf{\theta})$ is a *random distribution* following a Dirichlet process. The Dirichlet Process Mixture (DPM) model can be written\
+    $$
+    \begin{aligned}
+    x_i \vert \mathbf{\theta}_i &\overset{iid}{\sim} p(x_i \vert \mathbf{\theta}_i) \\  \mathbf{\theta}_i \vert P &\overset{iid}{\sim} P \nonumber \\
+    P &\sim \mathrm{DP}(\alpha_0 P_0)
+    \end{aligned}
+    $$
+
+Since realizations from the DP is almost surely discrete there will usually be several observations sharing the same parameter value $\mathbf{\theta}_j^{\star}$. In the case with a Gaussian kernel, the parameter vector is $\mathbf{\theta} =(\mu,\sigma^2)$ and the base measure $P_0$ is taken to be the conjugate prior:
+
+$$
+\begin{aligned}
+\mu \vert \sigma^2 \sim N\bigg(\mu_0,\frac{\sigma^2}{\kappa_0}\bigg) \\
+\sigma^2 \sim \mathrm{Inv}-\chi^2(\nu_0, \sigma_0^2)
+\end{aligned}
+$$In the Gibbs sampler presented below, we will need to compute the posterior of $\mathbf{\theta} =(\mu,\sigma^2)$ for all the observations currently allocated to a mixture component. This little helper function computes the posterior parameters $\mu_n,\kappa_n,\sigma_n^2$ and $\nu_n$ from a given data vector `x`:
+
+```{r}
+#| output: false
+post_normal_model <- function(x, mu0, sigma2_0, kappa0, nu0) {
+  if (length(x) == 0) return(list(mu = mu0, sigma2 = sigma2_0, kappa = kappa0, nu = nu0))
+  xbar    <- mean(x)
+  n       <- length(x)
+  kappa_n <- kappa0 + n
+  w       <- n / kappa_n
+  mu_n    <- w * xbar + (1 - w) * mu0
+  nu_n    <- nu0 + n
+  sumsqr  <- sum((x - xbar)^2)
+  sigma2_n <- (nu0 * sigma2_0 + sumsqr + (kappa0 * n / kappa_n) * (xbar - mu0)^2) / nu_n
+  list(mu = mu_n, sigma2 = sigma2_n, kappa = kappa_n, nu = nu_n)
+}
+```
+
+The Scaled inverse Chi-square distribution used as the prior on $\sigma^2$ can be simulated using the chi-squared distribution: if $X \sim \chi^2(\nu)$ then $\nu\tau^2/X \sim \mathrm{Inv}\text{-}\chi^2(\nu, \tau^2)$.
+
+```{r}
+#| output: false
+r_scaled_inv_chi2 <- function(nu, tau2) nu * tau2 / rchisq(1, nu)
+```
+
+The complete blocked Gibbs sampler for the DPM model with Gaussian components is given below. The sampler was developed in [@ishwaran2001gibbs]; see also [@villani_bayesbook]. The prior precision $\alpha_0$ can be fixed, or assigned a $\alpha_0 \sim \mathrm{Gamma}(g,h)$ prior and learned from the data. If `alpha0 = NULL` then $\alpha_0$ is estimated.
+
+```{r}
+#| output: false
+gibbs_dpm_normals <- function(x, K, n_iter, n_burn, P0,
+                              alpha0 = NULL, g = 1, h = 1) {
+  n      <- length(x)
+  mu0    <- P0[1]; sigma2_0 <- P0[2]; kappa0 <- P0[3]; nu0 <- P0[4]
+
+  mu     <- if (K == 1) mean(x) else seq(min(x), max(x), length.out = K)
+  sigma2 <- rep(var(x) / K, K)
+  omega  <- rep(1 / K, K)
+  V      <- rep(0, K)
+  z      <- rep(1L, n)
+
+  estimate_alpha0 <- is.null(alpha0)
+  if (estimate_alpha0) {
+    alpha0       <- 1
+    alpha0_draws <- numeric(n_iter)
+  } else {
+    alpha0_draws <- NULL
+  }
+
+  mu_draws     <- matrix(0, n_iter, K)
+  sigma2_draws <- matrix(0, n_iter, K)
+  omega_draws  <- matrix(0, n_iter, K)
+  K_occupied   <- integer(n_iter)
+
+  for (j in 1:(n_burn + n_iter)) {
+
+    # Update component allocations
+    log_lik <- sweep(
+      sapply(1:K, function(k) dnorm(x, mu[k], sqrt(sigma2[k]), log = TRUE)),
+      2, log(omega), "+"
+    )
+    log_lik <- log_lik - apply(log_lik, 1, max)
+    probs   <- exp(log_lik)
+    probs   <- probs / rowSums(probs)
+    z       <- apply(probs, 1, function(p) sample.int(K, 1, prob = p))
+
+    n_in_comps <- tabulate(z, nbins = K)
+
+    # Update component parameters
+    for (k in 1:K) {
+      post      <- post_normal_model(x[z == k], mu0, sigma2_0, kappa0, nu0)
+      sigma2[k] <- r_scaled_inv_chi2(post$nu, post$sigma2)
+      mu[k]     <- rnorm(1, post$mu, sqrt(sigma2[k] / post$kappa))
+    }
+
+    # Update component weights via stick-breaking
+    stick_length <- 1
+    for (k in 1:(K - 1)) {
+      a_post <- 1 + n_in_comps[k]
+      b_post <- alpha0 + sum(n_in_comps[(k + 1):K])
+      V[k]   <- rbeta(1, a_post, b_post)
+      omega[k]     <- V[k] * stick_length
+      stick_length <- stick_length * (1 - V[k])
+    }
+    omega[K] <- stick_length
+
+    # Update alpha0 (Gamma prior with scale parameterization)
+    if (estimate_alpha0) {
+      alpha0 <- rgamma(1, shape = g + K + 1,
+                       rate  = h - sum(log(1 - V[1:(K - 1)])))
+    }
+
+    if (j > n_burn) {
+      idx              <- j - n_burn
+      mu_draws[idx, ]     <- mu
+      sigma2_draws[idx, ] <- sigma2
+      omega_draws[idx, ]  <- omega
+      K_occupied[idx]     <- sum(n_in_comps > 0)
+      if (estimate_alpha0) alpha0_draws[idx] <- alpha0
+    }
+  }
+
+  list(mu_draws = mu_draws, sigma2_draws = sigma2_draws,
+       omega_draws = omega_draws, K_occupied = K_occupied,
+       alpha0_draws = alpha0_draws)
+}
+```
+
+After setting the prior hyperparameters and upper bound of the number of mixtures components, we run the Gibbs sampler for `n_burn=1000` iterations as burn-in and then another `n_iter = 10000` for posterior inference.
+
+```{r}
+#| output: false
+P0     <- c(mu0 = 20, sigma2_0 = 1, kappa0 = 0.1, nu0 = 3)
+alpha0 <- 1
+K      <- 30
+n_burn <- 1000
+n_iter <- 10000
+fit    <- gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0, alpha0)
+```
+
+A helper function computes the posterior mean density by averaging mixture pdfs over a thinned set of MCMC draws.
+
+```{r}
+#| output: false
+compute_post_mean_pdf <- function(fit, xGrid, K, plt_iter) {
+  pdf_mat <- sapply(plt_iter, function(i) {
+    rowSums(sapply(1:K, function(k)
+      fit$omega_draws[i, k] *
+        dnorm(xGrid, fit$mu_draws[i, k], sqrt(fit$sigma2_draws[i, k]))))
+  })
+  rowMeans(pdf_mat)
+}
+
+plot_K_bar <- function(K_occupied) {
+  K_max  <- max(K_occupied)
+  df_bar <- data.frame(
+    k    = 0:K_max,
+    freq = sapply(0:K_max, function(k) mean(K_occupied == k))
+  )
+  ggplot(df_bar, aes(x = k, y = freq)) +
+    geom_bar(stat = "identity", fill = colors[5],
+             color = colors[1], linewidth = 0.5) +
+    labs(x = "Number of components", y = "density",
+         title = "Posterior for number of components")
+}
+```
+
+Plot the posterior mean of the fitted density for $\alpha_0=1$.
+
+```{r}
+plt_iter     <- seq(1, n_iter, by = 10)
+post_mean_pdf <- compute_post_mean_pdf(fit, xGrid, K, plt_iter)
+
+p_data +
+  geom_line(data = data.frame(x = xGrid, y = post_mean_pdf),
+            aes(x = x, y = y), color = colors[3], linewidth = 1.5,
+            inherit.aes = FALSE) +
+  labs(title = bquote(paste("Post. mean density, ", alpha[0], " = ", .(alpha0))))
+```
+
+The posterior for the number of occupied mixture components has most of its mass on 5-10 components, with a mode at seven components:
+
+```{r}
+plot_K_bar(fit$K_occupied)
+```
+
+For $\alpha_0 = 10$ we get
+
+```{r}
+#| output: false
+alpha0  <- 10
+fit10   <- gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0, alpha0)
+```
+
+```{r}
+pdf10 <- compute_post_mean_pdf(fit10, xGrid, K, plt_iter)
+p_post10 <- p_data +
+  geom_line(data = data.frame(x = xGrid, y = pdf10),
+            aes(x = x, y = y), color = colors[3], linewidth = 1.5,
+            inherit.aes = FALSE) +
+  labs(title = bquote(paste("Post. mean density, ", alpha[0], " = ", .(alpha0))))
+p_post10 + plot_K_bar(fit10$K_occupied)
+```
+
+For $\alpha_0=100$
+
+```{r}
+#| output: false
+alpha0  <- 100
+fit100  <- gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0, alpha0)
+```
+
+```{r}
+pdf100 <- compute_post_mean_pdf(fit100, xGrid, K, plt_iter)
+p_post100 <- p_data +
+  geom_line(data = data.frame(x = xGrid, y = pdf100),
+            aes(x = x, y = y), color = colors[3], linewidth = 1.5,
+            inherit.aes = FALSE) +
+  labs(title = bquote(paste("Post. mean density, ", alpha[0], " = ", .(alpha0))))
+p_post100 + plot_K_bar(fit100$K_occupied)
+```
+
+and finally when $\alpha_0$ is estimated using a Gamma(1,1) prior:
+
+```{r}
+#| output: false
+fit_est <- gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0)
+```
+
+```{r}
+pdf_est <- compute_post_mean_pdf(fit_est, xGrid, K, plt_iter)
+p_post_est <- p_data +
+  geom_line(data = data.frame(x = xGrid, y = pdf_est),
+            aes(x = x, y = y), color = colors[3], linewidth = 1.5,
+            inherit.aes = FALSE) +
+  labs(title = expression(paste("Post. mean density, ", alpha[0], " ~ Gamma(1,1)")))
+p_post_est + plot_K_bar(fit_est$K_occupied)
+```
+
+The posterior for $\alpha_0$ is
+
+```{r}
+ggplot(data.frame(alpha0 = fit_est$alpha0_draws), aes(x = alpha0)) +
+  geom_histogram(aes(y = after_stat(density)), fill = colors[7],
+                 color = colors[3], alpha = 0.7, linewidth = 0.5, bins = 50) +
+  labs(x = expression(alpha[0]), y = "density",
+       title = expression(paste("Posterior for ", alpha[0])))
+```

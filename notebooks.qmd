@@ -10,67 +10,71 @@ This page contains a set of notebooks in Julia, R and Python for some of the dat
 
 #### Chapter 2 - One-parameter models
 
-|                                               |                                                                                        |                                                                                                                                      |                                                                                                                            |
+|  |  |  |  |
 |------------------|------------------|-------------------|------------------|
-| Bernoulli model for spam data                 | [![](figs/julialogo.svg){fig-align="left" width="20"}](notebooks/SpamBern/BernBeta.jl) | [![](figs/Rlogo.png){fig-align="left" width="20" height="16"}](notebooks/SpamBern/SpamBernR.ipynb)                                   |                                                                                                                            |
-| Normal model for internet download speed data |                                                                                        | [![](figs/Rlogo.png){alt="Julia" fig-align="left" width="20" height="16"}](notebooks/DownloadSpeedNormal/DownloadSpeedNormalR.ipynb) |                                                                                                                            |
-| Poisson for number of eBay bidders            |                                                                                        | [![](figs/Rlogo.png){alt="Julia" fig-align="left" width="20" height="16"}](notebooks/ebayPoissonOneParam/eBayPoissonR.ipynb)         | [![](figs/pythonlogo.svg){alt="Julia" fig-align="left" width="20"}](notebooks/ebayPoissonOneParam/eBayPoissonPython.ipynb) |
-
-: {.striped}
+| Bernoulli model for spam data | [![](figs/julialogo.svg){fig-align="left" width="20"}](notebooks/SpamBern/BernBeta.jl) | [![](figs/Rlogo.png){fig-align="left" width="20" height="16"}](notebooks/SpamBern/SpamBernR.ipynb) |  |
+| Normal model for internet download speed data |  | [![](figs/Rlogo.png){alt="Julia" fig-align="left" width="20" height="16"}](notebooks/DownloadSpeedNormal/DownloadSpeedNormalR.ipynb) |  |
+| Poisson for number of eBay bidders |  | [![](figs/Rlogo.png){alt="Julia" fig-align="left" width="20" height="16"}](notebooks/ebayPoissonOneParam/eBayPoissonR.ipynb) | [![](figs/pythonlogo.svg){alt="Julia" fig-align="left" width="20"}](notebooks/ebayPoissonOneParam/eBayPoissonPython.ipynb) |
 
 #### Chapter 3 - Multi-parameter models
 
-|                                   |                                                                                                         |                                                                                                                 |     |
+|  |  |  |  |
 |------------------|------------------|-------------------|------------------|
-| Multinomial model for survey data | [![](figs/julialogo.svg){alt="figs/julialogo.svg" width="20"}](notebooks/SurveyMultinomial/multinom.jl) | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/SurveyMultinomial/multinomial.Rmd) |     |
-
-: {.striped}
+| Multinomial model for survey data | [![](figs/julialogo.svg){alt="figs/julialogo.svg" width="20"}](notebooks/SurveyMultinomial/multinom.jl) | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/SurveyMultinomial/multinomial.Rmd) |  |
 
 #### 
 
 #### Chapter 4 - Priors
 
-#### Chapter 5 - Regression
+#### Chapter 5 - Linear Regression
 
 #### Chapter 6 - Prediction and Decision making
 
 #### Chapter 7 - Normal posterior approximation
 
-#### Chapter 8 - Classification
+#### Chapter 8 - Classification and Generalized regression
 
-|                                      |     |                                                                                                                   |     |
-|----------------|----------------|--------------------------|----------------|
-| Logistic regression for spam data    |     | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/SpamLogisticReg/SpamLogisticReg.Rmd) |     |
-| Logistic regression for Titanic data |     | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/TitanicLogistic/TitanicLogistic.qmd) |     |
-
-: {.striped}
+|  |  |  |  |
+|-----------------|-----------------|-----------------------|-----------------|
+| Logistic regression for spam data |  | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/SpamLogisticReg/SpamLogisticReg.Rmd) |  |
+| Logistic regression for Titanic data |  | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/TitanicLogistic/TitanicLogistic.qmd) |  |
 
 #### Chapter 9 - Gibbs sampling
 
-#### Chapter 10 - Markov Chain Monte Carlo simulation
+#### Chapter 10 - Monte Carlo simulation
 
-#### Chapter 11 - Variational inference
+#### Chapter 11 - Markov Chain Monte Carlo algorithms
 
-#### Chapter 12 - Regularization
+#### Chapter 12 - Markov Chain Monte Carlo in theory
 
-|                                   |     |                                                                                                                          |     |
+#### Chapter 13 - Markov Chain Monte Carlo in practice
+
+#### Chapter 14 - Hamiltonian Monte Carlo
+
+#### Chapter 15 - Variational inference
+
+#### Chapter 16 - Regularization
+
+|  |  |  |  |
 |------------------|------------------|-------------------|------------------|
-| Polynomial regression fossil data |     | [![figs/Rlogo.png](figs/rstan.png){alt="figs/Rlogo.png" width="20"}](notebooks/FossilNonlinearReg/FossilPolyRegStan.qmd) |     |
+| Polynomial regression fossil data |  | [![figs/Rlogo.png](figs/rstan.png){alt="figs/Rlogo.png" width="20"}](notebooks/FossilNonlinearReg/FossilPolyRegStan.qmd) |  |
 
-: {.striped}
+#### Chapter 17 - Mixture models
 
-#### Chapter 13 - Mixture models and Bayesian nonparametrics
+#### Chapter 18 - Model comparison and variable selection
 
-#### Chapter 14 - Model comparison and variable selection
+#### Chapter 19 - Gaussian processes
 
-#### Chapter 15 - Gaussian processes
+#### Chapter 20 - Bayesian nonparametrics
 
-#### Chapter 16 - Interaction models
+|  |  |  |  |
+|----|----|----|----|
+| Dirichlet process mixture galaxy velocities data | [![Julia](figs/julialogo.svg){width="20"}](#0) |  |  |
 
-#### Chapter 17 - Dynamic models and sequential inference
+#### Chapter 21 - Interaction models
 
-|                                                |                                                                                                                                                                                                     |     |     |
-|---------------|---------------------------|---------------|---------------|
-| Filtering and smoothing of the Nile river data | [![](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="20"}](notebooks/KalmanFilteringSmoothing/R_KalmanFilteringSmoothing.ipynb) |     |     |
+#### Chapter 22 - Dynamic models and sequential inference
 
-: {.striped}
+|  |  |  |  |
+|----------------|------------------------|----------------|----------------|
+| Filtering and smoothing of the Nile river data | [![](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="20"}](notebooks/KalmanFilteringSmoothing/R_KalmanFilteringSmoothing.ipynb) |  |  |

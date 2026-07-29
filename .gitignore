@@ -46,3 +46,5 @@
 .Rproj.user
 
 
+
+**/*.quarto_ipynb

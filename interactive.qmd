@@ -5,6 +5,12 @@ toc: true
 
 ![](figs/linocut_forest.png)
 
+::: {.callout-tip icon="false"}
+## Bayesian Learning App
+
+A companion app with interactive widgets for distributions and conjugate Bayesian analysis: [**mattiasvillani.com/bayesianlearningapp**](https://mattiasvillani.com/bayesianlearningapp/)
+:::
+
 This page contains interactive widgets for the book.
 
 #### Chapter 1 - The Bayesics

@@ -1,2 +1,1411 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"></html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Mattias Villani">
+
+<title>Modeling galaxy velocities with a Dirichlet process mixture model – Bayesian Learning Book</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-e91ff4436fb6c0bf2b7091132cfdd834.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-1e5877d3a227fb8b9a63227290115c5d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-e91ff4436fb6c0bf2b7091132cfdd834.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="quarto:status" content="draft">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Bayesian Learning Book</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../exercise_solutions.html"> 
+<span class="menu-text">Exercises</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../notebooks.html"> 
+<span class="menu-text">Notebooks</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../code.html"> 
+<span class="menu-text">Code</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../interactive.html"> 
+<span class="menu-text">Interactive</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../halloferrors.html"> 
+<span class="menu-text">Hall of Typos</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#dirichlet-process-prior-for-the-cdf" id="toc-dirichlet-process-prior-for-the-cdf" class="nav-link" data-scroll-target="#dirichlet-process-prior-for-the-cdf">Dirichlet process prior for the cdf</a></li>
+  <li><a href="#dirichlet-process-mixture" id="toc-dirichlet-process-mixture" class="nav-link" data-scroll-target="#dirichlet-process-mixture">Dirichlet process mixture</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Modeling galaxy velocities with a Dirichlet process mixture model</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Mattias Villani </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>The <strong>galaxy velocity data</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> consists of the velocities of 82 galaxies (measured in 1000km/s, after transformation). The scientific question is whether or not the velocities of the galaxies cluster around a few values, which would indicate that the galaxies are part of a few superclusters<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>The analysis here first explores the <strong>Dirichlet process</strong> as a prior directly on the distribution (cdf) of the velocities before moving on to the more interesting <strong>Dirichlet process mixture (DPM) model</strong>. The DP mixture makes it possible to learn about the number of mixture components in the data, i.e.&nbsp;to explore the possibility of superclusters of galaxies.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code for loading packages and plot settings.</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#6C8EBF"</span>, <span class="st">"#c0a34d"</span>, <span class="st">"#780000"</span>, <span class="st">"#007878"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"#b5c6df"</span>, <span class="st">"#eadaaa"</span>, <span class="st">"#AE6666"</span>, <span class="st">"#4CA0A0"</span>, <span class="st">"#bf9d6c"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>()))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>The data are available in the <code>galaxies</code> dataset in the <code>MASS</code> package in R. We inspect the data by plotting a histogram and a kernel density estimate using cross-validation to select the optimal bandwidth. At least three clusters are visible in the histogram, while the kernel density estimate suggest up to seven clusters.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(galaxies, <span class="at">package =</span> <span class="st">"MASS"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>velocity <span class="ot">&lt;-</span> galaxies <span class="sc">/</span> <span class="dv">1000</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>xlimits  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">40</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>xGrid    <span class="ot">&lt;-</span> <span class="fu">seq</span>(xlimits[<span class="dv">1</span>], xlimits[<span class="dv">2</span>], <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>n        <span class="ot">&lt;-</span> <span class="fu">length</span>(velocity)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>kde_fit <span class="ot">&lt;-</span> <span class="fu">density</span>(velocity, <span class="at">bw =</span> <span class="st">"ucv"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>p_data <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> velocity), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">fill =</span> colors[<span class="dv">6</span>],</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> colors[<span class="dv">2</span>], <span class="at">linewidth =</span> <span class="fl">0.5</span>, <span class="at">bins =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> kde_fit<span class="sc">$</span>x, <span class="at">y =</span> kde_fit<span class="sc">$</span>y),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y), <span class="at">color =</span> colors[<span class="dv">1</span>], <span class="at">linewidth =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(xlimits) <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Velocity (km/s)"</span>, <span class="at">y =</span> <span class="st">"density"</span>, <span class="at">title =</span> <span class="st">"Kernel density estimate"</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>p_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="dirichlet-process-prior-for-the-cdf" class="level2">
+<h2 class="anchored" data-anchor-id="dirichlet-process-prior-for-the-cdf">Dirichlet process prior for the cdf</h2>
+<p>We first analyze the cumulative distribution function (cdf) of the velocities using a Dirichlet process prior.</p>
+<section id="empirical-cdf" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-cdf">Empirical cdf</h4>
+<p>The empirical cumulative distribution function (cdf) for the data can be computed by</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>empirical_cdf <span class="ot">&lt;-</span> <span class="cf">function</span>(x, xlimits) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  xs <span class="ot">&lt;-</span> <span class="fu">sort</span>(x)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  ps <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(xs)) <span class="sc">/</span> <span class="fu">length</span>(xs)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  xs <span class="ot">&lt;-</span> <span class="fu">c</span>(xlimits[<span class="dv">1</span>], xs, xlimits[<span class="dv">2</span>])</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  ps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, ps, <span class="dv">1</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">xs =</span> xs, <span class="at">ps =</span> ps)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>ecdf_vals <span class="ot">&lt;-</span> <span class="fu">empirical_cdf</span>(velocity, xlimits)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>p_ecdf <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> ecdf_vals<span class="sc">$</span>xs, <span class="at">y =</span> ecdf_vals<span class="sc">$</span>ps), <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_step</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">direction =</span> <span class="st">"hv"</span>) <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Velocity (km/s)"</span>, <span class="at">y =</span> <span class="st">"CDF"</span>, <span class="at">title =</span> <span class="st">"Empirical cdf"</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>p_ecdf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When we later combine the empirical cdf with a Dirichlet process prior to form the posterior distribution it will be convenient to have a proper distribution object for the empirical cdf. We therefore approximate it with a mixture of normals with components with tiny (<span class="math inline">\(10^{-15}\)</span>) variances, effectively making it a mixture of Dirac spikes at the data points with equal weights <span class="math inline">\(1/n\)</span>. The plot below shows that the approximation is virtually identical to the true empirical cdf.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CDF of the normal-mixture approximation to Fn (equivalent to the empirical CDF)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cdf_Fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vals) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sapply</span>(x_vals, <span class="cf">function</span>(xv) <span class="fu">mean</span>(<span class="fu">pnorm</span>(xv, <span class="at">mean =</span> velocity, <span class="at">sd =</span> <span class="fl">1e-10</span>)))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>p_ecdf <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> xGrid, <span class="at">y =</span> <span class="fu">cdf_Fn</span>(xGrid)),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(x, y), <span class="at">color =</span> colors[<span class="dv">2</span>], <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">linewidth =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="prior-distribution" class="level4">
+<h4 class="anchored" data-anchor-id="prior-distribution">Prior distribution</h4>
+<p>Let <span class="math inline">\(P\)</span> denote the unknown distribution for the galaxy velocities. We use a Dirichlet process for <span class="math inline">\(P\)</span>, denoted by <span class="math inline">\(P \sim \mathrm{DP}(\alpha_0P_0)\)</span>. The <span class="math inline">\(P_0\)</span> is the so called <strong>base measure</strong> and is our best prior guess (prior expected value) of <span class="math inline">\(P\)</span>. We take <span class="math inline">\(P_0\)</span> to be the <span class="math inline">\(N(30,3^2)\)</span> distribution. The scalar parameter <span class="math inline">\(\alpha_0\)</span> is the prior concentration or <strong>prior precision</strong>, which is inversely related to the variance around <span class="math inline">\(P_0\)</span>. We start with low prior concentration <span class="math inline">\(\alpha_0=1\)</span> and later explore the effect of changing <span class="math inline">\(\alpha_0\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mu0_dp    <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sigma0_dp <span class="ot">&lt;-</span> <span class="dv">3</span>   <span class="co"># P0 = Normal(20, 3)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>alpha0    <span class="ot">&lt;-</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>At this stage we would like to simulate draws from the DP prior and plot the resulting distribution realizations, to get a feeling for the effect of <span class="math inline">\(\alpha_0\)</span>. The so called stick-breaking representation of the Dirichlet process is a constructive characterization that makes it easy to simulate from a DP. The <strong>stick-breaking representation</strong> of the Dirichlet process is an infinite mixture of point masses <span class="math inline">\(\delta_{\theta_k}\)</span> at locations <span class="math inline">\(\theta_k\)</span> with weights <span class="math inline">\(\omega_k\)</span>:</p>
+<p><span class="math display">\[
+\begin{align}
+  P(\cdot) &amp;= \sum_{k=1}^{\infty}\omega_{k}\delta_{\theta_{k}} \nonumber \\
+  \omega_{k} &amp;= V_{k}\prod_{\ell&lt;k}(1-V_{\ell})  \nonumber \\
+  V_{k} &amp;\overset{\mathrm{iid}}{\sim}\mathrm{Beta}(1,\alpha_0) \nonumber \\
+  \theta_{k} &amp;\overset{\mathrm{iid}}{\sim}P_{0}
+\end{align}
+\]</span></p>
+<p>The function below simulates from the Dirichlet process using the stick-breaking construction. The input <code>r_P0</code> is a function that draws from the base measure <span class="math inline">\(P_0\)</span>, and <code>epsilon</code> is the remaining stick length when the simulation terminates.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sim_dir_process <span class="ot">&lt;-</span> <span class="cf">function</span>(r_P0, alpha0, <span class="at">epsilon =</span> <span class="fl">0.001</span>) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  stick_left <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  theta <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">0</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  omega <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">0</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (stick_left <span class="sc">&gt;</span> epsilon) {</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    theta_k    <span class="ot">&lt;-</span> <span class="fu">r_P0</span>()</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    V_k        <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1</span>, <span class="dv">1</span>, alpha0)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    omega_k    <span class="ot">&lt;-</span> V_k <span class="sc">*</span> stick_left</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    stick_left <span class="ot">&lt;-</span> stick_left <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> V_k)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    theta      <span class="ot">&lt;-</span> <span class="fu">c</span>(theta, theta_k)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    omega      <span class="ot">&lt;-</span> <span class="fu">c</span>(omega, omega_k)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  sort_idx <span class="ot">&lt;-</span> <span class="fu">order</span>(theta)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">theta =</span> theta[sort_idx], <span class="at">omega =</span> omega[sort_idx])</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Efficient CDF evaluation when theta is sorted</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>dp_cdf <span class="ot">&lt;-</span> <span class="cf">function</span>(dp, x_vals) {</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  cum_omega <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">cumsum</span>(dp<span class="sc">$</span>omega))</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  bin_idx   <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(x_vals, dp<span class="sc">$</span>theta)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  cum_omega[bin_idx <span class="sc">+</span> <span class="dv">1</span>]</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Here are a few draws from the prior for three different choices of <span class="math inline">\(\alpha_0\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n_draws <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>r_P0 <span class="ot">&lt;-</span> <span class="cf">function</span>() <span class="fu">rnorm</span>(<span class="dv">1</span>, mu0_dp, sigma0_dp)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plts_prior <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>), <span class="cf">function</span>(a0) {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  draws_df <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span>n_draws, <span class="cf">function</span>(i) {</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    dp <span class="ot">&lt;-</span> <span class="fu">sim_dir_process</span>(r_P0, a0)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">x =</span> xGrid, <span class="at">y =</span> <span class="fu">dp_cdf</span>(dp, xGrid), <span class="at">draw =</span> <span class="fu">factor</span>(i))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(draws_df, <span class="fu">aes</span>(x, y, <span class="at">color =</span> draw)) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> colors[<span class="dv">1</span><span class="sc">:</span>n_draws]) <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">bquote</span>(<span class="fu">paste</span>(<span class="st">"Prior draws for "</span>, alpha[<span class="dv">0</span>], <span class="st">" = "</span>, .(a0))),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">"x"</span>, <span class="at">y =</span> <span class="st">"CDF"</span>) <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>plts_prior[[<span class="dv">1</span>]] <span class="sc">+</span> plts_prior[[<span class="dv">2</span>]] <span class="sc">+</span> plts_prior[[<span class="dv">3</span>]] <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">ncol =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can simulate a large number of draws and construct <span class="math inline">\(95\%\)</span> prior pointwise credible intervals for <span class="math inline">\(P\)</span>, showing the variation in the prior. Here are the (pointwise) prior credible intervals for <span class="math inline">\(\alpha_0=1\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>n_sim  <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>alpha0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>prior_draws <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="fu">length</span>(xGrid), n_sim)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_sim) {</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  dp <span class="ot">&lt;-</span> <span class="fu">sim_dir_process</span>(r_P0, alpha0)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  prior_draws[, i] <span class="ot">&lt;-</span> <span class="fu">dp_cdf</span>(dp, xGrid)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>prior_q_cdf <span class="ot">&lt;-</span> <span class="fu">apply</span>(prior_draws, <span class="dv">1</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>df_prior_ci <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">x  =</span> xGrid,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">P0 =</span> <span class="fu">pnorm</span>(xGrid, mu0_dp, sigma0_dp),</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">lo =</span> prior_q_cdf[<span class="dv">1</span>, ],</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">hi =</span> prior_q_cdf[<span class="dv">2</span>, ]</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_prior_ci, <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lo, <span class="at">ymax =</span> hi), <span class="at">fill =</span> colors[<span class="dv">2</span>], <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> P0), <span class="at">color =</span> colors[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">bquote</span>(alpha[<span class="dv">0</span>] <span class="sc">==</span> .(alpha0)), <span class="at">x =</span> <span class="st">"x"</span>, <span class="at">y =</span> <span class="st">"CDF"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="posterior-distribution" class="level4">
+<h4 class="anchored" data-anchor-id="posterior-distribution">Posterior distribution</h4>
+<p>The posterior distribution for <span class="math inline">\(P\)</span> is also a Dirichlet process</p>
+<p><span class="math display">\[
+P \vert x_1,\ldots, x_n \sim \mathrm{DP}(\alpha_nP_n)
+\]</span>where the posterior precision is <span class="math inline">\(\alpha_n = \alpha_0 + n\)</span> and</p>
+<p><span class="math display">\[
+P_n = \frac{\alpha_0}{\alpha_n}P_0 + \frac{n}{\alpha_n}F_n
+\]</span></p>
+<p>is a mixture of the prior mean and the empirical cdf. We compute the posterior by combining the two components with weights <span class="math inline">\(\alpha_0/\alpha_n\)</span> and <span class="math inline">\(n/\alpha_n\)</span>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>alpha_n <span class="ot">&lt;-</span> alpha0 <span class="sc">+</span> n</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>cdf_Pn <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vals, a0, n_obs) {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  an <span class="ot">&lt;-</span> a0 <span class="sc">+</span> n_obs</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  (a0 <span class="sc">/</span> an) <span class="sc">*</span> <span class="fu">pnorm</span>(x_vals, mu0_dp, sigma0_dp) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    (n_obs <span class="sc">/</span> an) <span class="sc">*</span> <span class="fu">ecdf</span>(velocity)(x_vals)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can now plot the prior-to-posterior mapping. Here is the code and plot for <span class="math inline">\(\alpha_0=100\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>n_sim  <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>alpha0 <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>prior_draws <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="fu">length</span>(xGrid), n_sim)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_sim) {</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  dp <span class="ot">&lt;-</span> <span class="fu">sim_dir_process</span>(r_P0, alpha0)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  prior_draws[, i] <span class="ot">&lt;-</span> <span class="fu">dp_cdf</span>(dp, xGrid)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>prior_q_cdf <span class="ot">&lt;-</span> <span class="fu">apply</span>(prior_draws, <span class="dv">1</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>alpha_n_val <span class="ot">&lt;-</span> alpha0 <span class="sc">+</span> n</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>r_Pn <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> alpha0 <span class="sc">/</span> alpha_n_val) <span class="fu">rnorm</span>(<span class="dv">1</span>, mu0_dp, sigma0_dp)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">sample</span>(velocity, <span class="dv">1</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>post_draws <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="fu">length</span>(xGrid), n_sim)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_sim) {</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  dp <span class="ot">&lt;-</span> <span class="fu">sim_dir_process</span>(r_Pn, alpha_n_val)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  post_draws[, i] <span class="ot">&lt;-</span> <span class="fu">dp_cdf</span>(dp, xGrid)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>post_q_cdf <span class="ot">&lt;-</span> <span class="fu">apply</span>(post_draws, <span class="dv">1</span>, quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>df_dp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">x        =</span> xGrid,</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">Fn       =</span> <span class="fu">ecdf</span>(velocity)(xGrid),</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">P0       =</span> <span class="fu">pnorm</span>(xGrid, mu0_dp, sigma0_dp),</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">Pn       =</span> <span class="fu">cdf_Pn</span>(xGrid, alpha0, n),</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior_lo =</span> prior_q_cdf[<span class="dv">1</span>, ],</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior_hi =</span> prior_q_cdf[<span class="dv">2</span>, ],</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">post_lo  =</span> post_q_cdf[<span class="dv">1</span>, ],</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">post_hi  =</span> post_q_cdf[<span class="dv">2</span>, ]</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_dp, <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> prior_lo, <span class="at">ymax =</span> prior_hi), <span class="at">fill =</span> colors[<span class="dv">2</span>], <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> post_lo,  <span class="at">ymax =</span> post_hi),  <span class="at">fill =</span> colors[<span class="dv">3</span>], <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> Fn), <span class="at">color =</span> colors[<span class="dv">1</span>]) <span class="sc">+</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> P0), <span class="at">color =</span> colors[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> Pn), <span class="at">color =</span> colors[<span class="dv">3</span>]) <span class="sc">+</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">bquote</span>(alpha[<span class="dv">0</span>] <span class="sc">==</span> .(alpha0)), <span class="at">x =</span> <span class="st">"x"</span>, <span class="at">y =</span> <span class="st">"CDF"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="dirichlet-process-mixture" class="level2">
+<h2 class="anchored" data-anchor-id="dirichlet-process-mixture">Dirichlet process mixture</h2>
+<p>The posterior distribution for <span class="math inline">\(P\)</span> in the above analysis is almost surely discrete. This is an undesirable consequence of the Dirichlet process prior whenever <span class="math inline">\(P\)</span> is thought to be a continuous distribution.</p>
+<p>However, the almost sure discreteness of the DP can be turned into a useful feature if the DP is used as mixing measure in a mixture model. A mixture model for the random variable <span class="math inline">\(X\)</span> is of the form</p>
+<p><span class="math display">\[
+p(x) = \int p(x \vert \mathbf{\theta})dP(\mathbf{\theta})
+\]</span></p>
+<p>where <span class="math inline">\(p(x\vert\theta)\)</span> is the kernel distribution with parameter vector <span class="math inline">\(\mathbf{\theta}\)</span> and <span class="math inline">\(P(\mathbf{\theta})\)</span> is the mixing distribution. The notation <span class="math inline">\(dP(\mathbf{\theta})\)</span> comes from measure theory and <span class="math inline">\(P(\cdot)\)</span> is a probability measure. This more general version of the integral makes it possible for <span class="math inline">\(P(\cdot)\)</span> be both a discrete and continuous probability distribution, or a mixture of the two types. There are three basic types of mixture distributions:</p>
+<ol type="1">
+<li><p><strong>Continuous mixtures</strong> where <span class="math inline">\(P(\mathbf{\theta})\)</span> is a continuous distribution with density <span class="math inline">\(p(\theta)\)</span> so we can write the more familiar integral <span class="math inline">\(p(x) = \int p(x \vert \mathbf{\theta})p(\mathbf{\theta})d\mathbf{\theta}\)</span>. Example: the student <span class="math inline">\(t\)</span> density is a mixture of Gaussian kernels where the variance parameter of the kernel is mixed with respect to a scaled-inverse-chi-square distribution.</p></li>
+<li><p><strong>Finite discrete mixtures</strong><br>
+<span class="math display">\[p(x) = \sum_{k=1}^K \omega_k \cdot N(x\vert \mu_k, \sigma_k^2),\]</span><br>
+where the kernel is again Gaussian, but the mixing distribution is a mixture of <span class="math inline">\(K\)</span> point masses for the mean and variance of the kernel. Since the mixing distribution <span class="math inline">\(P(\cdot)\)</span> is discrete here, the integral reduces to a sum.</p></li>
+<li><p><strong>Infinite discrete mixtures</strong><br>
+<span class="math display">\[p(x) = \sum_{k=1}^\infty \omega_k \cdot N(x\vert \mu_k, \sigma_k^2),\]</span><br>
+where the most popular version is the Dirichlet Process Mixture (DPM) model, which is obtained when <span class="math inline">\(P(\mathbf{\theta})\)</span> is a <em>random distribution</em> following a Dirichlet process. The Dirichlet Process Mixture (DPM) model can be written<br>
+<span class="math display">\[
+\begin{aligned}
+x_i \vert \mathbf{\theta}_i &amp;\overset{iid}{\sim} p(x_i \vert \mathbf{\theta}_i) \\  \mathbf{\theta}_i \vert P &amp;\overset{iid}{\sim} P \nonumber \\
+P &amp;\sim \mathrm{DP}(\alpha_0 P_0)
+\end{aligned}
+\]</span></p></li>
+</ol>
+<p>Since realizations from the DP is almost surely discrete there will usually be several observations sharing the same parameter value <span class="math inline">\(\mathbf{\theta}_j^{\star}\)</span>. In the case with a Gaussian kernel, the parameter vector is <span class="math inline">\(\mathbf{\theta} =(\mu,\sigma^2)\)</span> and the base measure <span class="math inline">\(P_0\)</span> is taken to be the conjugate prior:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mu \vert \sigma^2 \sim N\bigg(\mu_0,\frac{\sigma^2}{\kappa_0}\bigg) \\
+\sigma^2 \sim \mathrm{Inv}-\chi^2(\nu_0, \sigma_0^2)
+\end{aligned}
+\]</span>In the Gibbs sampler presented below, we will need to compute the posterior of <span class="math inline">\(\mathbf{\theta} =(\mu,\sigma^2)\)</span> for all the observations currently allocated to a mixture component. This little helper function computes the posterior parameters <span class="math inline">\(\mu_n,\kappa_n,\sigma_n^2\)</span> and <span class="math inline">\(\nu_n\)</span> from a given data vector <code>x</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>post_normal_model <span class="ot">&lt;-</span> <span class="cf">function</span>(x, mu0, sigma2_0, kappa0, nu0) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(x) <span class="sc">==</span> <span class="dv">0</span>) <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">mu =</span> mu0, <span class="at">sigma2 =</span> sigma2_0, <span class="at">kappa =</span> kappa0, <span class="at">nu =</span> nu0))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  xbar    <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  n       <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  kappa_n <span class="ot">&lt;-</span> kappa0 <span class="sc">+</span> n</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  w       <span class="ot">&lt;-</span> n <span class="sc">/</span> kappa_n</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  mu_n    <span class="ot">&lt;-</span> w <span class="sc">*</span> xbar <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> w) <span class="sc">*</span> mu0</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  nu_n    <span class="ot">&lt;-</span> nu0 <span class="sc">+</span> n</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  sumsqr  <span class="ot">&lt;-</span> <span class="fu">sum</span>((x <span class="sc">-</span> xbar)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  sigma2_n <span class="ot">&lt;-</span> (nu0 <span class="sc">*</span> sigma2_0 <span class="sc">+</span> sumsqr <span class="sc">+</span> (kappa0 <span class="sc">*</span> n <span class="sc">/</span> kappa_n) <span class="sc">*</span> (xbar <span class="sc">-</span> mu0)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> nu_n</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">mu =</span> mu_n, <span class="at">sigma2 =</span> sigma2_n, <span class="at">kappa =</span> kappa_n, <span class="at">nu =</span> nu_n)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The Scaled inverse Chi-square distribution used as the prior on <span class="math inline">\(\sigma^2\)</span> can be simulated using the chi-squared distribution: if <span class="math inline">\(X \sim \chi^2(\nu)\)</span> then <span class="math inline">\(\nu\tau^2/X \sim \mathrm{Inv}\text{-}\chi^2(\nu, \tau^2)\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>r_scaled_inv_chi2 <span class="ot">&lt;-</span> <span class="cf">function</span>(nu, tau2) nu <span class="sc">*</span> tau2 <span class="sc">/</span> <span class="fu">rchisq</span>(<span class="dv">1</span>, nu)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The complete blocked Gibbs sampler for the DPM model with Gaussian components is given below. The sampler was developed in <span class="citation" data-cites="ishwaran2001gibbs">(<a href="#ref-ishwaran2001gibbs" role="doc-biblioref">Ishwaran &amp; James, 2001</a>)</span>; see also <span class="citation" data-cites="villani_bayesbook">(<a href="#ref-villani_bayesbook" role="doc-biblioref">Villani, 2026</a>)</span>. The prior precision <span class="math inline">\(\alpha_0\)</span> can be fixed, or assigned a <span class="math inline">\(\alpha_0 \sim \mathrm{Gamma}(g,h)\)</span> prior and learned from the data. If <code>alpha0 = NULL</code> then <span class="math inline">\(\alpha_0\)</span> is estimated.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>gibbs_dpm_normals <span class="ot">&lt;-</span> <span class="cf">function</span>(x, K, n_iter, n_burn, P0,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">alpha0 =</span> <span class="cn">NULL</span>, <span class="at">g =</span> <span class="dv">1</span>, <span class="at">h =</span> <span class="dv">1</span>) {</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  n      <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  mu0    <span class="ot">&lt;-</span> P0[<span class="dv">1</span>]; sigma2_0 <span class="ot">&lt;-</span> P0[<span class="dv">2</span>]; kappa0 <span class="ot">&lt;-</span> P0[<span class="dv">3</span>]; nu0 <span class="ot">&lt;-</span> P0[<span class="dv">4</span>]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  mu     <span class="ot">&lt;-</span> <span class="cf">if</span> (K <span class="sc">==</span> <span class="dv">1</span>) <span class="fu">mean</span>(x) <span class="cf">else</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="at">length.out =</span> K)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  sigma2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">var</span>(x) <span class="sc">/</span> K, K)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  omega  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> K, K)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  V      <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  z      <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>L, n)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  estimate_alpha0 <span class="ot">&lt;-</span> <span class="fu">is.null</span>(alpha0)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (estimate_alpha0) {</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    alpha0       <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    alpha0_draws <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_iter)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    alpha0_draws <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  mu_draws     <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, n_iter, K)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  sigma2_draws <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, n_iter, K)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  omega_draws  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, n_iter, K)</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  K_occupied   <span class="ot">&lt;-</span> <span class="fu">integer</span>(n_iter)</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(n_burn <span class="sc">+</span> n_iter)) {</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Update component allocations</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    log_lik <span class="ot">&lt;-</span> <span class="fu">sweep</span>(</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>K, <span class="cf">function</span>(k) <span class="fu">dnorm</span>(x, mu[k], <span class="fu">sqrt</span>(sigma2[k]), <span class="at">log =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span>, <span class="fu">log</span>(omega), <span class="st">"+"</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    log_lik <span class="ot">&lt;-</span> log_lik <span class="sc">-</span> <span class="fu">apply</span>(log_lik, <span class="dv">1</span>, max)</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    probs   <span class="ot">&lt;-</span> <span class="fu">exp</span>(log_lik)</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    probs   <span class="ot">&lt;-</span> probs <span class="sc">/</span> <span class="fu">rowSums</span>(probs)</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>    z       <span class="ot">&lt;-</span> <span class="fu">apply</span>(probs, <span class="dv">1</span>, <span class="cf">function</span>(p) <span class="fu">sample.int</span>(K, <span class="dv">1</span>, <span class="at">prob =</span> p))</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>    n_in_comps <span class="ot">&lt;-</span> <span class="fu">tabulate</span>(z, <span class="at">nbins =</span> K)</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Update component parameters</span></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>K) {</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>      post      <span class="ot">&lt;-</span> <span class="fu">post_normal_model</span>(x[z <span class="sc">==</span> k], mu0, sigma2_0, kappa0, nu0)</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>      sigma2[k] <span class="ot">&lt;-</span> <span class="fu">r_scaled_inv_chi2</span>(post<span class="sc">$</span>nu, post<span class="sc">$</span>sigma2)</span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>      mu[k]     <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, post<span class="sc">$</span>mu, <span class="fu">sqrt</span>(sigma2[k] <span class="sc">/</span> post<span class="sc">$</span>kappa))</span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Update component weights via stick-breaking</span></span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>    stick_length <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(K <span class="sc">-</span> <span class="dv">1</span>)) {</span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>      a_post <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> n_in_comps[k]</span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>      b_post <span class="ot">&lt;-</span> alpha0 <span class="sc">+</span> <span class="fu">sum</span>(n_in_comps[(k <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>K])</span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>      V[k]   <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1</span>, a_post, b_post)</span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>      omega[k]     <span class="ot">&lt;-</span> V[k] <span class="sc">*</span> stick_length</span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>      stick_length <span class="ot">&lt;-</span> stick_length <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> V[k])</span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>    omega[K] <span class="ot">&lt;-</span> stick_length</span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Update alpha0 (Gamma prior with scale parameterization)</span></span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (estimate_alpha0) {</span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>      alpha0 <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="dv">1</span>, <span class="at">shape =</span> g <span class="sc">+</span> K <span class="sc">+</span> <span class="dv">1</span>,</span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>                       <span class="at">rate  =</span> h <span class="sc">-</span> <span class="fu">sum</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> V[<span class="dv">1</span><span class="sc">:</span>(K <span class="sc">-</span> <span class="dv">1</span>)])))</span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (j <span class="sc">&gt;</span> n_burn) {</span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>      idx              <span class="ot">&lt;-</span> j <span class="sc">-</span> n_burn</span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>      mu_draws[idx, ]     <span class="ot">&lt;-</span> mu</span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>      sigma2_draws[idx, ] <span class="ot">&lt;-</span> sigma2</span>
+<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>      omega_draws[idx, ]  <span class="ot">&lt;-</span> omega</span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>      K_occupied[idx]     <span class="ot">&lt;-</span> <span class="fu">sum</span>(n_in_comps <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (estimate_alpha0) alpha0_draws[idx] <span class="ot">&lt;-</span> alpha0</span>
+<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">mu_draws =</span> mu_draws, <span class="at">sigma2_draws =</span> sigma2_draws,</span>
+<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a>       <span class="at">omega_draws =</span> omega_draws, <span class="at">K_occupied =</span> K_occupied,</span>
+<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a>       <span class="at">alpha0_draws =</span> alpha0_draws)</span>
+<span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>After setting the prior hyperparameters and upper bound of the number of mixtures components, we run the Gibbs sampler for <code>n_burn=1000</code> iterations as burn-in and then another <code>n_iter = 10000</code> for posterior inference.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>P0     <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">mu0 =</span> <span class="dv">20</span>, <span class="at">sigma2_0 =</span> <span class="dv">1</span>, <span class="at">kappa0 =</span> <span class="fl">0.1</span>, <span class="at">nu0 =</span> <span class="dv">3</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>alpha0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>K      <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>n_burn <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>n_iter <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>fit    <span class="ot">&lt;-</span> <span class="fu">gibbs_dpm_normals</span>(velocity, K, n_iter, n_burn, P0, alpha0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A helper function computes the posterior mean density by averaging mixture pdfs over a thinned set of MCMC draws.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>compute_post_mean_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, xGrid, K, plt_iter) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  pdf_mat <span class="ot">&lt;-</span> <span class="fu">sapply</span>(plt_iter, <span class="cf">function</span>(i) {</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rowSums</span>(<span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>K, <span class="cf">function</span>(k)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>      fit<span class="sc">$</span>omega_draws[i, k] <span class="sc">*</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">dnorm</span>(xGrid, fit<span class="sc">$</span>mu_draws[i, k], <span class="fu">sqrt</span>(fit<span class="sc">$</span>sigma2_draws[i, k]))))</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowMeans</span>(pdf_mat)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>plot_K_bar <span class="ot">&lt;-</span> <span class="cf">function</span>(K_occupied) {</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  K_max  <span class="ot">&lt;-</span> <span class="fu">max</span>(K_occupied)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  df_bar <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">k    =</span> <span class="dv">0</span><span class="sc">:</span>K_max,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">freq =</span> <span class="fu">sapply</span>(<span class="dv">0</span><span class="sc">:</span>K_max, <span class="cf">function</span>(k) <span class="fu">mean</span>(K_occupied <span class="sc">==</span> k))</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(df_bar, <span class="fu">aes</span>(<span class="at">x =</span> k, <span class="at">y =</span> freq)) <span class="sc">+</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> colors[<span class="dv">5</span>],</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> colors[<span class="dv">1</span>], <span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Number of components"</span>, <span class="at">y =</span> <span class="st">"density"</span>,</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">"Posterior for number of components"</span>)</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Plot the posterior mean of the fitted density for <span class="math inline">\(\alpha_0=1\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plt_iter     <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, n_iter, <span class="at">by =</span> <span class="dv">10</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>post_mean_pdf <span class="ot">&lt;-</span> <span class="fu">compute_post_mean_pdf</span>(fit, xGrid, K, plt_iter)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>p_data <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> xGrid, <span class="at">y =</span> post_mean_pdf),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y), <span class="at">color =</span> colors[<span class="dv">3</span>], <span class="at">linewidth =</span> <span class="fl">1.5</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">bquote</span>(<span class="fu">paste</span>(<span class="st">"Post. mean density, "</span>, alpha[<span class="dv">0</span>], <span class="st">" = "</span>, .(alpha0))))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_bar()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The posterior for the number of occupied mixture components has most of its mass on 5-10 components, with a mode at seven components:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_K_bar</span>(fit<span class="sc">$</span>K_occupied)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For <span class="math inline">\(\alpha_0 = 10\)</span> we get</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>alpha0  <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>fit10   <span class="ot">&lt;-</span> <span class="fu">gibbs_dpm_normals</span>(velocity, K, n_iter, n_burn, P0, alpha0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pdf10 <span class="ot">&lt;-</span> <span class="fu">compute_post_mean_pdf</span>(fit10, xGrid, K, plt_iter)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>p_post10 <span class="ot">&lt;-</span> p_data <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> xGrid, <span class="at">y =</span> pdf10),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y), <span class="at">color =</span> colors[<span class="dv">3</span>], <span class="at">linewidth =</span> <span class="fl">1.5</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">bquote</span>(<span class="fu">paste</span>(<span class="st">"Post. mean density, "</span>, alpha[<span class="dv">0</span>], <span class="st">" = "</span>, .(alpha0))))</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>p_post10 <span class="sc">+</span> <span class="fu">plot_K_bar</span>(fit10<span class="sc">$</span>K_occupied)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_bar()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For <span class="math inline">\(\alpha_0=100\)</span></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>alpha0  <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>fit100  <span class="ot">&lt;-</span> <span class="fu">gibbs_dpm_normals</span>(velocity, K, n_iter, n_burn, P0, alpha0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pdf100 <span class="ot">&lt;-</span> <span class="fu">compute_post_mean_pdf</span>(fit100, xGrid, K, plt_iter)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>p_post100 <span class="ot">&lt;-</span> p_data <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> xGrid, <span class="at">y =</span> pdf100),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y), <span class="at">color =</span> colors[<span class="dv">3</span>], <span class="at">linewidth =</span> <span class="fl">1.5</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">bquote</span>(<span class="fu">paste</span>(<span class="st">"Post. mean density, "</span>, alpha[<span class="dv">0</span>], <span class="st">" = "</span>, .(alpha0))))</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>p_post100 <span class="sc">+</span> <span class="fu">plot_K_bar</span>(fit100<span class="sc">$</span>K_occupied)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_bar()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>and finally when <span class="math inline">\(\alpha_0\)</span> is estimated using a Gamma(1,1) prior:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fit_est <span class="ot">&lt;-</span> <span class="fu">gibbs_dpm_normals</span>(velocity, K, n_iter, n_burn, P0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pdf_est <span class="ot">&lt;-</span> <span class="fu">compute_post_mean_pdf</span>(fit_est, xGrid, K, plt_iter)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>p_post_est <span class="ot">&lt;-</span> p_data <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> xGrid, <span class="at">y =</span> pdf_est),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y), <span class="at">color =</span> colors[<span class="dv">3</span>], <span class="at">linewidth =</span> <span class="fl">1.5</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"Post. mean density, "</span>, alpha[<span class="dv">0</span>], <span class="st">" ~ Gamma(1,1)"</span>)))</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>p_post_est <span class="sc">+</span> <span class="fu">plot_K_bar</span>(fit_est<span class="sc">$</span>K_occupied)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_bar()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The posterior for <span class="math inline">\(\alpha_0\)</span> is</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">alpha0 =</span> fit_est<span class="sc">$</span>alpha0_draws), <span class="fu">aes</span>(<span class="at">x =</span> alpha0)) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">fill =</span> colors[<span class="dv">7</span>],</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> colors[<span class="dv">3</span>], <span class="at">alpha =</span> <span class="fl">0.7</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>, <span class="at">bins =</span> <span class="dv">50</span>) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(alpha[<span class="dv">0</span>]), <span class="at">y =</span> <span class="st">"density"</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"Posterior for "</span>, alpha[<span class="dv">0</span>])))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="galaxyMixturesR_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-ishwaran2001gibbs" class="csl-entry" role="listitem">
+Ishwaran, H., &amp; James, L. F. (2001). Gibbs sampling methods for stick-breaking priors. <em>Journal of the American Statistical Association</em>, <em>96</em>(453), 161–173.
+</div>
+<div id="ref-villani_bayesbook" class="csl-entry" role="listitem">
+Villani, M. (2026). <em>Bayesian learning - principles and computation</em>. <a href="https://github.com/mattiasvillani/BayesianLearningBook/raw/main/pdf/BayesBook.pdf">https://github.com/mattiasvillani/BayesianLearningBook/raw/main/pdf/BayesBook.pdf</a>
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Postman, M., Huchra, J. P. and Geller, M. J. (1986) Probes of large-scale structures in the Corona Borealis region. <em>Astronomical Journal</em> <strong>92</strong>, 1238–1247.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://doi.org/10.1080/01621459.1990.10474918">Roeder, K. (1990). <em>Density estimation with confidence sets exemplified by superclusters and voids in the galaxies</em>. Journal of the American Statistical Association, 85(411), 617-624</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

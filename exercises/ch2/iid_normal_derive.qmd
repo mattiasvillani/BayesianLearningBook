@@ -5,5 +5,45 @@
 ::: {#q:iid_geo_conj .callout-note icon="false" collapse="true"}
 ## Solution
 
-![](/exercises/larry.png){width="167"}
+By Bayes' theorem, the posterior is proportional to the likelihood times the prior:
+
+$$p(\theta \mid x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \mid \theta)\, p(\theta)$$
+
+As shown in Bayesian Learning book in equation \eqref{eq:likelinormal}, the likelihood is proportional to 
+$$
+p(x_1,\ldots,x_n \mid \theta) \propto \exp\big(-\frac{n}{2\sigma^2}(\bar x - \theta)^2\big).
+$$
+The posterior is therefore proportional to
+$$
+\begin{aligned}
+p(\theta \mid x_1,\ldots,x_n) &\propto \exp\Big(-\frac{n}{2\sigma^2}(\bar x - \theta)^2\Big) \exp\Big(-\frac{1}{2\tau_0^2}(\theta - \mu_0)^2\Big) \\
+&\propto \exp\Big(-\frac{1}{2}\Big(\frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2  \Big) \Big)
+\end{aligned} 
+$$ {#eq:twoquadratic}
+The aim now is to combine the two quadratic expressions in $\theta$ in the exponent into a single quadratic expression in $\theta$ plus a constant term. Using the result in Box~\ref{box:combining_quadratics} with $A = n/\sigma^2$, $B = 1/\tau_0^2$, $a = \bar x$, and $b = \mu_0$, we have
+$$
+\begin{equation}
+\frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2 = D(\theta - d)^2 + f 
+\end{equation}
+$$
+with
+$$
+D = A + B = \frac{n}{\sigma^2} + \frac{1}{\tau_0^2}
+$$
+and 
+$$
+d = \frac{Aa + Bb}{A + B} = \frac{\frac{n}{\sigma^2}\bar x + \frac{1}{\tau_0^2}\mu_0}{\frac{n}{\sigma^2} + \frac{1}{\tau_0^2}} = w \bar x + (1-w)\mu_0.
+$$  
+where the weight $w$ is given by
+$$
+w = \frac{n/\sigma^2}{n/\sigma^2 + 1/\tau_0^2}.
+$$
+Inserting this result into @eq:twoquadratic gives the posterior distribution as
+$$
+\begin{aligned}
+p(\theta \mid x_1,\ldots,x_n) &\propto \exp\Big(-\frac{1}{2}\big(D(\theta - d)^2 + f\Big)\Big) \\
+&\propto \exp\Big(-\frac{D}{2}(\theta - d)^2\Big) \\
+\end{aligned}
+$$
+since $f$ is a constant that does not depend on $\theta$. This shows that the posterior is a normal distribution with mean $d = w \bar x + (1-w)\mu_0$ and precision (inverse variance) $D = \frac{n}{\sigma^2} + \frac{1}{\tau_0^2}$.
 :::

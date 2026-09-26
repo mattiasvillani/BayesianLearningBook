@@ -1,0 +1,552 @@
+---
+title: "Modeling galaxy velocities with a Dirichlet process mixture model"
+author: "Mattias Villani"
+draft: true
+format:
+  html:
+    fig-align: center
+    toc: true
+bibliography: ../notebook.bib
+csl: ../apa.csl
+---
+
+## Introduction
+
+The **galaxy velocity data**[^1] consists of the velocities of 82 galaxies (measured in 1000km/s, after transformation). The scientific question is whether or not the velocities of the galaxies cluster around a few values, which would indicate that the galaxies are part of a few superclusters[^2].
+
+[^1]: Postman, M., Huchra, J. P. and Geller, M. J. (1986) Probes of large-scale structures in the Corona Borealis region. *Astronomical Journal* **92**, 1238–1247.
+
+[^2]: [Roeder, K. (1990). *Density estimation with confidence sets exemplified by superclusters and voids in the galaxies*. Journal of the American Statistical Association, 85(411), 617-624](https://doi.org/10.1080/01621459.1990.10474918)
+
+The analysis here first explores the **Dirichlet process** as a prior directly on the distribution (cdf) of the velocities before moving on to the more interesting **Dirichlet process mixture (DPM) model**. The DP mixture makes it possible to learn about the number of mixture components in the data, i.e. to explore the possibility of superclusters of galaxies.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Code for loading packages and plot settings."
+#| output: false
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy import stats
+import warnings
+warnings.filterwarnings('ignore')
+
+colors = ["#6C8EBF", "#c0a34d", "#780000", "#007878",
+          "#b5c6df", "#eadaaa", "#AE6666", "#4CA0A0", "#bf9d6c"]
+
+plt.rcParams.update({'axes.grid': False, 'figure.dpi': 100, 'font.size': 11})
+np.random.seed(123)
+```
+
+The data are available in the `galaxies` dataset from the `MASS` package in R, also mirrored in the Rdatasets repository. We inspect the data by plotting a histogram and a kernel density estimate using cross-validation to select the optimal bandwidth. At least three clusters are visible in the histogram, while the kernel density estimate suggest up to seven clusters.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Show the code"
+url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+       "master/csv/MASS/galaxies.csv")
+df = pd.read_csv(url)
+velocity = df['dat'].values / 1000
+xlimits  = [5, 40]
+xGrid    = np.linspace(xlimits[0], xlimits[1], 1000)
+n        = len(velocity)
+
+kde = stats.gaussian_kde(velocity, bw_method='silverman')
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.hist(velocity, bins=20, density=True, color=colors[5],
+        edgecolor=colors[1], linewidth=0.5, label='histogram')
+ax.plot(xGrid, kde(xGrid), color=colors[0], linewidth=1.5, label='kde')
+ax.set_xlim(xlimits)
+ax.set_xlabel('Velocity (km/s)')
+ax.set_ylabel('density')
+ax.set_title('Kernel density estimate')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+## Dirichlet process prior for the cdf
+
+We first analyze the cumulative distribution function (cdf) of the velocities using a Dirichlet process prior.
+
+#### Empirical cdf
+
+The empirical cumulative distribution function (cdf) for the data can be computed by
+
+```{python}
+def empirical_cdf(x, xlimits):
+    xs = np.concatenate([[xlimits[0]], np.sort(x), [xlimits[1]]])
+    ps = np.concatenate([[0], np.arange(1, len(x) + 1) / len(x), [1]])
+    return xs, ps
+
+xs, ps = empirical_cdf(velocity, xlimits)
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.step(xs, ps, where='post', color='black', label='Empirical cdf')
+ax.set_xlabel('Velocity (km/s)')
+ax.set_ylabel('CDF')
+ax.set_title('Empirical cdf')
+plt.tight_layout()
+plt.show()
+```
+
+When we later combine the empirical cdf with a Dirichlet process prior to form the posterior distribution it will be convenient to have a proper distribution object for the empirical cdf. We therefore approximate it with a mixture of normals with components with tiny ($10^{-15}$) variances, effectively making it a mixture of Dirac spikes at the data points with equal weights $1/n$. The plot below shows that the approximation is virtually identical to the true empirical cdf.
+
+```{python}
+def cdf_Fn(x_vals):
+    return np.mean(
+        [stats.norm.cdf(x_vals, loc=v, scale=1e-10) for v in velocity], axis=0
+    )
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.step(xs, ps, where='post', color='black', label='Empirical cdf')
+ax.plot(xGrid, cdf_Fn(xGrid), color=colors[1], label='Normal mixture approx')
+ax.set_xlabel('Velocity (km/s)')
+ax.set_ylabel('CDF')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+#### Prior distribution
+
+Let $P$ denote the unknown distribution for the galaxy velocities. We use a Dirichlet process for $P$, denoted by $P \sim \mathrm{DP}(\alpha_0P_0)$. The $P_0$ is the so called **base measure** and is our best prior guess (prior expected value) of $P$. We take $P_0$ to be the $N(30,3^2)$ distribution. The scalar parameter $\alpha_0$ is the prior concentration or **prior precision**, which is inversely related to the variance around $P_0$. We start with low prior concentration $\alpha_0=1$ and later explore the effect of changing $\alpha_0$.
+
+```{python}
+#| output: false
+mu0_dp    = 20.0
+sigma0_dp = 3.0   # P0 = Normal(20, 3)
+alpha0    = 1
+```
+
+At this stage we would like to simulate draws from the DP prior and plot the resulting distribution realizations, to get a feeling for the effect of $\alpha_0$. The so called stick-breaking representation of the Dirichlet process is a constructive characterization that makes it easy to simulate from a DP. The **stick-breaking representation** of the Dirichlet process is an infinite mixture of point masses $\delta_{\theta_k}$ at locations $\theta_k$ with weights $\omega_k$:
+
+$$
+\begin{align}
+  P(\cdot) &= \sum_{k=1}^{\infty}\omega_{k}\delta_{\theta_{k}} \nonumber \\
+  \omega_{k} &= V_{k}\prod_{\ell<k}(1-V_{\ell})  \nonumber \\
+  V_{k} &\overset{\mathrm{iid}}{\sim}\mathrm{Beta}(1,\alpha_0) \nonumber \\
+  \theta_{k} &\overset{\mathrm{iid}}{\sim}P_{0}
+\end{align}
+$$
+
+The function below simulates from the Dirichlet process using the stick-breaking construction. The input `r_P0` is a callable that draws from the base measure $P_0$, and `epsilon` is the remaining stick length when the simulation terminates.
+
+```{python}
+#| output: false
+def sim_dir_process(r_P0, alpha0, epsilon=0.001):
+    stick_left = 1.0
+    theta, omega = [], []
+    while stick_left > epsilon:
+        theta_k    = r_P0()
+        V_k        = np.random.beta(1, alpha0)
+        omega_k    = V_k * stick_left
+        stick_left = stick_left * (1 - V_k)
+        theta.append(theta_k)
+        omega.append(omega_k)
+    theta, omega = np.array(theta), np.array(omega)
+    sort_idx = np.argsort(theta)
+    return theta[sort_idx], omega[sort_idx]
+
+def dp_cdf(theta, omega, x_vals):
+    cum_omega = np.concatenate([[0], np.cumsum(omega)])
+    bin_idx   = np.searchsorted(theta, x_vals, side='left')
+    return cum_omega[bin_idx]
+```
+
+Here are a few draws from the prior for three different choices of $\alpha_0$.
+
+```{python}
+n_draws = 3
+r_P0 = lambda: np.random.normal(mu0_dp, sigma0_dp)
+
+fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+for j, a0 in enumerate([1, 10, 100]):
+    for i in range(n_draws):
+        theta, omega = sim_dir_process(r_P0, a0)
+        cdf_draw = dp_cdf(theta, omega, xGrid)
+        axes[j].plot(xGrid, cdf_draw, color=colors[i], label=f'draw {i+1}')
+    axes[j].set_title(rf'Prior draws for $\alpha_0 = {a0}$')
+    axes[j].set_xlabel('x')
+    axes[j].set_ylabel('CDF')
+    axes[j].legend(fontsize=8)
+plt.tight_layout()
+plt.show()
+```
+
+We can simulate a large number of draws and construct $95\%$ prior pointwise credible intervals for $P$, showing the variation in the prior. Here are the (pointwise) prior credible intervals for $\alpha_0=1$.
+
+```{python}
+n_sim  = 10000
+alpha0 = 1
+prior_draws = np.zeros((len(xGrid), n_sim))
+for i in range(n_sim):
+    theta, omega = sim_dir_process(r_P0, alpha0)
+    prior_draws[:, i] = dp_cdf(theta, omega, xGrid)
+
+prior_q = np.quantile(prior_draws, [0.025, 0.975], axis=1)
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.fill_between(xGrid, prior_q[0], prior_q[1], color=colors[1], alpha=0.2, label='Prior C.I.')
+ax.plot(xGrid, stats.norm.cdf(xGrid, mu0_dp, sigma0_dp), color=colors[1], label=r'$P_0$')
+ax.set_title(rf'$\alpha_0 = {alpha0}$')
+ax.set_xlabel('x')
+ax.set_ylabel('CDF')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+#### Posterior distribution
+
+The posterior distribution for $P$ is also a Dirichlet process
+
+$$
+P \vert x_1,\ldots, x_n \sim \mathrm{DP}(\alpha_nP_n)
+$$where the posterior precision is $\alpha_n = \alpha_0 + n$ and
+
+$$
+P_n = \frac{\alpha_0}{\alpha_n}P_0 + \frac{n}{\alpha_n}F_n
+$$
+
+is a mixture of the prior mean and the empirical cdf. We compute the posterior by combining the two components with weights $\alpha_0/\alpha_n$ and $n/\alpha_n$:
+
+```{python}
+def cdf_Pn(x_vals, a0, n_obs):
+    an = a0 + n_obs
+    return (a0 / an) * stats.norm.cdf(x_vals, mu0_dp, sigma0_dp) + \
+           (n_obs / an) * np.searchsorted(np.sort(velocity), x_vals) / n_obs
+```
+
+We can now plot the prior-to-posterior mapping. Here is the code and plot for $\alpha_0=100$.
+
+```{python}
+n_sim  = 5000
+alpha0 = 100
+
+prior_draws = np.zeros((len(xGrid), n_sim))
+for i in range(n_sim):
+    theta, omega = sim_dir_process(r_P0, alpha0)
+    prior_draws[:, i] = dp_cdf(theta, omega, xGrid)
+prior_q = np.quantile(prior_draws, [0.025, 0.975], axis=1)
+
+alpha_n_val = alpha0 + n
+def r_Pn():
+    if np.random.rand() < alpha0 / alpha_n_val:
+        return np.random.normal(mu0_dp, sigma0_dp)
+    else:
+        return np.random.choice(velocity)
+
+post_draws = np.zeros((len(xGrid), n_sim))
+for i in range(n_sim):
+    theta, omega = sim_dir_process(r_Pn, alpha_n_val)
+    post_draws[:, i] = dp_cdf(theta, omega, xGrid)
+post_q = np.quantile(post_draws, [0.025, 0.975], axis=1)
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.fill_between(xGrid, prior_q[0], prior_q[1], color=colors[1], alpha=0.2, label='Prior C.I.')
+ax.fill_between(xGrid, post_q[0],  post_q[1],  color=colors[2], alpha=0.2, label='Post C.I.')
+ecdf_vals = np.searchsorted(np.sort(velocity), xGrid) / n
+ax.plot(xGrid, ecdf_vals,                          color=colors[0], label=r'$F_n$')
+ax.plot(xGrid, stats.norm.cdf(xGrid, mu0_dp, sigma0_dp), color=colors[1], label=r'$P_0$')
+ax.plot(xGrid, cdf_Pn(xGrid, alpha0, n),           color=colors[2], label=r'$P_n$')
+ax.set_title(rf'$\alpha_0 = {alpha0}$')
+ax.set_xlabel('x')
+ax.set_ylabel('CDF')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+## Dirichlet process mixture
+
+The posterior distribution for $P$ in the above analysis is almost surely discrete. This is an undesirable consequence of the Dirichlet process prior whenever $P$ is thought to be a continuous distribution.
+
+However, the almost sure discreteness of the DP can be turned into a useful feature if the DP is used as mixing measure in a mixture model. A mixture model for the random variable $X$ is of the form
+
+$$
+p(x) = \int p(x \vert \mathbf{\theta})dP(\mathbf{\theta})
+$$
+
+where $p(x\vert\theta)$ is the kernel distribution with parameter vector $\mathbf{\theta}$ and $P(\mathbf{\theta})$ is the mixing distribution. The notation $dP(\mathbf{\theta})$ comes from measure theory and $P(\cdot)$ is a probability measure. This more general version of the integral makes it possible for $P(\cdot)$ be both a discrete and continuous probability distribution, or a mixture of the two types. There are three basic types of mixture distributions:
+
+1.  **Continuous mixtures** where $P(\mathbf{\theta})$ is a continuous distribution with density $p(\theta)$ so we can write the more familiar integral $p(x) = \int p(x \vert \mathbf{\theta})p(\mathbf{\theta})d\mathbf{\theta}$. Example: the student $t$ density is a mixture of Gaussian kernels where the variance parameter of the kernel is mixed with respect to a scaled-inverse-chi-square distribution.
+
+2.  **Finite discrete mixtures**\
+    $$p(x) = \sum_{k=1}^K \omega_k \cdot N(x\vert \mu_k, \sigma_k^2),$$\
+    where the kernel is again Gaussian, but the mixing distribution is a mixture of $K$ point masses for the mean and variance of the kernel. Since the mixing distribution $P(\cdot)$ is discrete here, the integral reduces to a sum.
+
+3.  **Infinite discrete mixtures**\
+    $$p(x) = \sum_{k=1}^\infty \omega_k \cdot N(x\vert \mu_k, \sigma_k^2),$$\
+    where the most popular version is the Dirichlet Process Mixture (DPM) model, which is obtained when $P(\mathbf{\theta})$ is a *random distribution* following a Dirichlet process. The Dirichlet Process Mixture (DPM) model can be written\
+    $$
+    \begin{aligned}
+    x_i \vert \mathbf{\theta}_i &\overset{iid}{\sim} p(x_i \vert \mathbf{\theta}_i) \\  \mathbf{\theta}_i \vert P &\overset{iid}{\sim} P \nonumber \\
+    P &\sim \mathrm{DP}(\alpha_0 P_0)
+    \end{aligned}
+    $$
+
+Since realizations from the DP is almost surely discrete there will usually be several observations sharing the same parameter value $\mathbf{\theta}_j^{\star}$. In the case with a Gaussian kernel, the parameter vector is $\mathbf{\theta} =(\mu,\sigma^2)$ and the base measure $P_0$ is taken to be the conjugate prior:
+
+$$
+\begin{aligned}
+\mu \vert \sigma^2 \sim N\bigg(\mu_0,\frac{\sigma^2}{\kappa_0}\bigg) \\
+\sigma^2 \sim \mathrm{Inv}-\chi^2(\nu_0, \sigma_0^2)
+\end{aligned}
+$$In the Gibbs sampler presented below, we will need to compute the posterior of $\mathbf{\theta} =(\mu,\sigma^2)$ for all the observations currently allocated to a mixture component. This little helper function computes the posterior parameters $\mu_n,\kappa_n,\sigma_n^2$ and $\nu_n$ from a given data vector `x`:
+
+```{python}
+#| output: false
+def post_normal_model(x, mu0, sigma2_0, kappa0, nu0):
+    if len(x) == 0:
+        return mu0, sigma2_0, kappa0, nu0
+    xbar     = x.mean()
+    n        = len(x)
+    kappa_n  = kappa0 + n
+    w        = n / kappa_n
+    mu_n     = w * xbar + (1 - w) * mu0
+    nu_n     = nu0 + n
+    sumsqr   = np.sum((x - xbar)**2)
+    sigma2_n = (nu0 * sigma2_0 + sumsqr +
+                (kappa0 * n / kappa_n) * (xbar - mu0)**2) / nu_n
+    return mu_n, sigma2_n, kappa_n, nu_n
+```
+
+The Scaled inverse Chi-square distribution used as the prior on $\sigma^2$ can be simulated using the chi-squared distribution: if $X \sim \chi^2(\nu)$ then $\nu\tau^2/X \sim \mathrm{Inv}\text{-}\chi^2(\nu, \tau^2)$.
+
+```{python}
+#| output: false
+def r_scaled_inv_chi2(nu, tau2):
+    return nu * tau2 / np.random.chisquare(nu)
+```
+
+The complete blocked Gibbs sampler for the DPM model with Gaussian components is given below. The sampler was developed in [@ishwaran2001gibbs]; see also [@villani_bayesbook]. The prior precision $\alpha_0$ can be fixed, or assigned a $\alpha_0 \sim \mathrm{Gamma}(g,h)$ prior and learned from the data. If `alpha0 = None` then $\alpha_0$ is estimated.
+
+```{python}
+#| output: false
+def gibbs_dpm_normals(x, K, n_iter, n_burn, P0, alpha0=None, g=1, h=1):
+    n  = len(x)
+    mu0, sigma2_0, kappa0, nu0 = P0
+
+    mu     = np.linspace(x.min(), x.max(), K) if K > 1 else np.array([x.mean()])
+    sigma2 = np.full(K, x.var() / K)
+    omega  = np.full(K, 1.0 / K)
+    V      = np.zeros(K)
+    z      = np.zeros(n, dtype=int)
+
+    estimate_alpha0 = alpha0 is None
+    if estimate_alpha0:
+        alpha0       = 1.0
+        alpha0_draws = np.zeros(n_iter)
+    else:
+        alpha0_draws = None
+
+    mu_draws     = np.zeros((n_iter, K))
+    sigma2_draws = np.zeros((n_iter, K))
+    omega_draws  = np.zeros((n_iter, K))
+    K_occupied   = np.zeros(n_iter, dtype=int)
+
+    for j in range(n_burn + n_iter):
+
+        # Update component allocations (log-scale for numerical stability)
+        log_lik = np.column_stack([
+            np.log(omega[k]) + stats.norm.logpdf(x, mu[k], np.sqrt(sigma2[k]))
+            for k in range(K)
+        ])
+        log_lik -= log_lik.max(axis=1, keepdims=True)
+        probs    = np.exp(log_lik)
+        probs   /= probs.sum(axis=1, keepdims=True)
+        z = np.array([np.random.choice(K, p=probs[i]) for i in range(n)])
+
+        n_in_comps = np.bincount(z, minlength=K)
+
+        # Update component parameters
+        for k in range(K):
+            x_k = x[z == k]
+            mu_n, sigma2_n, kappa_n, nu_n = post_normal_model(x_k, mu0, sigma2_0, kappa0, nu0)
+            sigma2[k] = r_scaled_inv_chi2(nu_n, sigma2_n)
+            mu[k]     = np.random.normal(mu_n, np.sqrt(sigma2[k] / kappa_n))
+
+        # Update component weights via stick-breaking
+        stick_length = 1.0
+        for k in range(K - 1):
+            a_post  = 1 + n_in_comps[k]
+            b_post  = alpha0 + n_in_comps[k+1:].sum()
+            V[k]    = np.random.beta(a_post, b_post)
+            omega[k]     = V[k] * stick_length
+            stick_length *= (1 - V[k])
+        omega[K - 1] = stick_length
+
+        # Update alpha0 (Gamma prior, scale parameterization)
+        if estimate_alpha0:
+            alpha0 = np.random.gamma(
+                shape=g + K + 1,
+                scale=1.0 / (h - np.sum(np.log(1 - V[:K - 1])))
+            )
+
+        if j >= n_burn:
+            idx              = j - n_burn
+            mu_draws[idx]     = mu
+            sigma2_draws[idx] = sigma2
+            omega_draws[idx]  = omega
+            K_occupied[idx]   = (n_in_comps > 0).sum()
+            if estimate_alpha0:
+                alpha0_draws[idx] = alpha0
+
+    return mu_draws, sigma2_draws, omega_draws, K_occupied, alpha0_draws
+```
+
+After setting the prior hyperparameters and upper bound of the number of mixtures components, we run the Gibbs sampler for `n_burn=1000` iterations as burn-in and then another `n_iter = 10000` for posterior inference.
+
+```{python}
+#| output: false
+P0     = (20.0, 1.0**2, 0.1, 3.0)   # mu0, sigma2_0, kappa0, nu0
+alpha0 = 1
+K      = 30
+n_burn = 1000
+n_iter = 10000
+mu_draws, sigma2_draws, omega_draws, K_occupied, alpha0_draws = \
+    gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0, alpha0)
+```
+
+A helper function computes the posterior mean density by averaging mixture pdfs over a thinned set of MCMC draws, and a second helper draws the bar chart for the number of occupied components.
+
+```{python}
+#| output: false
+def compute_post_mean_pdf(mu_draws, sigma2_draws, omega_draws, xGrid, K, plt_iter):
+    pdf_mat = np.zeros((len(plt_iter), len(xGrid)))
+    for i, idx in enumerate(plt_iter):
+        pdf_mat[i] = sum(
+            omega_draws[idx, k] *
+            stats.norm.pdf(xGrid, mu_draws[idx, k], np.sqrt(sigma2_draws[idx, k]))
+            for k in range(K)
+        )
+    return pdf_mat.mean(axis=0)
+
+def make_base_ax(ax):
+    ax.hist(velocity, bins=20, density=True, color=colors[5],
+            edgecolor=colors[1], linewidth=0.5, label='histogram')
+    ax.plot(xGrid, kde(xGrid), color=colors[0], linewidth=1.5, label='kde')
+    ax.set_xlim(xlimits)
+    ax.set_xlabel('Velocity (km/s)')
+    ax.set_ylabel('density')
+
+def plot_K_bar(K_occ, ax):
+    K_max = K_occ.max()
+    freq  = [np.mean(K_occ == k) for k in range(K_max + 1)]
+    ax.bar(range(K_max + 1), freq, color=colors[4],
+           edgecolor=colors[0], linewidth=0.5)
+    ax.set_xlabel('Number of components')
+    ax.set_ylabel('density')
+    ax.set_title('Posterior for number of components')
+```
+
+Plot the posterior mean of the fitted density for $\alpha_0=1$.
+
+```{python}
+plt_iter     = range(0, n_iter, 10)
+post_mean_pdf = compute_post_mean_pdf(
+    mu_draws, sigma2_draws, omega_draws, xGrid, K, plt_iter)
+
+fig, ax = plt.subplots(figsize=(6, 4))
+make_base_ax(ax)
+ax.plot(xGrid, post_mean_pdf, color=colors[2], linewidth=2,
+        label=rf'post mean $\alpha_0={alpha0}$')
+ax.legend()
+ax.set_title(rf'Post. mean density, $\alpha_0 = {alpha0}$')
+plt.tight_layout()
+plt.show()
+```
+
+The posterior for the number of occupied mixture components has most of its mass on 5-10 components, with a mode at seven components:
+
+```{python}
+fig, ax = plt.subplots(figsize=(6, 4))
+plot_K_bar(K_occupied, ax)
+plt.tight_layout()
+plt.show()
+```
+
+For $\alpha_0 = 10$ we get
+
+```{python}
+#| output: false
+alpha0 = 10
+mu_draws10, sigma2_draws10, omega_draws10, K_occupied10, _ = \
+    gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0, alpha0)
+```
+
+```{python}
+pdf10 = compute_post_mean_pdf(
+    mu_draws10, sigma2_draws10, omega_draws10, xGrid, K, plt_iter)
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+make_base_ax(ax1)
+ax1.plot(xGrid, pdf10, color=colors[2], linewidth=2,
+         label=rf'post mean $\alpha_0={alpha0}$')
+ax1.legend()
+ax1.set_title(rf'Post. mean density, $\alpha_0 = {alpha0}$')
+plot_K_bar(K_occupied10, ax2)
+plt.tight_layout()
+plt.show()
+```
+
+For $\alpha_0=100$
+
+```{python}
+#| output: false
+alpha0 = 100
+mu_draws100, sigma2_draws100, omega_draws100, K_occupied100, _ = \
+    gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0, alpha0)
+```
+
+```{python}
+pdf100 = compute_post_mean_pdf(
+    mu_draws100, sigma2_draws100, omega_draws100, xGrid, K, plt_iter)
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+make_base_ax(ax1)
+ax1.plot(xGrid, pdf100, color=colors[2], linewidth=2,
+         label=rf'post mean $\alpha_0={alpha0}$')
+ax1.legend()
+ax1.set_title(rf'Post. mean density, $\alpha_0 = {alpha0}$')
+plot_K_bar(K_occupied100, ax2)
+plt.tight_layout()
+plt.show()
+```
+
+and finally when $\alpha_0$ is estimated using a Gamma(1,1) prior:
+
+```{python}
+#| output: false
+mu_draws_est, sigma2_draws_est, omega_draws_est, K_occupied_est, alpha0_draws_est = \
+    gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0)
+```
+
+```{python}
+pdf_est = compute_post_mean_pdf(
+    mu_draws_est, sigma2_draws_est, omega_draws_est, xGrid, K, plt_iter)
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+make_base_ax(ax1)
+ax1.plot(xGrid, pdf_est, color=colors[2], linewidth=2,
+         label=r'post mean $\alpha_0 \sim \mathrm{Gamma}(1,1)$')
+ax1.legend()
+ax1.set_title(r'Post. mean density, $\alpha_0 \sim \mathrm{Gamma}(1,1)$')
+plot_K_bar(K_occupied_est, ax2)
+plt.tight_layout()
+plt.show()
+```
+
+The posterior for $\alpha_0$ is
+
+```{python}
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.hist(alpha0_draws_est, bins=50, density=True, color=colors[6],
+        edgecolor=colors[2], alpha=0.7, linewidth=0.5)
+ax.set_xlabel(r'$\alpha_0$')
+ax.set_ylabel('density')
+ax.set_title(r'Posterior for $\alpha_0$')
+plt.tight_layout()
+plt.show()
+```

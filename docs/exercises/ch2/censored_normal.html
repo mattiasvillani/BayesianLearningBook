@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>censored_normal – Bayesian Learning Book</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -71,14 +77,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-7c9b27349e03c13da50bda67412940ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-e91ff4436fb6c0bf2b7091132cfdd834.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-1e5877d3a227fb8b9a63227290115c5d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-e91ff4436fb6c0bf2b7091132cfdd834.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -108,7 +114,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -375,12 +381,12 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="exercise-2.5">Exercise 2.5</h3>
 <p><strong>a)</strong> Let <span class="math inline">\(x_{1},\ldots,x_{10}\)</span> be a sample with mean <span class="math inline">\(\bar{x}=1.873\)</span>. Assume the model <span class="math inline">\(X_1,\ldots,X_n \overset{\mathrm{iid}}{\sim} N(\theta,1)\)</span>. Use the prior <span class="math inline">\(\theta \sim N(0,5)\)</span>. Note that the second parameter of the normal distribution is a variance, not a standard deviation. Compute the posterior distribution of <span class="math inline">\(\theta\)</span>.</p>
 <div id="q:iid_censored_normal_a" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -397,12 +403,12 @@ Solution
 <p><strong>b)</strong> You now get hold of a second sample <span class="math inline">\(Y_1,\ldots,Y_{10} | \theta \overset{\mathrm{iid}}{\sim} N(\theta ,2)\)</span>, where <span class="math inline">\(\theta\)</span> is the same quantity as in (a) but the measurements have a larger variance. The sample mean in this second sample is <span class="math inline">\(\bar{y}=0.582\)</span>. Compute the posterior distribution of <span class="math inline">\(\theta\)</span> using both samples (the <span class="math inline">\(x\)</span>’s and the <span class="math inline">\(y\)</span>’s) under the assumption that the two samples are independent.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: batch learning.</p>
 <div id="q:iid_censored_normal_b" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -421,12 +427,12 @@ Solution
 <p><strong>c)</strong> You finally obtain a third sample <span class="math inline">\(Z_{1},\ldots,Z_{10} | \theta \overset{\mathrm{iid}}{\sim} N(\theta,3)\)</span>, with mean <span class="math inline">\(\bar{z}=1.221\)</span>. Unfortunately, the measuring device for this latter sample was defective and any measurement above <span class="math inline">\(3\)</span> was recorded as exactly <span class="math inline">\(3\)</span>. There were two such measurements. Give an expression for the unnormalized posterior distribution (likelihood times prior) for <span class="math inline">\(\theta\)</span> based on all three samples (<span class="math inline">\(x,y\)</span> and <span class="math inline">\(z\)</span>). Plot this unnormalized posterior over a grid of <span class="math inline">\(\theta\)</span> values.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: the posterior distribution is not normal anymore when the measurements are censored at <span class="math inline">\(3\)</span>.</p>
 <div id="q:iid_censored_normal_c" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -442,13 +448,13 @@ Solution
       p(z_{1},z_{2}\vert\theta) &amp;=\mathrm{Pr}(z_{1}\geq3\vert\theta)\mathrm{Pr}(z_{2}\geq3\vert\theta) \\
       &amp;=\Big(1-\mathrm{Pr}(z_{1}\leq 3\vert\theta)\Big) \Big(1-\mathrm{Pr}(z_{2}\leq3\vert\theta)\Big) \\
       &amp;=\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]  \\
-      &amp;=\left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}
+      &amp;=\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]^{2}
     \end{align*}\]</span> where <span class="math inline">\(\Phi(\cdot)\)</span> is the CDF of the <span class="math inline">\(\mathrm{N}(0,1)\)</span> distribution. The posterior based on all <span class="math inline">\(30\)</span> data points is now obtained by multiplying this likelihood with the prior at this stage, that is the posterior based on the first <span class="math inline">\(28\)</span> correctly recorded data: <span class="math inline">\(N(1.3271,0.05597)\)</span>. The posterior is therefore proportional to <span class="math display">\[\begin{equation*}
-      \left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}\exp\left[-\frac{1}{2\cdot0.05597}\left(\mu-1.3271\right)^{2}\right].
+      \left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]^{2}\exp\left[-\frac{1}{2\cdot0.05597}\left(\theta-1.3271\right)^{2}\right].
     \end{equation*}\]</span></p>
 <p>The code below plots the prior (which is the posterior based on the <span class="math inline">\(28\)</span> correctly recorded observations), the (normalized) likelihood from the two censored observations and the posterior based on all <span class="math inline">\(30\)</span> data points. Note the form of the likelihood function from the two censored observations: the probability of observing them increases monotonically with <span class="math inline">\(\theta\)</span> since all we know about these observations is that they are larger or equal to <span class="math inline">\(3\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>theta_grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">2.5</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>theta_grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">2.5</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>bin_width <span class="ot">=</span> theta_grid[<span class="dv">2</span>] <span class="sc">-</span> theta_grid[<span class="dv">1</span>]</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>like <span class="ot">=</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">3</span>, theta_grid, <span class="fu">sqrt</span>(<span class="dv">3</span>)))<span class="sc">^</span><span class="dv">2</span> </span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>prior <span class="ot">=</span> <span class="fu">dnorm</span>(theta_grid, <span class="fl">1.3271</span>, <span class="fu">sqrt</span>(<span class="fl">0.05597</span>))</span>
@@ -459,7 +465,7 @@ Solution
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(theta_grid, like, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(theta_grid, post, <span class="at">col =</span> <span class="st">"indianred"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Prior"</span>, <span class="st">"Likelihood (normalized)"</span>, <span class="st">"Posterior"</span>),</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"orange"</span>, <span class="st">"steelblue"</span>, <span class="st">"indianred"</span>), <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"orange"</span>, <span class="st">"steelblue"</span>, <span class="st">"indianred"</span>), <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -540,13 +546,14 @@ Solution
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

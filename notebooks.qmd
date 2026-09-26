@@ -35,7 +35,7 @@ This page contains a set of notebooks in Julia, R and Python for some of the dat
 #### Chapter 8 - Classification and Generalized regression
 
 |  |  |  |  |
-|-----------------|-----------------|-----------------------|-----------------|
+|-----------------|-----------------|---------------------|-----------------|
 | Logistic regression for spam data |  | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/SpamLogisticReg/SpamLogisticReg.Rmd) |  |
 | Logistic regression for Titanic data |  | [![](figs/Rlogo.png){alt="figs/Rlogo.png" width="20" height="16"}](notebooks/TitanicLogistic/TitanicLogistic.qmd) |  |
 
@@ -68,13 +68,13 @@ This page contains a set of notebooks in Julia, R and Python for some of the dat
 #### Chapter 20 - Bayesian nonparametrics
 
 |  |  |  |  |
-|----|----|----|----|
-| Dirichlet process mixture galaxy velocities data | [![Julia](figs/julialogo.svg){width="20"}](#0) |  |  |
+|------------------|------------------|------------------|------------------|
+| Dirichlet process mixture galaxy velocities data | ![Julia](figs/julialogo.svg){width="20"} |  |  |
 
 #### Chapter 21 - Interaction models
 
 #### Chapter 22 - Dynamic models and sequential inference
 
 |  |  |  |  |
-|----------------|------------------------|----------------|----------------|
+|-----------------|----------------------|-----------------|-----------------|
 | Filtering and smoothing of the Nile river data | [![](figs/julialogo.svg){alt="Julia" fig-alt="Gibbs sampling from a multivariate normal - Julia" fig-align="left" width="20"}](notebooks/KalmanFilteringSmoothing/R_KalmanFilteringSmoothing.ipynb) |  |  |

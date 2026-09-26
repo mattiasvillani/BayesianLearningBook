@@ -4,6 +4,7 @@ project:
 
 website:
   title: "Bayesian Learning Book"
+  draft-mode: unlinked
   navbar:
     left:
       - href: index.qmd

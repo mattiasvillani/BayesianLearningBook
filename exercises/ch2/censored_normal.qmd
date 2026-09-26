@@ -55,12 +55,12 @@ We are now ready for the final piece of information: the two censored observatio
       p(z_{1},z_{2}\vert\theta) &=\mathrm{Pr}(z_{1}\geq3\vert\theta)\mathrm{Pr}(z_{2}\geq3\vert\theta) \\
       &=\Big(1-\mathrm{Pr}(z_{1}\leq 3\vert\theta)\Big) \Big(1-\mathrm{Pr}(z_{2}\leq3\vert\theta)\Big) \\
       &=\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]  \\
-      &=\left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}
+      &=\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]^{2}
     \end{align*}
     where $\Phi(\cdot)$ is the CDF of the $\mathrm{N}(0,1)$ distribution.
     The posterior based on all $30$ data points is now obtained by multiplying this likelihood with the prior at this stage, that is the posterior based on the first $28$ correctly recorded data: $N(1.3271,0.05597)$. The posterior is therefore proportional to
     \begin{equation*}
-      \left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}\exp\left[-\frac{1}{2\cdot0.05597}\left(\mu-1.3271\right)^{2}\right].
+      \left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]^{2}\exp\left[-\frac{1}{2\cdot0.05597}\left(\theta-1.3271\right)^{2}\right].
     \end{equation*}
     
 The code below plots the prior (which is the posterior based on the $28$ correctly recorded observations), the (normalized) likelihood from the two censored observations and the posterior based on all $30$ data points. Note the form of the likelihood function from the two censored observations: the probability of observing them increases monotonically with $\theta$ since all we know about these observations is that they are larger or equal to $3$.

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,10 +10,16 @@
 
 <title>Chapter 2 - Single-parameter models: Exercise solutions – Bayesian Learning Book</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -72,14 +78,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-7c9b27349e03c13da50bda67412940ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-e91ff4436fb6c0bf2b7091132cfdd834.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-1e5877d3a227fb8b9a63227290115c5d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-e91ff4436fb6c0bf2b7091132cfdd834.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -109,7 +115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -122,7 +128,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -410,12 +416,12 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="exercise-2.1">Exercise 2.1</h3>
 <p>Let <span class="math inline">\(X_1,\ldots,X_n \vert \theta \overset{\mathrm{iid}}{\sim} \mathrm{Expon}(\theta)\)</span> be iid exponentially distributed data. Show that the Gamma distribution is the conjugate prior for this model.</p>
 <div id="q:iid_exp_conj" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -445,12 +451,12 @@ p(\theta) =  \frac{\beta^\alpha}{\Gamma(\alpha)}\theta^{\alpha-1}e^{-\beta\theta
 <p>The dataset <span class="math inline">\(\texttt{lung}\)</span> in the R package <span class="math inline">\(\texttt{survival}\)</span> contains data on 228 patients with advanced lung cancer. We will here analyze the survival time of the patient in days (<span class="math inline">\(\texttt{time}\)</span>). The variable <span class="math inline">\(\texttt{status}\)</span> is a binary variable with <span class="math inline">\(\texttt{status}=1\)</span> if the survival time of the patient is censored (patient was still alive at the end of the study) and <span class="math inline">\(\texttt{status}=2\)</span> if the survival time was uncensored (patient was dead before the end of the study).</p>
 <p>In this exercise we will only analyze the uncensored patients; Exercise below asks you to analyze all patients. Assume that the survival times <span class="math inline">\(X_1,\ldots,X_n\)</span> of the uncensored patients are iid <span class="math inline">\(\mathrm{Expon}(\theta)\)</span> distributed. Use the conjugate prior <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha=3,\beta=300)\)</span>, which can be shown to imply that the expected survival time <span class="math inline">\(\mathbb{E}(X \vert \theta) = 1/\theta\)</span> for this population is around <span class="math inline">\(200\)</span> days. Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values.</p>
 <div id="q:iid_exp_survival_uncens" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -459,25 +465,25 @@ Solution
 <p>From Exercise 2.1, we know that the posterior distribution is <span class="math display">\[\theta \sim \mathrm{Gamma}(\alpha + n_u, \beta + \sum\nolimits_{u \in \mathcal{U}} x_u),\]</span> where <span class="math inline">\(n_u\)</span> is the number of uncensored observations and <span class="math inline">\(\mathcal{U}\)</span> is the set of observation indices for the uncensored data.</p>
 <p>The following code plots the prior, likelihood (normalized) and posterior over a grid of values for <span class="math inline">\(\theta\)</span>. Note that the data is so much stronger than the prior that the posterior is virtually identical to the likelihood, which is why the normalized likelihood is not visible in the plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># loads data manipulation and visualization packages</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># loads data manipulation and visualization packages</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival) <span class="co"># loads the lung cancer data as `lung`</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"#6C8EBF"</span>, <span class="st">"#c0a34d"</span>, <span class="st">"#780000"</span>,<span class="st">"#007878"</span>,<span class="st">"#B5C6DF"</span>,<span class="st">"#EADAAA"</span>,<span class="st">"#AE6666"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"#6C8EBF"</span>, <span class="st">"#c0a34d"</span>, <span class="st">"#780000"</span>,<span class="st">"#007878"</span>,<span class="st">"#B5C6DF"</span>,<span class="st">"#EADAAA"</span>,<span class="st">"#AE6666"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the data needed for the posterior, filter out censored data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_summary <span class="ot">&lt;-</span> lung <span class="sc">%&gt;%</span> <span class="fu">filter</span>(status <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">sum_x =</span> <span class="fu">sum</span>(time))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the data needed for the posterior, filter out censored data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_summary <span class="ot">&lt;-</span> lung <span class="sc">%&gt;%</span> <span class="fu">filter</span>(status <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">sum_x =</span> <span class="fu">sum</span>(time))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up prior hyperparameters</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up prior hyperparameters</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>alpha_prior <span class="ot">&lt;-</span> <span class="dv">3</span>   <span class="co"># shape parameter</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>beta_prior <span class="ot">&lt;-</span> <span class="dv">300</span>  <span class="co"># rate parameter</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute posterior hyperparameters</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>alpha_post <span class="ot">&lt;-</span> alpha_prior <span class="sc">+</span> data_summary<span class="sc">$</span>n  </span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>beta_post <span class="ot">&lt;-</span> beta_prior <span class="sc">+</span> data_summary<span class="sc">$</span>sum_x   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>beta_post <span class="ot">&lt;-</span> beta_prior <span class="sc">+</span> data_summary<span class="sc">$</span>sum_x   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the prior and posterior densities, and the (normalized) likelihood </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the prior and posterior densities, and the (normalized) likelihood </span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>thetaGrid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.03</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>prior_density <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> alpha_prior, <span class="at">rate =</span> beta_prior)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>likelihood_density <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> data_summary<span class="sc">$</span>n, <span class="at">rate =</span> data_summary<span class="sc">$</span>sum_x)</span>
@@ -500,7 +506,7 @@ Solution
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"prior"</span>, <span class="st">"likelihood"</span>, <span class="st">"posterior"</span>), </span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(colors[<span class="dv">2</span>], colors[<span class="dv">1</span>], colors[<span class="dv">3</span>])) <span class="sc">+</span></span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Survival lung cancer - uncensored patients"</span>, <span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Density"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -518,12 +524,12 @@ Solution
 <h3 class="anchored" data-anchor-id="exercise-2.3">Exercise 2.3</h3>
 <p>Let <span class="math inline">\(X_1,\ldots,X_n \vert \theta \overset{\mathrm{iid}}{\sim} \mathrm{Geom}(\theta)\)</span> be iid from a geometric distribution with parameter <span class="math inline">\(0&lt;\theta&lt;1\)</span>. Show that the Beta distribution is the conjugate prior for this model.</p>
 <div id="q:iid_geo_conj" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -549,12 +555,12 @@ p(\theta\vert x_{1},\ldots,x_n) \propto
 p(x) \propto \theta^2 x \exp (-x\theta)\quad \text{ for } x&gt;0 \text{ and } \theta&gt;0.
 \]</span> Find the conjugate prior for this distribution and derive the posterior distribution from an iid sample <span class="math inline">\(x_1,\ldots,x_n\)</span>.</p>
 <div id="q:iid_gamma2" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -581,12 +587,12 @@ p(\theta|x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \
 <h3 class="anchored" data-anchor-id="exercise-2.5">Exercise 2.5</h3>
 <p><strong>a)</strong> Let <span class="math inline">\(x_{1},\ldots,x_{10}\)</span> be a sample with mean <span class="math inline">\(\bar{x}=1.873\)</span>. Assume the model <span class="math inline">\(X_1,\ldots,X_n \overset{\mathrm{iid}}{\sim} N(\theta,1)\)</span>. Use the prior <span class="math inline">\(\theta \sim N(0,5)\)</span>. Note that the second parameter of the normal distribution is a variance, not a standard deviation. Compute the posterior distribution of <span class="math inline">\(\theta\)</span>.</p>
 <div id="q:iid_censored_normal_a" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -603,12 +609,12 @@ Solution
 <p><strong>b)</strong> You now get hold of a second sample <span class="math inline">\(Y_1,\ldots,Y_{10} | \theta \overset{\mathrm{iid}}{\sim} N(\theta ,2)\)</span>, where <span class="math inline">\(\theta\)</span> is the same quantity as in (a) but the measurements have a larger variance. The sample mean in this second sample is <span class="math inline">\(\bar{y}=0.582\)</span>. Compute the posterior distribution of <span class="math inline">\(\theta\)</span> using both samples (the <span class="math inline">\(x\)</span>’s and the <span class="math inline">\(y\)</span>’s) under the assumption that the two samples are independent.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: batch learning.</p>
 <div id="q:iid_censored_normal_b" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -627,12 +633,12 @@ Solution
 <p><strong>c)</strong> You finally obtain a third sample <span class="math inline">\(Z_{1},\ldots,Z_{10} | \theta \overset{\mathrm{iid}}{\sim} N(\theta,3)\)</span>, with mean <span class="math inline">\(\bar{z}=1.221\)</span>. Unfortunately, the measuring device for this latter sample was defective and any measurement above <span class="math inline">\(3\)</span> was recorded as exactly <span class="math inline">\(3\)</span>. There were two such measurements. Give an expression for the unnormalized posterior distribution (likelihood times prior) for <span class="math inline">\(\theta\)</span> based on all three samples (<span class="math inline">\(x,y\)</span> and <span class="math inline">\(z\)</span>). Plot this unnormalized posterior over a grid of <span class="math inline">\(\theta\)</span> values.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: the posterior distribution is not normal anymore when the measurements are censored at <span class="math inline">\(3\)</span>.</p>
 <div id="q:iid_censored_normal_c" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -648,13 +654,13 @@ Solution
       p(z_{1},z_{2}\vert\theta) &amp;=\mathrm{Pr}(z_{1}\geq3\vert\theta)\mathrm{Pr}(z_{2}\geq3\vert\theta) \\
       &amp;=\Big(1-\mathrm{Pr}(z_{1}\leq 3\vert\theta)\Big) \Big(1-\mathrm{Pr}(z_{2}\leq3\vert\theta)\Big) \\
       &amp;=\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]  \\
-      &amp;=\left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}
+      &amp;=\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]^{2}
     \end{align*}\]</span> where <span class="math inline">\(\Phi(\cdot)\)</span> is the CDF of the <span class="math inline">\(\mathrm{N}(0,1)\)</span> distribution. The posterior based on all <span class="math inline">\(30\)</span> data points is now obtained by multiplying this likelihood with the prior at this stage, that is the posterior based on the first <span class="math inline">\(28\)</span> correctly recorded data: <span class="math inline">\(N(1.3271,0.05597)\)</span>. The posterior is therefore proportional to <span class="math display">\[\begin{equation*}
-      \left[1-\Phi\left(\frac{3-\mu}{\sqrt{3}}\right)\right]^{2}\exp\left[-\frac{1}{2\cdot0.05597}\left(\mu-1.3271\right)^{2}\right].
+      \left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]^{2}\exp\left[-\frac{1}{2\cdot0.05597}\left(\theta-1.3271\right)^{2}\right].
     \end{equation*}\]</span></p>
 <p>The code below plots the prior (which is the posterior based on the <span class="math inline">\(28\)</span> correctly recorded observations), the (normalized) likelihood from the two censored observations and the posterior based on all <span class="math inline">\(30\)</span> data points. Note the form of the likelihood function from the two censored observations: the probability of observing them increases monotonically with <span class="math inline">\(\theta\)</span> since all we know about these observations is that they are larger or equal to <span class="math inline">\(3\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>theta_grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">2.5</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>theta_grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">2.5</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>bin_width <span class="ot">=</span> theta_grid[<span class="dv">2</span>] <span class="sc">-</span> theta_grid[<span class="dv">1</span>]</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>like <span class="ot">=</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">3</span>, theta_grid, <span class="fu">sqrt</span>(<span class="dv">3</span>)))<span class="sc">^</span><span class="dv">2</span> </span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>prior <span class="ot">=</span> <span class="fu">dnorm</span>(theta_grid, <span class="fl">1.3271</span>, <span class="fu">sqrt</span>(<span class="fl">0.05597</span>))</span>
@@ -665,7 +671,7 @@ Solution
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(theta_grid, like, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(theta_grid, post, <span class="at">col =</span> <span class="st">"indianred"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Prior"</span>, <span class="st">"Likelihood (normalized)"</span>, <span class="st">"Posterior"</span>),</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"orange"</span>, <span class="st">"steelblue"</span>, <span class="st">"indianred"</span>), <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"orange"</span>, <span class="st">"steelblue"</span>, <span class="st">"indianred"</span>), <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -681,21 +687,46 @@ Solution
 </section>
 <section id="exercise-2.6" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.6">Exercise 2.6</h3>
-<p>Derive the posterior distribution for the normal model with a normal prior.</p>
+<p>Derive the posterior distribution for the normal model <span class="math inline">\(X_1,\ldots,X_n \overset{\mathrm{iid}}{\sim}N(\theta,\sigma^2)\)</span> with a known variance <span class="math inline">\(\sigma^2\)</span> using a normal prior <span class="math inline">\(\theta \sim N(\mu_0,\tau_0^2)\)</span>.</p>
 <p></p>
 <div id="q:iid_geo_conj" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><img src="../exercises/larry.png" class="img-fluid" width="167"></p>
+<p>By Bayes’ theorem, the posterior is proportional to the likelihood times the prior:</p>
+<p><span class="math display">\[p(\theta \mid x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \mid \theta)\, p(\theta)\]</span></p>
+<p>As shown in Bayesian Learning book in equation <span class="math inline">\(\eqref{eq:likelinormal}\)</span>, the likelihood is proportional to <span class="math display">\[
+p(x_1,\ldots,x_n \mid \theta) \propto \exp\big(-\frac{n}{2\sigma^2}(\bar x - \theta)^2\big).
+\]</span> The posterior is therefore proportional to <span class="math display">\[
+\begin{aligned}
+p(\theta \mid x_1,\ldots,x_n) &amp;\propto \exp\Big(-\frac{n}{2\sigma^2}(\bar x - \theta)^2\Big) \exp\Big(-\frac{1}{2\tau_0^2}(\theta - \mu_0)^2\Big) \\
+&amp;\propto \exp\Big(-\frac{1}{2}\Big(\frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2  \Big) \Big)
+\end{aligned}
+\]</span> {#eq:twoquadratic} The aim now is to combine the two quadratic expressions in <span class="math inline">\(\theta\)</span> in the exponent into a single quadratic expression in <span class="math inline">\(\theta\)</span> plus a constant term. Using the result in Box~ with <span class="math inline">\(A = n/\sigma^2\)</span>, <span class="math inline">\(B = 1/\tau_0^2\)</span>, <span class="math inline">\(a = \bar x\)</span>, and <span class="math inline">\(b = \mu_0\)</span>, we have <span class="math display">\[
+\begin{equation}
+\frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2 = D(\theta - d)^2 + f
+\end{equation}
+\]</span> with <span class="math display">\[
+D = A + B = \frac{n}{\sigma^2} + \frac{1}{\tau_0^2}
+\]</span> and <span class="math display">\[
+d = \frac{Aa + Bb}{A + B} = \frac{\frac{n}{\sigma^2}\bar x + \frac{1}{\tau_0^2}\mu_0}{\frac{n}{\sigma^2} + \frac{1}{\tau_0^2}} = w \bar x + (1-w)\mu_0.
+\]</span><br>
+where the weight <span class="math inline">\(w\)</span> is given by <span class="math display">\[
+w = \frac{n/\sigma^2}{n/\sigma^2 + 1/\tau_0^2}.
+\]</span> Inserting this result into <span class="citation" data-cites="eq:twoquadratic">@eq:twoquadratic</span> gives the posterior distribution as <span class="math display">\[
+\begin{aligned}
+p(\theta \mid x_1,\ldots,x_n) &amp;\propto \exp\Big(-\frac{1}{2}\big(D(\theta - d)^2 + f\Big)\Big) \\
+&amp;\propto \exp\Big(-\frac{D}{2}(\theta - d)^2\Big) \\
+\end{aligned}
+\]</span> since <span class="math inline">\(f\)</span> is a constant that does not depend on <span class="math inline">\(\theta\)</span>. This shows that the posterior is a normal distribution with mean <span class="math inline">\(d = w \bar x + (1-w)\mu_0\)</span> and precision (inverse variance) <span class="math inline">\(D = \frac{n}{\sigma^2} + \frac{1}{\tau_0^2}\)</span>.</p>
 </div>
 </div>
 </div>
@@ -706,12 +737,12 @@ Solution
 <p><strong>a)</strong> Let <span class="math inline">\(X_1,\dots,X_n |\theta \sim \mathrm{Uniform}(\theta-1/2,\theta+1/2)\)</span> for <span class="math inline">\(-\infty &lt; \theta &lt;\infty\)</span>. The estimator <span class="math inline">\(\hat\theta= \bar X\)</span> is unbiased for <span class="math inline">\(\theta\)</span>. Calculate for the sampling variance of <span class="math inline">\(\hat\theta\)</span>.</p>
 <p><span class="math inline">\(\textit{Note}\)</span>: A more efficient estimator is the mid-range <span class="math inline">\(\hat\theta = (X_{\min} + X_{\max})/2\)</span>, but we use the sample mean here for simplicity.</p>
 <div id="q:iid_uniform_a" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -728,12 +759,12 @@ Solution
 <p><strong>b)</strong> Derive the posterior distribution for <span class="math inline">\(\theta\)</span> assuming a uniform prior distribution over the whole real line.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: once you have observed some data, some values for <span class="math inline">\(\theta\)</span> are no longer possible.</p>
 <div id="q:iid_uniform_b" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -750,7 +781,7 @@ p(x_1,\ldots,x_n \vert \theta) = \prod_{i=1}^n p(x_i \vert \theta) = \prod_{i=1}
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>xi <span class="ot">=</span> <span class="fl">2.1</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>xi <span class="ot">=</span> <span class="fl">2.1</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">1</span>))</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding the uniform density for an impossible theta</span></span>
@@ -781,7 +812,7 @@ p(x_1,\ldots,x_n \vert \theta) = \prod_{i=1}^n p(x_i \vert \theta) = \prod_{i=1}
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(theta, <span class="dv">0</span>, <span class="at">pch =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"green"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(theta <span class="sc">-</span> <span class="fl">0.5</span>, theta <span class="sc">+</span> <span class="fl">0.5</span>), <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">col =</span> <span class="st">"green"</span>)</span>
 <span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(theta <span class="sc">-</span> <span class="fl">0.5</span>, theta <span class="sc">-</span> <span class="fl">0.5</span>), <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">col =</span> <span class="st">"green"</span>)</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(theta <span class="sc">+</span> <span class="fl">0.5</span>, theta <span class="sc">+</span> <span class="fl">0.5</span>), <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">col =</span> <span class="st">"green"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(theta <span class="sc">+</span> <span class="fl">0.5</span>, theta <span class="sc">+</span> <span class="fl">0.5</span>), <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">col =</span> <span class="st">"green"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -801,12 +832,12 @@ p(\theta \vert x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \
 </div>
 <p><strong>c)</strong> Assume that you have observed three data observations: <span class="math inline">\(x_1 = 1.1, x_2 = 2.05, x_3 = 1.21\)</span>. What would a frequentist conclude about <span class="math inline">\(\theta\)</span>? What would a Bayesian conclude? Discuss.</p>
 <div id="q:iid_uniform_c" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -814,7 +845,7 @@ Solution
 <div class="callout-body-container callout-body">
 <p>The frequentist with <span class="math inline">\(\bar X\)</span> as the estimator of <span class="math inline">\(\theta\)</span> obtains the estimate <span class="math inline">\(\bar x \approx 1.453\)</span>. The sampling standard deviation is <span class="math inline">\(\mathbb{S}(\bar X) = \sqrt{\frac{1}{12n}} = \sqrt{\frac{1}{3\cdot 12}} \approx 0.1666\)</span>, which is the variability of the sample mean estimator <em>on average</em> over all possible datasets of size <span class="math inline">\(n=3\)</span>. The variability is rather large since we only have three observations, so we can easily obtain a sample with three extreme (all small or all large) observations. Here is a plot of the simulated sampling distribution for <span class="math inline">\(\bar X\)</span> from a sample with three observations:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="dv">1</span>  <span class="co"># any value is ok, it will be the center of the sampling distr.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="dv">1</span>  <span class="co"># any value is ok, it will be the center of the sampling distr.</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>nRep <span class="ot">=</span> <span class="dv">50000</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">3</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>xbar <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, nRep)</span>
@@ -824,7 +855,7 @@ Solution
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(xbar, <span class="dv">50</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, </span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"sampling distribution of the sample mean"</span>, </span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"sample mean"</span>, <span class="at">ylab =</span> <span class="st">"density"</span>, <span class="at">col =</span> <span class="st">"cornflowerblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"sample mean"</span>, <span class="at">ylab =</span> <span class="st">"density"</span>, <span class="at">col =</span> <span class="st">"cornflowerblue"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -840,7 +871,7 @@ Solution
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.10</span>, <span class="fl">2.05</span>, <span class="fl">1.21</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.10</span>, <span class="fl">2.05</span>, <span class="fl">1.21</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> <span class="cn">NA</span>, <span class="at">y =</span> <span class="cn">NA</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>), </span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(theta), <span class="at">ylab =</span> <span class="st">"posterior density"</span>)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>post_low <span class="ot">=</span> <span class="fu">max</span>(x) <span class="sc">-</span><span class="fl">0.5</span></span>
@@ -848,7 +879,7 @@ Solution
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(post_low, post_high), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">"orange"</span>)</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(post_low, post_low), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">"orange"</span>)</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">c</span>(post_high, post_high), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="at">col =</span> <span class="st">"orange"</span>)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -869,21 +900,21 @@ Solution
 <p>Exercise modelled the survival times of uncensored lung cancer patients with an iid exponential model. In this exercise we will extend that analysis to include also the censored patients, using the same prior as in Exercise . Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values. Finally, assess the fit of the exponential model by plotting a histogram of <span class="math inline">\(\texttt{time}\)</span> and overlay the pdf of the exponential model with the parameter <span class="math inline">\(\theta\)</span> estimated with the posterior mode.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: The posterior is no longer tractable due to contributions of the censored patients to the likelihood. For the censored patients we only know that they lived the number of days recorded in the dataset. The likelihood contribution <span class="math inline">\(p(x_c \vert \theta)\)</span> for the <span class="math inline">\(c\)</span>th censored patient with recorded time <span class="math inline">\(x_c\)</span> is therefore <span class="math inline">\(p(X \geq x_c \vert \theta) = e^{-\theta x_c}\)</span>, which follows from the distribution function of the exponential distribution <span class="math inline">\(p(X \leq x \vert \theta) = 1 - e^{-\theta x}\)</span>.</p>
 <div id="q:iid_exp_survival_all" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># loads data manipulation and visualization packages</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># loads data manipulation and visualization packages</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival) <span class="co"># loads the lung cancer data as `lung`</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"#6C8EBF"</span>, <span class="st">"#c0a34d"</span>, <span class="st">"#780000"</span>,<span class="st">"#007878"</span>,<span class="st">"#B5C6DF"</span>,<span class="st">"#EADAAA"</span>,<span class="st">"#AE6666"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"#6C8EBF"</span>, <span class="st">"#c0a34d"</span>, <span class="st">"#780000"</span>,<span class="st">"#007878"</span>,<span class="st">"#B5C6DF"</span>,<span class="st">"#EADAAA"</span>,<span class="st">"#AE6666"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The likelihood for all data, censored and uncensored, is <span class="math display">\[
 \begin{align}
@@ -915,11 +946,11 @@ p(\theta \vert x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\th
 </ul>
 <p>The posterior with all data is more informative and concentrates on smaller <span class="math inline">\(\theta\)</span> values. Since smaller <span class="math inline">\(\theta\)</span> values correspond to longer expected survival times, this is makes sense since the censored patients were still alive at the end of the study.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the data needed for the posterior, grouped by `status`:</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>data_summary <span class="ot">&lt;-</span> lung <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(status) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">sum_x =</span> <span class="fu">sum</span>(time))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the data needed for the posterior, grouped by `status`:</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>data_summary <span class="ot">&lt;-</span> lung <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(status) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">sum_x =</span> <span class="fu">sum</span>(time))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up prior hyperparameters</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up prior hyperparameters</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>alpha_prior <span class="ot">&lt;-</span> <span class="dv">3</span>   <span class="co"># shape parameter</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>beta_prior <span class="ot">&lt;-</span> <span class="dv">300</span>  <span class="co"># rate parameter</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -929,10 +960,10 @@ p(\theta \vert x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\th
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute posterior hyperparameters - all data</span></span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>alpha_post_all <span class="ot">&lt;-</span> alpha_prior <span class="sc">+</span> data_summary<span class="sc">$</span>n[<span class="dv">2</span>] <span class="co"># note: this is still n_u </span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>beta_post_all <span class="ot">&lt;-</span> beta_prior <span class="sc">+</span> <span class="fu">sum</span>(data_summary<span class="sc">$</span>sum_x) <span class="co"># sum over all observations   </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>beta_post_all <span class="ot">&lt;-</span> beta_prior <span class="sc">+</span> <span class="fu">sum</span>(data_summary<span class="sc">$</span>sum_x) <span class="co"># sum over all observations   </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the prior and the two posterior densities </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the prior and the two posterior densities </span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>thetaGrid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.03</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>prior_density <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> alpha_prior, <span class="at">rate =</span> beta_prior)</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>posterior_density_u <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> alpha_post_u, <span class="at">rate =</span> beta_post_u)</span>
@@ -955,7 +986,7 @@ p(\theta \vert x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\th
 <span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"prior"</span>, <span class="st">"posterior_uncensored"</span>, <span class="st">"posterior_all"</span>), </span>
 <span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(colors[<span class="dv">2</span>], colors[<span class="dv">3</span>], colors[<span class="dv">4</span>])) <span class="sc">+</span></span>
 <span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Exercise 2.2"</span>, <span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Density"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -966,7 +997,7 @@ p(\theta \vert x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\th
 </div>
 <p>The code below plots the histogram and the pdf of the exponential model with the parameter <span class="math inline">\(\theta\)</span> set equal to the posterior mode. It is clear that the exponential model with its monotonically decreasing density is not fitting the data well.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>postMode <span class="ot">=</span> df<span class="sc">$</span>thetaGrid[<span class="fu">which.max</span>(df<span class="sc">$</span>posterior_all)]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>postMode <span class="ot">=</span> df<span class="sc">$</span>thetaGrid[<span class="fu">which.max</span>(df<span class="sc">$</span>posterior_all)]</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lung, <span class="fu">aes</span>(time)) <span class="sc">+</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density), <span class="at">fill =</span> <span class="st">"Data"</span>), <span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
@@ -976,7 +1007,7 @@ p(\theta \vert x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\th
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Exercise 2.2c - Exponential model fit to lung cancer survival"</span>, <span class="at">x =</span> <span class="st">"days"</span>, <span class="at">y =</span> <span class="st">"Density"</span>) <span class="sc">+</span> </span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="st">""</span>, <span class="at">values =</span> colors[<span class="dv">5</span>]) <span class="sc">+</span></span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="st">""</span>, <span class="at">values =</span> colors[<span class="dv">3</span>]) <span class="sc">+</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -994,12 +1025,12 @@ p(\theta \vert x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\th
 <h3 class="anchored" data-anchor-id="exercise-2.10">Exercise 2.10</h3>
 <p>Show that the <span class="math inline">\(N(\mu,1)\)</span> distribution belongs to the exponential family.</p>
 <div id="q:normal_in_expfamily" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1019,12 +1050,12 @@ X_1,\ldots,X_n \vert \lambda, k \overset{\mathrm{iid}}{\sim} \mathrm{Weibull}(\l
 <p>Plot the posterior distribution of <span class="math inline">\(\lambda\)</span> conditional on <span class="math inline">\(k=1\)</span>, <span class="math inline">\(k=3/2\)</span> and <span class="math inline">\(k=2\)</span>. For all <span class="math inline">\(k\)</span>, use the prior <span class="math inline">\(\lambda \sim \mathrm{Gamma}(\alpha,\beta)\)</span> with <span class="math inline">\(\alpha=3\)</span> and <span class="math inline">\(\beta=1/50\)</span> (which is a similar prior for <span class="math inline">\(\theta=1/\lambda\)</span> as in Exercise 2.2). Plot the <code>time</code> variable as a histogram and overlay the fitted model for the three different <span class="math inline">\(k\)</span>-values; use the posterior mode for <span class="math inline">\(\theta\)</span> in each model when plotting the fitted model density.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: the posterior distribution for <span class="math inline">\(k\neq 1\)</span> is intractable, so use numerical evaluation of the posterior over a grid of <span class="math inline">\(\lambda\)</span>-values.</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1050,29 +1081,29 @@ p(\lambda^{(j)} \vert x_1,\ldots,x_n) =
 {\sum_{h=1}^J \exp\Big( \log p(x_1,\ldots,x_n \vert \lambda^{(h)}) + \log p(\lambda^{(h)}) \Big) \Delta}
 \]</span> where <span class="math inline">\(\Delta\)</span> is the spacing between the grid points of <span class="math inline">\(\lambda\)</span>-values: <span class="math inline">\(\lambda^{(1)}, \ldots, \lambda^{(J)}\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># loads data manipulation and visualization packages</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># loads data manipulation and visualization packages</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival) <span class="co"># loads the lung cancer data as `lung`</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"#6C8EBF"</span>, <span class="st">"#c0a34d"</span>, <span class="st">"#780000"</span>,<span class="st">"#007878"</span>,<span class="st">"#B5C6DF"</span>,<span class="st">"#EADAAA"</span>,<span class="st">"#AE6666"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"#6C8EBF"</span>, <span class="st">"#c0a34d"</span>, <span class="st">"#780000"</span>,<span class="st">"#007878"</span>,<span class="st">"#B5C6DF"</span>,<span class="st">"#EADAAA"</span>,<span class="st">"#AE6666"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Set up prior hyperparameters</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>alpha_prior <span class="ot">&lt;-</span> <span class="dv">3</span>     <span class="co"># shape parameter</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>beta_prior <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">50</span>   <span class="co"># rate parameter</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>alpha_prior <span class="ot">&lt;-</span> <span class="dv">3</span>     <span class="co"># shape parameter</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>beta_prior <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">50</span>   <span class="co"># rate parameter</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Set up function that computes the likelihood for any <span class="math inline">\(\lambda\)</span> value:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make a function that computes the likelihood</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make a function that computes the likelihood</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>weibull_loglike <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda, x, censored, k){</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  loglik_uncensored <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">dweibull</span>(x[<span class="sc">-</span>censored], <span class="at">shape =</span> k, <span class="at">scale =</span> lambda, </span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  loglik_censored <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">pweibull</span>(x[censored], <span class="at">shape =</span> k, <span class="at">scale =</span> lambda, </span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">lower.tail =</span> <span class="cn">FALSE</span>, <span class="at">log.p =</span> <span class="cn">TRUE</span>))</span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(loglik_uncensored <span class="sc">+</span> loglik_censored)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Set up a function that computes the posterior density over a grid of <span class="math inline">\(\lambda\)</span>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>weibull_posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(lambdaGrid, x, censored, k, alpha_prior, beta_prior){</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>weibull_posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(lambdaGrid, x, censored, k, alpha_prior, beta_prior){</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  Delta <span class="ot">=</span> lambdaGrid[<span class="dv">2</span>] <span class="sc">-</span> lambdaGrid[<span class="dv">1</span>] <span class="co"># Grid step size</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  logPrior <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(lambdaGrid, <span class="at">shape =</span> alpha_prior, <span class="at">rate =</span> beta_prior, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  logLike <span class="ot">&lt;-</span> <span class="fu">sapply</span>(lambdaGrid, weibull_loglike, x, censored, k)</span>
@@ -1082,10 +1113,10 @@ p(\lambda^{(j)} \vert x_1,\ldots,x_n) =
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  logLike <span class="ot">&lt;-</span> logLike <span class="sc">-</span> <span class="fu">max</span>(logLike)</span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  likeNorm <span class="ot">&lt;-</span> <span class="fu">exp</span>(logLike)<span class="sc">/</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(logLike))<span class="sc">*</span>Delta) <span class="co"># normalized likelihood</span></span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">post =</span> post, <span class="at">prior =</span> <span class="fu">exp</span>(logPrior), <span class="at">likeNorm =</span> likeNorm))</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the prior and posterior densities</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the prior and posterior densities</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>lambdaGrid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">200</span>, <span class="dv">800</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute to get the prior</span></span>
@@ -1115,7 +1146,7 @@ p(\lambda^{(j)} \vert x_1,\ldots,x_n) =
 <span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"prior"</span>, <span class="st">"posterior k=1"</span>, <span class="st">"posterior k=1.5"</span>, <span class="st">"posterior k=2"</span>), </span>
 <span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(colors[<span class="dv">2</span>], colors[<span class="dv">1</span>], colors[<span class="dv">3</span>], colors[<span class="dv">4</span>])) <span class="sc">+</span></span>
 <span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Exercise 2.3"</span>, <span class="at">x =</span> <span class="fu">expression</span>(lambda), <span class="at">y =</span> <span class="st">"Density"</span>, <span class="at">color =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Removed 1668 rows containing missing values or values outside the scale range
 (`geom_line()`).</code></pre>
@@ -1130,7 +1161,7 @@ p(\lambda^{(j)} \vert x_1,\ldots,x_n) =
 </div>
 <p>The fit of the three Weibull models are plotted below. The best fit seems to be for <span class="math inline">\(k=3/2\)</span>, but it is still not very good. In a later exercise you will be asked to freely estimate both <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(k\)</span>, and even later to fit a Weibull regression model with covariates.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lung, <span class="fu">aes</span>(time)) <span class="sc">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lung, <span class="fu">aes</span>(time)) <span class="sc">+</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density), <span class="at">fill =</span> <span class="st">"Data"</span>), <span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dweibull, <span class="at">args =</span> <span class="fu">list</span>(<span class="at">shape =</span> <span class="dv">1</span>, <span class="at">scale =</span> postModes[<span class="dv">1</span>]), <span class="at">lwd =</span> <span class="dv">1</span>, </span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Weibull fit k = 1"</span>),</span>
@@ -1144,7 +1175,7 @@ p(\lambda^{(j)} \vert x_1,\ldots,x_n) =
 <span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Weibull model fits"</span>, <span class="at">x =</span> <span class="st">"days"</span>, <span class="at">y =</span> <span class="st">"Density"</span>) <span class="sc">+</span> </span>
 <span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="st">""</span>, <span class="at">values =</span> colors[<span class="dv">6</span>]) <span class="sc">+</span></span>
 <span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="st">""</span>, <span class="at">values =</span> <span class="fu">c</span>(colors[<span class="dv">1</span>], colors[<span class="dv">3</span>], colors[<span class="dv">4</span>])) <span class="sc">+</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1165,12 +1196,12 @@ X_1,\ldots,X_n \overset{iid}{\sim } \mathrm{Uniform}(0,\theta).
 \]</span> Show that the Pareto prior <span class="math inline">\(\theta \sim \mathrm{Pareto}(\alpha, \beta)\)</span>, is conjugate to the Uniform model by deriving the posterior distribution. See Box~ for a definition of the Pareto distribution and properties; note the support of the Pareto distribution.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: Do not forget to include an indicator function when you write up the likelihood function since the <span class="math inline">\(\mathrm{Uniform}(0,\theta)\)</span> distribution is zero for outcomes larger than <span class="math inline">\(\theta\)</span>. Also, the Pareto prior is zero for values of <span class="math inline">\(\theta &lt; \beta\)</span>, so you need another indicator function for that.</p>
 <div id="ex:iid_uniform_conj" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1208,12 +1239,12 @@ p(x) = \frac{1}{\theta} I(x_i \leq \theta).
 <p>The number of patients per day in need of an ambulance to a small regional hospital is random following a Poisson distribution with unknown mean <span class="math inline">\(\theta\)</span>. The hospital has collected data from the past <span class="math inline">\(n=7\)</span> days, resulting in the following daily counts of ambulance trips: <span class="math inline">\(8, 12,  6,  9,  9,  9,  5\)</span>. Before collecting the data, the head of the ambulance drivers believed that the mean number of ambulance trips per day is about <span class="math inline">\(12\)</span> and that a mean of less than <span class="math inline">\(5\)</span> trips is very unlikely, “like winning a lottery with only one winning ticket per hundred tickets”.</p>
 <p><strong>a)</strong> Compute the posterior distribution for <span class="math inline">\(\theta\)</span> using a Gamma prior <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha,\beta)\)</span> with parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> set to reflect the head’s beliefs. Provide a plot of the prior distribution, the normalized likelihood and the posterior distribution.</p>
 <div id="q:iid_poisson_ambulance_a" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1227,16 +1258,16 @@ Solution
 F(5 \vert 12\beta,\beta) = 0.01
 \]</span> In R code, we would like to find the <code>beta</code> this <code>pgamma(5, shape = 12*beta, rate = beta) = 0.01</code> This cannot be (easily) solved analytically. We can either find the <span class="math inline">\(\beta\)</span> that satisfies <code>pgamma(5, shape = 12*beta, rate = beta) = 0.01</code> by trial and error (that is, try different values of <code>beta</code> until you get really close to <code>pgamma(5, shape = 12*beta, rate = beta) = 0.01</code>). A faster way is to use a numerical method (for example Newton’s method) that finds <em>roots</em> to equations <span class="math inline">\(f(x) = 0\)</span> (a so called <em>root-finding algorithm</em>), since our problem can be formulated as finding the <span class="math inline">\(\beta\)</span> that solves the equation <span class="math inline">\(F(5 \vert 12\beta,\beta) - 0.01 = 0\)</span>. The <code>uniroot</code> function in R does the job:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">pgamma</span>(<span class="dv">5</span>, <span class="at">shape =</span> <span class="dv">12</span><span class="sc">*</span>x, <span class="at">rate =</span> x) <span class="sc">-</span> <span class="fl">0.01</span>)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>results <span class="ot">=</span> <span class="fu">uniroot</span>(f, <span class="fu">c</span>(<span class="fl">0.001</span>,<span class="dv">100</span>)) <span class="co"># second argument is a search interval</span></span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>betaPrior <span class="ot">=</span> results<span class="sc">$</span>root </span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>alphaPrior <span class="ot">=</span> <span class="dv">12</span><span class="sc">*</span>betaPrior</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>alphaPrior <span class="ot">=</span> <span class="dv">12</span><span class="sc">*</span>betaPrior</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The value of <span class="math inline">\(\beta\)</span> that satisfies the equation <span class="math inline">\(F(5 \vert 12\beta,\beta) = 0.01\)</span> is <span class="math inline">\(\beta = 0.8472998\)</span>. We can check that this <span class="math inline">\(\beta\)</span> indeed gives the correct prior probability <span class="math inline">\(\mathrm{Pr}(\theta &lt; 5) = 0.01\)</span>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pgamma</span>(<span class="dv">5</span>, <span class="at">shape =</span> alphaPrior, <span class="at">rate =</span> betaPrior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pgamma</span>(<span class="dv">5</span>, <span class="at">shape =</span> alphaPrior, <span class="at">rate =</span> betaPrior)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.01000101</code></pre>
 </div>
@@ -1244,10 +1275,10 @@ F(5 \vert 12\beta,\beta) = 0.01
 <p>Bingo!</p>
 <p>Since <span class="math inline">\(\alpha = 12\beta\)</span>, the complete prior is <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha = 10.168, 0.847)\)</span>. Here is a plot:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>thetaGrid <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">30</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>thetaGrid <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">30</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(thetaGrid, <span class="fu">dgamma</span>(thetaGrid, <span class="at">shape =</span> alphaPrior, <span class="at">rate =</span> betaPrior), </span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">ylab =</span> <span class="st">"prior density"</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(theta), </span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"orange"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1261,7 +1292,7 @@ F(5 \vert 12\beta,\beta) = 0.01
 \theta \vert \boldsymbol{x} \sim \mathrm{Gamma}(\alpha + \sum_{i=1}^n x_i, \beta + n)
 \]</span> So, since <span class="math inline">\(\sum_{i=1}^7 x_i = 58\)</span> we have</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">8</span>,<span class="dv">12</span>,<span class="dv">6</span>,<span class="dv">9</span>,<span class="dv">9</span>,<span class="dv">9</span>,<span class="dv">5</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">8</span>,<span class="dv">12</span>,<span class="dv">6</span>,<span class="dv">9</span>,<span class="dv">9</span>,<span class="dv">9</span>,<span class="dv">5</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">length</span>(x)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>alphaPost <span class="ot">=</span> alphaPrior <span class="sc">+</span> <span class="fu">sum</span>(x)</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>betaPost <span class="ot">=</span> betaPrior <span class="sc">+</span> n</span>
@@ -1282,7 +1313,7 @@ F(5 \vert 12\beta,\beta) = 0.01
 <span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(thetaGrid, like_norm, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
 <span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(thetaGrid, postDens, <span class="at">col =</span> <span class="st">"indianred"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
 <span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Prior"</span>, <span class="st">"Likelihood (normalized)"</span>, <span class="st">"Posterior"</span>),</span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"orange"</span>, <span class="st">"steelblue"</span>, <span class="st">"indianred"</span>), <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"orange"</span>, <span class="st">"steelblue"</span>, <span class="st">"indianred"</span>), <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">bty =</span> <span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1296,12 +1327,12 @@ F(5 \vert 12\beta,\beta) = 0.01
 </div>
 <p><strong>b)</strong> Compare the posterior mean, median and mode, and summarize the posterior distribution by a 95% credible interval.</p>
 <div id="q:iid_poisson_ambulance_b" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1314,18 +1345,18 @@ Solution
 \end{aligned}  
 \]</span> The median is not available in closed from, but R gladly computes it with the <span class="math inline">\(qgamma\)</span> function. Here is posterior mean, median and mode in the ambulance data example:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>postMean <span class="ot">=</span> alphaPost<span class="sc">/</span>betaPost</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>postMean <span class="ot">=</span> alphaPost<span class="sc">/</span>betaPost</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>postMedian <span class="ot">=</span> <span class="fu">qgamma</span>(<span class="fl">0.5</span>, alphaPost, betaPost)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>postMode <span class="ot">=</span> (alphaPost <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>betaPost</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"The posterior mean is "</span>, <span class="fu">round</span>(postMean,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"The posterior mean is "</span>, <span class="fu">round</span>(postMean,<span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>The posterior mean is 8.687</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"The posterior median is "</span>, <span class="fu">round</span>(postMedian,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"The posterior median is "</span>, <span class="fu">round</span>(postMedian,<span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>The posterior median is 8.644</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"The posterior mode is "</span>, <span class="fu">round</span>(postMode,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"The posterior mode is "</span>, <span class="fu">round</span>(postMode,<span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>The posterior mode is 8.559</code></pre>
 </div>
@@ -1333,23 +1364,23 @@ Solution
 <p>Since the posterior distribution is fairly symmetric, these three measures of posterior location are similar.</p>
 <p>Finally, a 95% credible interval can be computed by the following code (there are many ways of doing this). The code assumes for simplicity that the HPD interval is truly an interval, and not several disjoint intervals, as would happen when the posterior is multimodal. We know from the plot above that the posterior is unimodal, so the code is safe to use here.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first, sort the density values from highest to lowest</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first, sort the density values from highest to lowest</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>postDensOrdered <span class="ot">=</span> <span class="fu">sort</span>(postDens, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)  </span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># reorder the thetaValues so that they still match the density values</span></span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>thetaOrdered <span class="ot">=</span> thetaGrid[<span class="fu">order</span>(postDens, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)] </span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>cumsumPostDens <span class="ot">=</span> <span class="fu">cumsum</span>(binWidth<span class="sc">*</span>postDensOrdered) <span class="co"># posterior cdf </span></span>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>inHPD <span class="ot">=</span> <span class="fu">which</span>(cumsumPostDens <span class="sc">&lt;</span> <span class="fl">0.95</span>) <span class="co"># find highest pdf vals up to 95% quota.</span></span>
 <span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>hpd <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">min</span>(thetaOrdered[inHPD]), <span class="fu">max</span>(thetaOrdered[inHPD]))</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="fu">paste0</span>(<span class="st">"The 95% HPD interval for theta is ("</span>, hpd[<span class="dv">1</span>], <span class="st">","</span>, hpd[<span class="dv">2</span>],<span class="st">")"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="fu">paste0</span>(<span class="st">"The 95% HPD interval for theta is ("</span>, hpd[<span class="dv">1</span>], <span class="st">","</span>, hpd[<span class="dv">2</span>],<span class="st">")"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>The 95% HPD interval for theta is (6.68168168168168,10.7657657657658)</code></pre>
 </div>
 </div>
 <p>Plot the HPD as a blue line:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(thetaGrid, postDens, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"indianred"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(thetaGrid, postDens, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"indianred"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, </span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(theta), <span class="at">ylab =</span> <span class="st">"posterior density"</span>) </span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(hpd, <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(hpd, <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1430,13 +1461,14 @@ Solution
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

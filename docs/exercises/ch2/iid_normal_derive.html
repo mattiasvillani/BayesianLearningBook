@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>iid_normal_derive – Bayesian Learning Book</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -36,14 +42,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-7c9b27349e03c13da50bda67412940ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-e91ff4436fb6c0bf2b7091132cfdd834.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-1e5877d3a227fb8b9a63227290115c5d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-e91ff4436fb6c0bf2b7091132cfdd834.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,6 +78,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -309,21 +344,46 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="exercise-2.6" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.6">Exercise 2.6</h3>
-<p>Derive the posterior distribution for the normal model with a normal prior.</p>
+<p>Derive the posterior distribution for the normal model <span class="math inline">\(X_1,\ldots,X_n \overset{\mathrm{iid}}{\sim}N(\theta,\sigma^2)\)</span> with a known variance <span class="math inline">\(\sigma^2\)</span> using a normal prior <span class="math inline">\(\theta \sim N(\mu_0,\tau_0^2)\)</span>.</p>
 <p></p>
 <div id="q:iid_geo_conj" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><img src="../../exercises/larry.png" class="img-fluid" width="167"></p>
+<p>By Bayes’ theorem, the posterior is proportional to the likelihood times the prior:</p>
+<p><span class="math display">\[p(\theta \mid x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \mid \theta)\, p(\theta)\]</span></p>
+<p>As shown in Bayesian Learning book in equation <span class="math inline">\(\eqref{eq:likelinormal}\)</span>, the likelihood is proportional to <span class="math display">\[
+p(x_1,\ldots,x_n \mid \theta) \propto \exp\big(-\frac{n}{2\sigma^2}(\bar x - \theta)^2\big).
+\]</span> The posterior is therefore proportional to <span class="math display">\[
+\begin{aligned}
+p(\theta \mid x_1,\ldots,x_n) &amp;\propto \exp\Big(-\frac{n}{2\sigma^2}(\bar x - \theta)^2\Big) \exp\Big(-\frac{1}{2\tau_0^2}(\theta - \mu_0)^2\Big) \\
+&amp;\propto \exp\Big(-\frac{1}{2}\Big(\frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2  \Big) \Big)
+\end{aligned}
+\]</span> {#eq:twoquadratic} The aim now is to combine the two quadratic expressions in <span class="math inline">\(\theta\)</span> in the exponent into a single quadratic expression in <span class="math inline">\(\theta\)</span> plus a constant term. Using the result in Box~ with <span class="math inline">\(A = n/\sigma^2\)</span>, <span class="math inline">\(B = 1/\tau_0^2\)</span>, <span class="math inline">\(a = \bar x\)</span>, and <span class="math inline">\(b = \mu_0\)</span>, we have <span class="math display">\[
+\begin{equation}
+\frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2 = D(\theta - d)^2 + f
+\end{equation}
+\]</span> with <span class="math display">\[
+D = A + B = \frac{n}{\sigma^2} + \frac{1}{\tau_0^2}
+\]</span> and <span class="math display">\[
+d = \frac{Aa + Bb}{A + B} = \frac{\frac{n}{\sigma^2}\bar x + \frac{1}{\tau_0^2}\mu_0}{\frac{n}{\sigma^2} + \frac{1}{\tau_0^2}} = w \bar x + (1-w)\mu_0.
+\]</span><br>
+where the weight <span class="math inline">\(w\)</span> is given by <span class="math display">\[
+w = \frac{n/\sigma^2}{n/\sigma^2 + 1/\tau_0^2}.
+\]</span> Inserting this result into <span class="citation" data-cites="eq:twoquadratic">@eq:twoquadratic</span> gives the posterior distribution as <span class="math display">\[
+\begin{aligned}
+p(\theta \mid x_1,\ldots,x_n) &amp;\propto \exp\Big(-\frac{1}{2}\big(D(\theta - d)^2 + f\Big)\Big) \\
+&amp;\propto \exp\Big(-\frac{D}{2}(\theta - d)^2\Big) \\
+\end{aligned}
+\]</span> since <span class="math inline">\(f\)</span> is a constant that does not depend on <span class="math inline">\(\theta\)</span>. This shows that the posterior is a normal distribution with mean <span class="math inline">\(d = w \bar x + (1-w)\mu_0\)</span> and precision (inverse variance) <span class="math inline">\(D = \frac{n}{\sigma^2} + \frac{1}{\tau_0^2}\)</span>.</p>
 </div>
 </div>
 </div>
@@ -396,13 +456,14 @@ Solution
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -5,5 +5,14 @@
 ::: {#q:normal_in_expfamily .callout-note icon="false" collapse="true"}
 ## Solution
 
-![](/exercises/larry.png){width="167"}
+The pdf of the $N(\mu,1)$ distribution can be written 
+$$
+\begin{aligned}
+p(x\mid \mu) &= \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{(x-\mu)^2}{2}\right) \\
+&= \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2-2\mu x+\mu^2}{2}\right) \\
+&= \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2}{2}\right)\exp\left(\mu x - \frac{\mu^2}{2}\right) \\
+&= h(x)\exp\left(\eta(\mu)T(x) - A(\mu)\right),  
+\end{aligned}
+$$
+with $h(x) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2}{2}\right)$, $\eta(\mu) = \mu$, $T(x) = x$, and $A(\mu) = \frac{\mu^2}{2}$. The $N(\mu,1)$ distribution is therefore a member of the exponential family.
 :::

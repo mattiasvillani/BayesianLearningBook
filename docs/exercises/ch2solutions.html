@@ -1036,7 +1036,14 @@ p(\theta \vert x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\th
 </div>
 <div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><img src="../exercises/larry.png" class="img-fluid" width="167"></p>
+<p>The pdf of the <span class="math inline">\(N(\mu,1)\)</span> distribution can be written <span class="math display">\[
+\begin{aligned}
+p(x\mid \mu) &amp;= \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{(x-\mu)^2}{2}\right) \\
+&amp;= \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2-2\mu x+\mu^2}{2}\right) \\
+&amp;= \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2}{2}\right)\exp\left(\mu x - \frac{\mu^2}{2}\right) \\
+&amp;= h(x)\exp\left(\eta(\mu)T(x) - A(\mu)\right),  
+\end{aligned}
+\]</span> with <span class="math inline">\(h(x) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{x^2}{2}\right)\)</span>, <span class="math inline">\(\eta(\mu) = \mu\)</span>, <span class="math inline">\(T(x) = x\)</span>, and <span class="math inline">\(A(\mu) = \frac{\mu^2}{2}\)</span>. The <span class="math inline">\(N(\mu,1)\)</span> distribution is therefore a member of the exponential family.</p>
 </div>
 </div>
 </div>

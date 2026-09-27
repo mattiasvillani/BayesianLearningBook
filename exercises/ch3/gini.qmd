@@ -1,10 +1,10 @@
 
 ### Exercise 3.7
 
-{{< include /exercises/book_exercises/multiparam/gini.tex >}}
+{{< include /exercises/resolved-exercises/multiparam/gini.tex >}}
 
 **a)** 
-{{< include /exercises/book_exercises/multiparam/gini_a.tex >}}
+{{< include /exercises/resolved-exercises/multiparam/gini_a.tex >}}
 
 ::: {#q:gini_a .callout-note icon="false" collapse="true"}
 ## Solution
@@ -29,7 +29,7 @@ hist(sqrt(sigma2Draws), 100, col = "steelblue", main = "", freq = FALSE,
 :::
 
 **b)** 
-{{< include /exercises/book_exercises/multiparam/gini_b.tex >}}
+{{< include /exercises/resolved-exercises/multiparam/gini_b.tex >}}
 
 ::: {#q:gini_b .callout-note icon="false" collapse="true"}
 ## Solution
@@ -47,7 +47,7 @@ hist(gini, 100, col = "cornsilk", main = "", freq = FALSE,
 :::
 
 **c)** 
-{{< include /exercises/book_exercises/multiparam/gini_c.tex >}}
+{{< include /exercises/resolved-exercises/multiparam/gini_c.tex >}}
 
 ::: {#q:gini_c .callout-note icon="false" collapse="true"}
 ## Solution

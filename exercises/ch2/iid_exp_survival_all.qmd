@@ -1,7 +1,7 @@
 
 ### Exercise 2.8
 
-{{< include /exercises/book_exercises/oneparam/iid_exp_survival_all.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_exp_survival_all.tex >}}
 
 ::: {#q:iid_exp_survival_all .callout-note icon="false" collapse="true"}
 ## Solution 

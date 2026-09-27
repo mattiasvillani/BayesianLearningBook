@@ -1,7 +1,7 @@
 
 ### Exercise 2.4
 
-{{< include /exercises/book_exercises/oneparam/iid_gamma2.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_gamma2.tex >}}
 
 ::: {#q:iid_gamma2 .callout-note icon="false" collapse="true"}
 ## Solution 

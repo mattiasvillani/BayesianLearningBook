@@ -1,9 +1,9 @@
 ### Exercise 6.2
 
-{{< include /exercises/book_exercises/predictiondecision/iid_expon_pred.tex >}}
+{{< include /exercises/resolved-exercises/predictiondecision/iid_expon_pred.tex >}}
 <br>
 **a)**
-{{< include /exercises/book_exercises/predictiondecision/iid_expon_pred_a.tex >}}
+{{< include /exercises/resolved-exercises/predictiondecision/iid_expon_pred_a.tex >}}
 
 ::: {#q:iid_expon_pred_a .callout-note icon="false" collapse="true"}
 ## Solution
@@ -35,7 +35,7 @@ where it is important to rememeber that we are here interested in the distributi
 :::
 
 **b)**
-{{< include /exercises/book_exercises/predictiondecision/iid_expon_pred_b.tex >}}
+{{< include /exercises/resolved-exercises/predictiondecision/iid_expon_pred_b.tex >}}
 
 ::: {#q:iid_expon_pred_b .callout-note icon="false" collapse="true"}
 ## Solution

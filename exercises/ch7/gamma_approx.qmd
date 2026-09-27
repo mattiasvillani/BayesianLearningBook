@@ -1,7 +1,7 @@
 
 ### Exercise 7.1
 
-{{< include /exercises/book_exercises/normalapprox/gamma_approx.tex >}}
+{{< include /exercises/resolved-exercises/normalapprox/gamma_approx.tex >}}
 
 We start off by loading the data:
 ```{r}
@@ -13,7 +13,7 @@ hist(y, 30, freq = FALSE, col ="cornsilk",
 
 
 **a)** 
-{{< include /exercises/book_exercises/normalapprox/gamma_approx_a.tex >}}
+{{< include /exercises/resolved-exercises/normalapprox/gamma_approx_a.tex >}}
 
 ::: {#q:gamma_approx_a .callout-note icon="false" collapse="true"}
 ## Solution
@@ -59,7 +59,7 @@ postStd = sqrt(diag(postCov))
 :::
 
 **b)** 
-{{< include /exercises/book_exercises/normalapprox/gamma_approx_b.tex >}}
+{{< include /exercises/resolved-exercises/normalapprox/gamma_approx_b.tex >}}
 
 ::: {#q:gamma_approx_b .callout-note icon="false" collapse="true"}
 ## Solution

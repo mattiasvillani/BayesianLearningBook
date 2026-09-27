@@ -1,6 +1,6 @@
 ### Exercise 2.1
 
-{{< include /exercises/book_exercises/oneparam/iid_exp_conj.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_exp_conj.tex >}}
 
 ::: {#q:iid_exp_conj .callout-note icon="false" collapse="true"}
 ## Solution

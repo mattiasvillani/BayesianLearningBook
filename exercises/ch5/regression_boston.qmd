@@ -1,7 +1,7 @@
 
 ### Exercise 5.1
 
-{{< include /exercises/book_exercises/regression/regression_boston.tex >}}
+{{< include /exercises/resolved-exercises/regression/regression_boston.tex >}}
 
 
 ::: {#q:regression_boston .callout-note icon="false" collapse="true"}

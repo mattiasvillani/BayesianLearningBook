@@ -1,8 +1,8 @@
 ### Exercise 2.6
 
-{{< include /exercises/book_exercises/oneparam/iid_normal_derive.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_normal_derive.tex >}}
 
-::: {#q:iid_geo_conj .callout-note icon="false" collapse="true"}
+::: {#q-iid_normal_derive .callout-note icon="false" collapse="true"}
 ## Solution
 
 By Bayes' theorem, the posterior is proportional to the likelihood times the prior:
@@ -19,8 +19,8 @@ $$
 p(\theta \mid x_1,\ldots,x_n) &\propto \exp\Big(-\frac{n}{2\sigma^2}(\bar x - \theta)^2\Big) \exp\Big(-\frac{1}{2\tau_0^2}(\theta - \mu_0)^2\Big) \\
 &\propto \exp\Big(-\frac{1}{2}\Big(\frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2  \Big) \Big)
 \end{aligned} 
-$$ {#eq:twoquadratic}
-The aim now is to combine the two quadratic expressions in $\theta$ in the exponent into a single quadratic expression in $\theta$ plus a constant term. Using the result in Box~\ref{box:combining_quadratics} with $A = n/\sigma^2$, $B = 1/\tau_0^2$, $a = \bar x$, and $b = \mu_0$, we have
+$$ {#eq-twoquadratic}
+The aim now is to combine the two quadratic expressions in $\theta$ in the exponent into a single quadratic expression in $\theta$ plus a constant term. Using the result in Box \ref{box:combining_quadratics} in the Bayesian Learning book with $A = n/\sigma^2$, $B = 1/\tau_0^2$, $a = \bar x$, and $b = \mu_0$, we have
 $$
 \begin{equation}
 \frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2 = D(\theta - d)^2 + f 
@@ -38,7 +38,7 @@ where the weight $w$ is given by
 $$
 w = \frac{n/\sigma^2}{n/\sigma^2 + 1/\tau_0^2}.
 $$
-Inserting this result into @eq:twoquadratic gives the posterior distribution as
+Inserting this result into @eq-twoquadratic gives the posterior distribution as
 $$
 \begin{aligned}
 p(\theta \mid x_1,\ldots,x_n) &\propto \exp\Big(-\frac{1}{2}\big(D(\theta - d)^2 + f\Big)\Big) \\

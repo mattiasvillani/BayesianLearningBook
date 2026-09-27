@@ -449,7 +449,7 @@ p(\theta) =  \frac{\beta^\alpha}{\Gamma(\alpha)}\theta^{\alpha-1}e^{-\beta\theta
 <section id="exercise-2.2" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.2">Exercise 2.2</h3>
 <p>The dataset <span class="math inline">\(\texttt{lung}\)</span> in the R package <span class="math inline">\(\texttt{survival}\)</span> contains data on 228 patients with advanced lung cancer. We will here analyze the survival time of the patient in days (<span class="math inline">\(\texttt{time}\)</span>). The variable <span class="math inline">\(\texttt{status}\)</span> is a binary variable with <span class="math inline">\(\texttt{status}=1\)</span> if the survival time of the patient is censored (patient was still alive at the end of the study) and <span class="math inline">\(\texttt{status}=2\)</span> if the survival time was uncensored (patient was dead before the end of the study).</p>
-<p>In this exercise we will only analyze the uncensored patients; Exercise below asks you to analyze all patients. Assume that the survival times <span class="math inline">\(X_1,\ldots,X_n\)</span> of the uncensored patients are iid <span class="math inline">\(\mathrm{Expon}(\theta)\)</span> distributed. Use the conjugate prior <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha=3,\beta=300)\)</span>, which can be shown to imply that the expected survival time <span class="math inline">\(\mathbb{E}(X \vert \theta) = 1/\theta\)</span> for this population is around <span class="math inline">\(200\)</span> days. Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values.</p>
+<p>In this exercise we will only analyze the uncensored patients; Exercise 2.8 below asks you to analyze all patients. Assume that the survival times <span class="math inline">\(X_1,\ldots,X_n\)</span> of the uncensored patients are iid <span class="math inline">\(\mathrm{Expon}(\theta)\)</span> distributed. Use the conjugate prior <span class="math inline">\(\theta \sim \mathrm{Gamma}(\alpha=3,\beta=300)\)</span>, which can be shown to imply that the expected survival time <span class="math inline">\(\mathbb{E}(X \vert \theta) = 1/\theta\)</span> for this population is around <span class="math inline">\(200\)</span> days. Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values.</p>
 <div id="q:iid_exp_survival_uncens" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -650,7 +650,7 @@ p(\theta|x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \
       \mu_{n}   &amp;=\frac{10}{67}\cdot0.77625+\left(1-\frac{10}{67}\right)\cdot1.4237=1.3271 \\
       \tau_{n}^{2} &amp;=\left(\frac{8}{3}+\frac{1}{5/76}\right)^{-1}=\frac{15}{268}=0.05597.
     \end{align*}\]</span> Note that most of the weight is now given to the prior, i.e.&nbsp;the posterior after the updates in (a) and (b). This is reasonable since the <span class="math inline">\(8\)</span> new observations have a relatively large variance, <span class="math inline">\(\sigma^{2}=3\)</span>, and the prior at this step is based on <span class="math inline">\(20\)</span> previous observations.</p>
-<p>We are now ready for the final piece of information: the two censored observations. We do not know their exact values, but we know that they were equal to or larger than <span class="math inline">\(3\)</span>. This is important information which we cannot ignore. The likelihood from these two observations (let’s call them <span class="math inline">\(z_{1}\)</span> and <span class="math inline">\(z_{2}\)</span>) is <span class="math display">\[\begin{align*}
+<p>We are now ready for the final piece of information: the two censored observations. We do not know their exact values, but we <strong>do</strong> know that they were equal to or larger than <span class="math inline">\(3\)</span>. This is important information which we cannot ignore. The likelihood from these two observations (let’s call them <span class="math inline">\(z_{1}\)</span> and <span class="math inline">\(z_{2}\)</span>) is <span class="math display">\[\begin{align*}
       p(z_{1},z_{2}\vert\theta) &amp;=\mathrm{Pr}(z_{1}\geq3\vert\theta)\mathrm{Pr}(z_{2}\geq3\vert\theta) \\
       &amp;=\Big(1-\mathrm{Pr}(z_{1}\leq 3\vert\theta)\Big) \Big(1-\mathrm{Pr}(z_{2}\leq3\vert\theta)\Big) \\
       &amp;=\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]\left[1-\Phi\left(\frac{3-\theta}{\sqrt{3}}\right)\right]  \\
@@ -688,8 +688,8 @@ p(\theta|x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \
 <section id="exercise-2.6" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.6">Exercise 2.6</h3>
 <p>Derive the posterior distribution for the normal model <span class="math inline">\(X_1,\ldots,X_n \overset{\mathrm{iid}}{\sim}N(\theta,\sigma^2)\)</span> with a known variance <span class="math inline">\(\sigma^2\)</span> using a normal prior <span class="math inline">\(\theta \sim N(\mu_0,\tau_0^2)\)</span>.</p>
-<p></p>
-<div id="q:iid_geo_conj" class="callout callout-style-default callout-note no-icon callout-titled">
+<p><em><span class="math inline">\(\textit{Hint}\)</span>: complete the square.</em></p>
+<div id="q-iid_normal_derive" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -703,14 +703,14 @@ p(\theta|x_1,\ldots,x_n) &amp; \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \
 <div class="callout-body-container callout-body">
 <p>By Bayes’ theorem, the posterior is proportional to the likelihood times the prior:</p>
 <p><span class="math display">\[p(\theta \mid x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \mid \theta)\, p(\theta)\]</span></p>
-<p>As shown in Bayesian Learning book in equation <span class="math inline">\(\eqref{eq:likelinormal}\)</span>, the likelihood is proportional to <span class="math display">\[
+<p>As shown in Bayesian Learning book in equation (2.9), the likelihood is proportional to <span class="math display">\[
 p(x_1,\ldots,x_n \mid \theta) \propto \exp\big(-\frac{n}{2\sigma^2}(\bar x - \theta)^2\big).
-\]</span> The posterior is therefore proportional to <span class="math display">\[
+\]</span> The posterior is therefore proportional to <span id="eq-twoquadratic"><span class="math display">\[
 \begin{aligned}
 p(\theta \mid x_1,\ldots,x_n) &amp;\propto \exp\Big(-\frac{n}{2\sigma^2}(\bar x - \theta)^2\Big) \exp\Big(-\frac{1}{2\tau_0^2}(\theta - \mu_0)^2\Big) \\
 &amp;\propto \exp\Big(-\frac{1}{2}\Big(\frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2  \Big) \Big)
 \end{aligned}
-\]</span> {#eq:twoquadratic} The aim now is to combine the two quadratic expressions in <span class="math inline">\(\theta\)</span> in the exponent into a single quadratic expression in <span class="math inline">\(\theta\)</span> plus a constant term. Using the result in Box~ with <span class="math inline">\(A = n/\sigma^2\)</span>, <span class="math inline">\(B = 1/\tau_0^2\)</span>, <span class="math inline">\(a = \bar x\)</span>, and <span class="math inline">\(b = \mu_0\)</span>, we have <span class="math display">\[
+\tag{1}\]</span></span> The aim now is to combine the two quadratic expressions in <span class="math inline">\(\theta\)</span> in the exponent into a single quadratic expression in <span class="math inline">\(\theta\)</span> plus a constant term. Using the result in Box 2.5 in the Bayesian Learning book with <span class="math inline">\(A = n/\sigma^2\)</span>, <span class="math inline">\(B = 1/\tau_0^2\)</span>, <span class="math inline">\(a = \bar x\)</span>, and <span class="math inline">\(b = \mu_0\)</span>, we have <span class="math display">\[
 \begin{equation}
 \frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2 = D(\theta - d)^2 + f
 \end{equation}
@@ -721,7 +721,7 @@ d = \frac{Aa + Bb}{A + B} = \frac{\frac{n}{\sigma^2}\bar x + \frac{1}{\tau_0^2}\
 \]</span><br>
 where the weight <span class="math inline">\(w\)</span> is given by <span class="math display">\[
 w = \frac{n/\sigma^2}{n/\sigma^2 + 1/\tau_0^2}.
-\]</span> Inserting this result into <span class="citation" data-cites="eq:twoquadratic">@eq:twoquadratic</span> gives the posterior distribution as <span class="math display">\[
+\]</span> Inserting this result into <a href="#eq-twoquadratic" class="quarto-xref">(1)</a> gives the posterior distribution as <span class="math display">\[
 \begin{aligned}
 p(\theta \mid x_1,\ldots,x_n) &amp;\propto \exp\Big(-\frac{1}{2}\big(D(\theta - d)^2 + f\Big)\Big) \\
 &amp;\propto \exp\Big(-\frac{D}{2}(\theta - d)^2\Big) \\
@@ -897,8 +897,8 @@ p(\theta \vert x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \vert \theta)p(\theta) \
 </section>
 <section id="exercise-2.8" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.8">Exercise 2.8</h3>
-<p>Exercise modelled the survival times of uncensored lung cancer patients with an iid exponential model. In this exercise we will extend that analysis to include also the censored patients, using the same prior as in Exercise . Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values. Finally, assess the fit of the exponential model by plotting a histogram of <span class="math inline">\(\texttt{time}\)</span> and overlay the pdf of the exponential model with the parameter <span class="math inline">\(\theta\)</span> estimated with the posterior mode.</p>
-<p><span class="math inline">\(\textit{Hint}\)</span>: The posterior is no longer tractable due to contributions of the censored patients to the likelihood. For the censored patients we only know that they lived the number of days recorded in the dataset. The likelihood contribution <span class="math inline">\(p(x_c \vert \theta)\)</span> for the <span class="math inline">\(c\)</span>th censored patient with recorded time <span class="math inline">\(x_c\)</span> is therefore <span class="math inline">\(p(X \geq x_c \vert \theta) = e^{-\theta x_c}\)</span>, which follows from the distribution function of the exponential distribution <span class="math inline">\(p(X \leq x \vert \theta) = 1 - e^{-\theta x}\)</span>.</p>
+<p>Exercise 2.2 modelled the survival times of uncensored lung cancer patients with an iid exponential model. In this exercise we will extend that analysis to include also the censored patients, using the same prior as in Exercise 2.2. Plot the prior and posterior densities for <span class="math inline">\(\theta\)</span> over a suitable grid of <span class="math inline">\(\theta\)</span>-values. Finally, assess the fit of the exponential model by plotting a histogram of <span class="math inline">\(\texttt{time}\)</span> and overlay the pdf of the exponential model with the parameter <span class="math inline">\(\theta\)</span> estimated with the posterior mode.</p>
+<p><span class="math inline">\(\textit{Hint}\)</span>: The posterior is no longer tractable due to contributions of the censored patients to the likelihood. For the censored patients we only know that they lived <em>at least</em> the number of days recorded in the dataset. The likelihood contribution <span class="math inline">\(p(x_c \vert \theta)\)</span> for the <span class="math inline">\(c\)</span>th censored patient with recorded time <span class="math inline">\(x_c\)</span> is therefore <span class="math inline">\(p(X \geq x_c \vert \theta) = e^{-\theta x_c}\)</span>, which follows from the distribution function of the exponential distribution <span class="math inline">\(p(X \leq x \vert \theta) = 1 - e^{-\theta x}\)</span>.</p>
 <div id="q:iid_exp_survival_all" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1051,7 +1051,7 @@ p(x\mid \mu) &amp;= \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{(x-\mu)^2}{2}\right) \
 </section>
 <section id="exercise-2.10" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.10">Exercise 2.10</h3>
-Exercise modelled the survival times of uncensored lung cancer patients with an iid exponential model. Here we extend that analysis to the more general Weibull distribution: <span class="math display">\[
+Exercise 2.8 modelled the survival times of uncensored lung cancer patients with an iid exponential model. Here we extend that analysis to the more general Weibull distribution: <span class="math display">\[
 X_1,\ldots,X_n \vert \lambda, k \overset{\mathrm{iid}}{\sim} \mathrm{Weibull}(\lambda,k).
 \]</span> The value of <span class="math inline">\(k\)</span> determines how the failure rate changes with time:
 <p>Plot the posterior distribution of <span class="math inline">\(\lambda\)</span> conditional on <span class="math inline">\(k=1\)</span>, <span class="math inline">\(k=3/2\)</span> and <span class="math inline">\(k=2\)</span>. For all <span class="math inline">\(k\)</span>, use the prior <span class="math inline">\(\lambda \sim \mathrm{Gamma}(\alpha,\beta)\)</span> with <span class="math inline">\(\alpha=3\)</span> and <span class="math inline">\(\beta=1/50\)</span> (which is a similar prior for <span class="math inline">\(\theta=1/\lambda\)</span> as in Exercise 2.2). Plot the <code>time</code> variable as a histogram and overlay the fitted model for the three different <span class="math inline">\(k\)</span>-values; use the posterior mode for <span class="math inline">\(\theta\)</span> in each model when plotting the fitted model density.</p>
@@ -1200,7 +1200,7 @@ p(\lambda^{(j)} \vert x_1,\ldots,x_n) =
 <h3 class="anchored" data-anchor-id="exercise-2.11">Exercise 2.11</h3>
 <p>Let <span class="math display">\[
 X_1,\ldots,X_n \overset{iid}{\sim } \mathrm{Uniform}(0,\theta).
-\]</span> Show that the Pareto prior <span class="math inline">\(\theta \sim \mathrm{Pareto}(\alpha, \beta)\)</span>, is conjugate to the Uniform model by deriving the posterior distribution. See Box~ for a definition of the Pareto distribution and properties; note the support of the Pareto distribution.</p>
+\]</span> Show that the Pareto prior <span class="math inline">\(\theta \sim \mathrm{Pareto}(\alpha, \beta)\)</span>, is conjugate to the Uniform model by deriving the posterior distribution. See Box~2.14 for a definition of the Pareto distribution and properties; note the support of the Pareto distribution.</p>
 <p><span class="math inline">\(\textit{Hint}\)</span>: Do not forget to include an indicator function when you write up the likelihood function since the <span class="math inline">\(\mathrm{Uniform}(0,\theta)\)</span> distribution is zero for outcomes larger than <span class="math inline">\(\theta\)</span>. Also, the Pareto prior is zero for values of <span class="math inline">\(\theta &lt; \beta\)</span>, so you need another indicator function for that.</p>
 <div id="ex:iid_uniform_conj" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">

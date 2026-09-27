@@ -1,10 +1,10 @@
 
 ### Exercise 2.12
 
-{{< include /exercises/book_exercises/oneparam/iid_poisson_ambulance.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_poisson_ambulance.tex >}}
 
 **a)** 
-{{< include /exercises/book_exercises/oneparam/iid_poisson_ambulance_a.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_poisson_ambulance_a.tex >}}
 
 ::: {#q:iid_poisson_ambulance_a .callout-note icon="false" collapse="true"}
 ## Solution
@@ -82,7 +82,7 @@ legend("topleft", legend = c("Prior", "Likelihood (normalized)", "Posterior"),
 
 
 **b)** 
-{{< include /exercises/book_exercises/oneparam/iid_poisson_ambulance_b.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_poisson_ambulance_b.tex >}}
 
 ::: {#q:iid_poisson_ambulance_b .callout-note icon="false" collapse="true"}
 ## Solution

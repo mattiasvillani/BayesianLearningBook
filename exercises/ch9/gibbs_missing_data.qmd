@@ -3,10 +3,10 @@
 
 NOT COMPLETE!
 
-{{< include /exercises/book_exercises/gibbs/gibbs_missing_data.tex >}}
+{{< include /exercises/resolved-exercises/gibbs/gibbs_missing_data.tex >}}
 
 **a)** 
-{{< include /exercises/book_exercises/gibbs/gibbs_missing_data_a.tex >}}
+{{< include /exercises/resolved-exercises/gibbs/gibbs_missing_data_a.tex >}}
 
 
 ::: {#q:gibbs_missing_data_a .callout-note icon="false" collapse="true"}
@@ -95,7 +95,7 @@ GibbsMultiNormalMissing <- function(data, theta0, Lambda0, Sigma, nSim){
 :::
 
 **b)** 
-{{< include /exercises/book_exercises/gibbs/gibbs_missing_data_b.tex >}}
+{{< include /exercises/resolved-exercises/gibbs/gibbs_missing_data_b.tex >}}
 
 ::: {#q:gibbs_missing_data_b .callout-note icon="false" collapse="true"}
 ## Solution

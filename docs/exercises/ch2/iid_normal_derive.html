@@ -345,8 +345,8 @@ window.Quarto = {
 <section id="exercise-2.6" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-2.6">Exercise 2.6</h3>
 <p>Derive the posterior distribution for the normal model <span class="math inline">\(X_1,\ldots,X_n \overset{\mathrm{iid}}{\sim}N(\theta,\sigma^2)\)</span> with a known variance <span class="math inline">\(\sigma^2\)</span> using a normal prior <span class="math inline">\(\theta \sim N(\mu_0,\tau_0^2)\)</span>.</p>
-<p></p>
-<div id="q:iid_geo_conj" class="callout callout-style-default callout-note no-icon callout-titled">
+<p><em><span class="math inline">\(\textit{Hint}\)</span>: complete the square.</em></p>
+<div id="q-iid_normal_derive" class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -360,14 +360,14 @@ window.Quarto = {
 <div class="callout-body-container callout-body">
 <p>By Bayes’ theorem, the posterior is proportional to the likelihood times the prior:</p>
 <p><span class="math display">\[p(\theta \mid x_1,\ldots,x_n) \propto p(x_1,\ldots,x_n \mid \theta)\, p(\theta)\]</span></p>
-<p>As shown in Bayesian Learning book in equation <span class="math inline">\(\eqref{eq:likelinormal}\)</span>, the likelihood is proportional to <span class="math display">\[
+<p>As shown in Bayesian Learning book in equation (2.9), the likelihood is proportional to <span class="math display">\[
 p(x_1,\ldots,x_n \mid \theta) \propto \exp\big(-\frac{n}{2\sigma^2}(\bar x - \theta)^2\big).
-\]</span> The posterior is therefore proportional to <span class="math display">\[
+\]</span> The posterior is therefore proportional to <span id="eq-twoquadratic"><span class="math display">\[
 \begin{aligned}
 p(\theta \mid x_1,\ldots,x_n) &amp;\propto \exp\Big(-\frac{n}{2\sigma^2}(\bar x - \theta)^2\Big) \exp\Big(-\frac{1}{2\tau_0^2}(\theta - \mu_0)^2\Big) \\
 &amp;\propto \exp\Big(-\frac{1}{2}\Big(\frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2  \Big) \Big)
 \end{aligned}
-\]</span> {#eq:twoquadratic} The aim now is to combine the two quadratic expressions in <span class="math inline">\(\theta\)</span> in the exponent into a single quadratic expression in <span class="math inline">\(\theta\)</span> plus a constant term. Using the result in Box~ with <span class="math inline">\(A = n/\sigma^2\)</span>, <span class="math inline">\(B = 1/\tau_0^2\)</span>, <span class="math inline">\(a = \bar x\)</span>, and <span class="math inline">\(b = \mu_0\)</span>, we have <span class="math display">\[
+\tag{1}\]</span></span> The aim now is to combine the two quadratic expressions in <span class="math inline">\(\theta\)</span> in the exponent into a single quadratic expression in <span class="math inline">\(\theta\)</span> plus a constant term. Using the result in Box 2.5 in the Bayesian Learning book with <span class="math inline">\(A = n/\sigma^2\)</span>, <span class="math inline">\(B = 1/\tau_0^2\)</span>, <span class="math inline">\(a = \bar x\)</span>, and <span class="math inline">\(b = \mu_0\)</span>, we have <span class="math display">\[
 \begin{equation}
 \frac{n}{\sigma^2}(\bar x - \theta)^2 + \frac{1}{\tau_0^2}(\theta - \mu_0)^2 = D(\theta - d)^2 + f
 \end{equation}
@@ -378,7 +378,7 @@ d = \frac{Aa + Bb}{A + B} = \frac{\frac{n}{\sigma^2}\bar x + \frac{1}{\tau_0^2}\
 \]</span><br>
 where the weight <span class="math inline">\(w\)</span> is given by <span class="math display">\[
 w = \frac{n/\sigma^2}{n/\sigma^2 + 1/\tau_0^2}.
-\]</span> Inserting this result into <span class="citation" data-cites="eq:twoquadratic">@eq:twoquadratic</span> gives the posterior distribution as <span class="math display">\[
+\]</span> Inserting this result into <a href="#eq-twoquadratic" class="quarto-xref">(1)</a> gives the posterior distribution as <span class="math display">\[
 \begin{aligned}
 p(\theta \mid x_1,\ldots,x_n) &amp;\propto \exp\Big(-\frac{1}{2}\big(D(\theta - d)^2 + f\Big)\Big) \\
 &amp;\propto \exp\Big(-\frac{D}{2}(\theta - d)^2\Big) \\

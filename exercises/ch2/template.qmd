@@ -1,6 +1,6 @@
 ### Exercise 3.1
 
-{{< include /exercises/book_exercises/multiparam/iid_normal_mean_known.tex >}}
+{{< include /exercises/resolved-exercises/multiparam/iid_normal_mean_known.tex >}}
 
 ::: {#q:iid_normal_mean_known .callout-note icon="false" collapse="true"}
 ## Solution

@@ -1,7 +1,7 @@
 
 ### Exercise 2.2
 
-{{< include /exercises/book_exercises/oneparam/iid_exp_survival_uncens.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_exp_survival_uncens.tex >}}
 
 ::: {#q:iid_exp_survival_uncens .callout-note icon="false" collapse="true"}
 ## Solution

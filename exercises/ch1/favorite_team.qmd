@@ -1,6 +1,6 @@
 ## Exercise 1.2
 
-{{< include /exercises/book_exercises/bayesics/favorite_team.tex >}}
+{{< include /exercises/resolved-exercises/bayesics/favorite_team.tex >}}
 
 ::: {#q:favorite_team .callout-note icon="false" collapse="true"}
 ## Solution

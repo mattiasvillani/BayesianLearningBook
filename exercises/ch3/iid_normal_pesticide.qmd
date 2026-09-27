@@ -1,6 +1,6 @@
 ### Exercise 3.1
 
-{{< include /exercises/book_exercises/multiparam/iid_normal_pesticide.tex >}}
+{{< include /exercises/resolved-exercises/multiparam/iid_normal_pesticide.tex >}}
 
 ::: {#q:iid_normal_pesticide .callout-note icon="false" collapse="true"}
 ## Solution
@@ -52,7 +52,7 @@ $$
 $$
 The marginal posterior for $\theta$ is 
 $$
-\theta \vert \boldsymbol{x} \sim t\Big(\mu_n,\frac{\sigma_n^2}{\kappa_n},\nu_n\Big) = t\Big(`r nun`,\frac{`r round(sigman2, 3)`}{`r kappan`},`r nun`\Big) 
+\theta \vert \boldsymbol{x} \sim t\Big(\mu_n,\frac{\sigma_n^2}{\kappa_n},\nu_n\Big) = t\Big(`r round(mun, 3)`,\frac{`r round(sigman2, 3)`}{`r kappan`},`r nun`\Big) 
 $$
 Plotting the marginal posterior of $\theta$:
 ```{r}

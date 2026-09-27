@@ -1,6 +1,6 @@
 ## Exercise 1.1
 
-{{< include /exercises/book_exercises/bayesics/plagiarism.tex >}}
+{{< include /exercises/resolved-exercises/bayesics/plagiarism.tex >}}
 
 
 ::: {#prob:expon_post .callout-note icon="false" collapse="true"}

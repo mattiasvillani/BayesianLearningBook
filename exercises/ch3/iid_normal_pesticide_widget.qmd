@@ -1,0 +1,3 @@
+### Exercise 3.2
+
+{{< include /exercises/resolved-exercises/multiparam/iid_normal_pesticide_widget.tex >}}

@@ -18,6 +18,10 @@ Click on the arrow to see a solution.
 
 ---
 
+{{< include ch3/iid_normal_pesticide_widget.qmd >}}
+
+---
+
 {{< include ch3/iid_normal_mean_known.qmd >}}
 
 ---

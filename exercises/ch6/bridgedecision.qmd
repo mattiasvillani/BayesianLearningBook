@@ -1,9 +1,9 @@
 ### Exercise 6.3
 
-{{< include /exercises/book_exercises/predictiondecision/bridgedecision.tex >}}
+{{< include /exercises/resolved-exercises/predictiondecision/bridgedecision.tex >}}
 
 **a)**
-{{< include /exercises/book_exercises/predictiondecision/bridgedecision_a.tex >}}
+{{< include /exercises/resolved-exercises/predictiondecision/bridgedecision_a.tex >}}
 
 
 ::: {#q:bridgedecision_a .callout-note icon="false" collapse="true"}
@@ -32,7 +32,7 @@ hist(predDraws, xlim = c(150,250),
 :::
 
 **b)**
-{{< include /exercises/book_exercises/predictiondecision/bridgedecision_b.tex >}}
+{{< include /exercises/resolved-exercises/predictiondecision/bridgedecision_b.tex >}}
 
 ::: {#q:bridgedecision_b .callout-note icon="false" collapse="true"}
 ## Solution
@@ -57,7 +57,7 @@ hist(maxWeightYear, , xlim = c(150,250), xlab = "Max weight over a full year day
 :::
 
 **c)**
-{{< include /exercises/book_exercises/predictiondecision/bridgedecision_c.tex >}}
+{{< include /exercises/resolved-exercises/predictiondecision/bridgedecision_c.tex >}}
 
 
 ::: {#q:bridgedecision_c .callout-note icon="false" collapse="true"}

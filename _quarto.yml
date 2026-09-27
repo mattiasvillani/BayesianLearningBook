@@ -1,6 +1,7 @@
 project:
   type: website
   output-dir: docs
+  pre-render: make -s resolve
 
 website:
   title: "Bayesian Learning Book"
@@ -33,4 +34,7 @@ format:
 filters:
   - ref2crossref.lua
   - texttt.lua
+  - rawtex.lua
+  - quarto
+  - eqref.lua
 

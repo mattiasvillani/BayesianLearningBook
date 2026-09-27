@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>iid_normal_pesticide – Bayesian Learning Book</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -71,14 +77,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-7c9b27349e03c13da50bda67412940ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-865814eb785c8900efc8f95d7965f745.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-e91ff4436fb6c0bf2b7091132cfdd834.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-1e5877d3a227fb8b9a63227290115c5d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-e91ff4436fb6c0bf2b7091132cfdd834.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -108,7 +114,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -121,7 +127,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -374,14 +380,14 @@ window.Quarto = {
 <section id="exercise-3.1" class="level3">
 <h3 class="anchored" data-anchor-id="exercise-3.1">Exercise 3.1</h3>
 <p>A dataset contains observations on measurements of pesticide for <span class="math inline">\(n=24\)</span> pike fish in a lake in southern Italy. The sample mean pesticide level is <span class="math inline">\(\bar{x} = 12.5\)</span> with a sample standard deviation of <span class="math inline">\(s=3.1\)</span>. Assume that the pesticide levels <span class="math inline">\(X_1,\ldots,X_n|\theta,\sigma^2 \sim \mathrm{N}(\theta,\sigma^2)\)</span> are independent and identically distributed normal random variables with unknown mean <span class="math inline">\(\theta\)</span> and unknown variance <span class="math inline">\(\sigma^2\)</span>.</p>
-<p>Compute the joint posterior distribution for <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\sigma^2\)</span> using a conjugate prior distribution. Use a prior mean for <span class="math inline">\(\theta\)</span> of <span class="math inline">\(8\)</span> and an (imaginary) prior sample size of <span class="math inline">\(5\)</span>. Use <span class="math inline">\(\sigma_0^2 = 1^2\)</span> and <span class="math inline">\(\nu_0 = 3\)</span> degrees of freedom in your prior for <span class="math inline">\(\sigma^2\)</span>. Plot both the marginal posterior distributions for <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>Compute the joint posterior distribution for <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\sigma^2\)</span> using a conjugate prior distribution. Use a prior mean for <span class="math inline">\(\theta\)</span> of <span class="math inline">\(8\)</span> and an (imaginary) prior sample size of <span class="math inline">\(5\)</span>. Use <span class="math inline">\(\sigma_0^2 = 1^2\)</span> and <span class="math inline">\(\nu_0 = 3\)</span> degrees of freedom in your prior for <span class="math inline">\(\sigma^2\)</span>. Plot the marginal posterior distribution of <span class="math inline">\(\theta\)</span>.</p>
 <div id="q:iid_normal_pesticide" class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution
+<span class="screen-reader-only">Note</span>Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -402,7 +408,7 @@ w &amp;= \frac{n}{\kappa_0+n} \\
 \end{aligned}
 \]</span> We have</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data </span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">24</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>xBar <span class="ot">=</span> <span class="fl">12.5</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>s2 <span class="ot">=</span> <span class="fl">3.1</span><span class="sc">^</span><span class="dv">2</span></span>
@@ -419,7 +425,7 @@ w &amp;= \frac{n}{\kappa_0+n} \\
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>kappan <span class="ot">=</span> kappa0 <span class="sc">+</span> n</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>nun <span class="ot">=</span> nu0 <span class="sc">+</span> n</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>sigman2 <span class="ot">=</span> (nu0<span class="sc">*</span>sigma02 <span class="sc">+</span> (n<span class="dv">-1</span>)<span class="sc">*</span>s2  <span class="sc">+</span> </span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>             (kappa0<span class="sc">*</span>n<span class="sc">/</span>(kappa0 <span class="sc">+</span> n))<span class="sc">*</span>(xBar <span class="sc">-</span> mu0)<span class="sc">^</span><span class="dv">2</span> )<span class="sc">/</span>nun</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>             (kappa0<span class="sc">*</span>n<span class="sc">/</span>(kappa0 <span class="sc">+</span> n))<span class="sc">*</span>(xBar <span class="sc">-</span> mu0)<span class="sc">^</span><span class="dv">2</span> )<span class="sc">/</span>nun</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>So the joint posterior is <span class="math display">\[
 \begin{aligned}
@@ -427,17 +433,17 @@ w &amp;= \frac{n}{\kappa_0+n} \\
 \sigma^2 | \boldsymbol{x} &amp;\sim \mathrm{Inv-}\chi^2(27,11.401)
 \end{aligned}
 \]</span> The marginal posterior for <span class="math inline">\(\theta\)</span> is <span class="math display">\[
-\theta \vert \boldsymbol{x} \sim t\Big(\mu_n,\frac{\sigma_n^2}{\kappa_n},\nu_n\Big) = t\Big(27,\frac{11.401}{29},27\Big)
+\theta \vert \boldsymbol{x} \sim t\Big(\mu_n,\frac{\sigma_n^2}{\kappa_n},\nu_n\Big) = t\Big(11.724,\frac{11.401}{29},27\Big)
 \]</span> Plotting the marginal posterior of <span class="math inline">\(\theta\)</span>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>thetaGrid <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">7</span>, <span class="dv">18</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>thetaGrid <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">7</span>, <span class="dv">18</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sigma2Grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="dv">30</span>, <span class="at">length =</span> <span class="dv">1000</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>dtdist <span class="ot">&lt;-</span> <span class="cf">function</span>(x, mu, sigma2, nu){</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>((<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(sigma2))<span class="sc">*</span><span class="fu">dt</span>(<span class="at">x =</span> (x <span class="sc">-</span> mu)<span class="sc">/</span><span class="fu">sqrt</span>(sigma2), <span class="at">df =</span> nu))</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(thetaGrid, <span class="fu">dtdist</span>(thetaGrid, mun, sigman2<span class="sc">/</span>kappan, nun), <span class="at">type =</span> <span class="st">"l"</span>, </span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(theta), <span class="at">ylab =</span> <span class="st">"posterior density"</span>, </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"indianred"</span>, <span class="at">main =</span> <span class="fu">expression</span>(theta))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"indianred"</span>, <span class="at">main =</span> <span class="fu">expression</span>(theta))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -518,13 +524,14 @@ w &amp;= \frac{n}{\kappa_0+n} \\
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

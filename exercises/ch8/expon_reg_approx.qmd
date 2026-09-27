@@ -1,7 +1,7 @@
 
 ### Exercise 8.1
 
-{{< include /exercises/book_exercises/classification/expon_reg_approx.tex >}}
+{{< include /exercises/resolved-exercises/classification/expon_reg_approx.tex >}}
 
 Loading the data and mvtnorm package
 ```{r}
@@ -14,7 +14,7 @@ hist(y, 30, freq = FALSE, main = "The running time data", xlab = "running time")
 
 
 **a)** 
-{{< include /exercises/book_exercises/classification/expon_reg_approx_a.tex >}}
+{{< include /exercises/resolved-exercises/classification/expon_reg_approx_a.tex >}}
 
 
 ::: {#q:expon_reg_approx_a .callout-note icon="false" collapse="true"}
@@ -57,7 +57,7 @@ hist(betaDraws[,j], 30, freq = FALSE, main = varNames[j],
 :::
 
 **b)** 
-{{< include /exercises/book_exercises/classification/expon_reg_approx_b.tex >}}
+{{< include /exercises/resolved-exercises/classification/expon_reg_approx_b.tex >}}
 
 ::: {#q:expon_reg_approx_b .callout-note icon="false" collapse="true"}
 ## Solution

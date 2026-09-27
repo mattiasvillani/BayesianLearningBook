@@ -1,6 +1,6 @@
 ### Exercise 2.11
 
-{{< include /exercises/book_exercises/oneparam/iid_uniform_conj.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_uniform_conj.tex >}}
 
 ::: {#ex:iid_uniform_conj .callout-note icon="false" collapse="true"}
 ## Solution

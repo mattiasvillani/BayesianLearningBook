@@ -1,6 +1,6 @@
 ### Exercise 10.1 
 
-{{< include /exercises/book_exercises/mcmc/survival_weibull_stan.tex >}}
+{{< include /exercises/resolved-exercises/mcmc/survival_weibull_stan.tex >}}
   
 ::: {.callout-note icon="false" collapse="true"}
 ## Solution

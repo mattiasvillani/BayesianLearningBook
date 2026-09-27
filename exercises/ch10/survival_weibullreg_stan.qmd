@@ -1,7 +1,7 @@
 
 ### Exercise 10.2 
 
-{{< include /exercises/book_exercises/mcmc/survival_weibullreg_stan.tex >}}
+{{< include /exercises/resolved-exercises/mcmc/survival_weibullreg_stan.tex >}}
   
 ::: {.callout-note icon="false" collapse="true"}
 ## Solution

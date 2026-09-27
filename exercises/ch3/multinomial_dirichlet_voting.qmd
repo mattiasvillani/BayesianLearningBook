@@ -1,9 +1,9 @@
 ### Exercise 3.6
 
-{{< include /exercises/book_exercises/multiparam/multinomial_dirichlet_voting.tex >}}
+{{< include /exercises/resolved-exercises/multiparam/multinomial_dirichlet_voting.tex >}}
 
 **a)** 
-{{< include /exercises/book_exercises/multiparam/multinomial_dirichlet_voting_a.tex >}}
+{{< include /exercises/resolved-exercises/multiparam/multinomial_dirichlet_voting_a.tex >}}
 
 ::: {#q:iid_normal_mean_known_a .callout-note icon="false" collapse="true"}
 ## Solution
@@ -27,7 +27,7 @@ $$
 :::
 
 **b)** 
-{{< include /exercises/book_exercises/multiparam/multinomial_dirichlet_voting_b.tex >}}
+{{< include /exercises/resolved-exercises/multiparam/multinomial_dirichlet_voting_b.tex >}}
 
 ::: {#q:iid_normal_mean_known_b .callout-note icon="false" collapse="true"}
 ## Solution
@@ -52,7 +52,7 @@ plot(thetaGrid, dbeta(thetaGrid, alphaPost[5], sum(alphaPost) - alphaPost[5]),
 :::
 
 **c)** 
-{{< include /exercises/book_exercises/multiparam/multinomial_dirichlet_voting_c.tex >}}
+{{< include /exercises/resolved-exercises/multiparam/multinomial_dirichlet_voting_c.tex >}}
 
 ::: {#q:iid_normal_mean_known_c .callout-note icon="false" collapse="true"}
 ## Solution

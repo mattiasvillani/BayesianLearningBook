@@ -1,7 +1,7 @@
 ### Exercise 2.7
 
 **a)** 
-{{< include /exercises/book_exercises/oneparam/iid_uniform_a.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_uniform_a.tex >}}
 
 ::: {#q:iid_uniform_a .callout-note icon="false" collapse="true"}
 ## Solution
@@ -16,7 +16,7 @@ $$
 :::
 
 **b)** 
-{{< include /exercises/book_exercises/oneparam/iid_uniform_b.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_uniform_b.tex >}}
 
 ::: {#q:iid_uniform_b .callout-note icon="false" collapse="true"}
 ## Solution
@@ -83,7 +83,7 @@ $$
 :::
 
 **c)** 
-{{< include /exercises/book_exercises/oneparam/iid_uniform_c.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/iid_uniform_c.tex >}}
 
 ::: {#q:iid_uniform_c .callout-note icon="false" collapse="true"}
 ## Solution

@@ -2,7 +2,7 @@
 
 
 **a)** 
-{{< include /exercises/book_exercises/oneparam/censored_normal_a.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/censored_normal_a.tex >}}
 
 ::: {#q:iid_censored_normal_a .callout-note icon="false" collapse="true"}
 ## Solution
@@ -16,7 +16,7 @@ We have $n=10,\bar{x}=1.873,\sigma^{2}=1,\mu_{0}=0,\tau_{0}^{2}=5$. The posterio
 :::
 
 **b)** 
-{{< include /exercises/book_exercises/oneparam/censored_normal_b.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/censored_normal_b.tex >}}
 
 ::: {#q:iid_censored_normal_b .callout-note icon="false" collapse="true"}
 ## Solution
@@ -35,7 +35,7 @@ The easiest way to do this is use the posterior from the first sample as a prior
 :::
 
 **c)** 
-{{< include /exercises/book_exercises/oneparam/censored_normal_c.tex >}}
+{{< include /exercises/resolved-exercises/oneparam/censored_normal_c.tex >}}
 
 ::: {#q:iid_censored_normal_c .callout-note icon="false" collapse="true"}
 ## Solution

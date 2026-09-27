@@ -362,23 +362,23 @@ p(x_i \vert \theta, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big(-\frac{1}{
 \]</span> The likelihood for the iid normal model with known mean <span class="math inline">\(\theta\)</span> is therefore the product of <span class="math inline">\(n\)</span> such density functions: <span class="math display">\[
 \begin{aligned}
 p(x_1,\ldots,x_n \vert \theta, \sigma^2) = \prod_{i=1}^n p(x_i \vert \theta, \sigma^2) &amp;\propto  \frac{1}{(\sigma^2)^{n/2}}\exp\Big( -\frac{1}{2\sigma^2}\sum_{i=1}^n (x_i-\theta)^2\Big) \\
-&amp;\propto  \frac{1}{(\sigma^2)^{n/2}}\exp\Big( -\frac{n s^2}{2\sigma^2}\Big)
+&amp;\propto  \frac{1}{(\sigma^2)^{n/2}}\exp\Big( -\frac{n \tilde{s}^2}{2\sigma^2}\Big)
 \end{aligned}
-\]</span> where we have defined <span class="math inline">\(s^2 = \frac{\sum_{i=1}^n (x_i-\theta)^2}{n}\)</span> as the sample standard deviation (dividing by <span class="math inline">\(n\)</span> instead of <span class="math inline">\(n-1\)</span> since the mean <span class="math inline">\(\theta\)</span> is assumed known).</p>
+\]</span> where we have defined <span class="math inline">\(\tilde{s}^2 = \frac{\sum_{i=1}^n (x_i-\theta)^2}{n}\)</span> as the sample standard deviation, using ~ to denote that this estimate is for a <em>known</em> mean <span class="math inline">\(\theta\)</span> (which divides by <span class="math inline">\(n\)</span> instead of <span class="math inline">\(n-1\)</span> since the mean <span class="math inline">\(\theta\)</span> is assumed known).</p>
 <p>The density of the <span class="math inline">\(\sigma^2 \sim \mathrm{Scaled-Inv-}\chi^2(\nu_0,\sigma_0^2)\)</span> prior is of the form <span class="math display">\[
 p(\sigma^2) \propto \frac{1}{(\sigma^2)^{1+\nu_0/2}}\exp\Big( -\frac{\nu_0\sigma_0^2}{2\sigma^2} \Big)
 \]</span> The posterior distribution from using the <span class="math inline">\(\sigma^2 \sim \mathrm{Scaled-Inv-}\chi^2(\nu_0,\sigma_0^2)\)</span> prior is given by Bayes’ theorem as (to avoid cluttering the notation, we do not write out the conditioning on <span class="math inline">\(\theta\)</span> since it is known) <span class="math display">\[
 \begin{aligned}
 p(\sigma^2 \vert x_1,\ldots,x_n) &amp;\propto
 p(x_1,\ldots,x_n \vert \sigma^2)p(\sigma^2) \\
-&amp; \propto  \frac{1}{(\sigma^2)^{n/2}}\exp\Big( -\frac{n s^2}{2\sigma^2}\Big)
+&amp; \propto  \frac{1}{(\sigma^2)^{n/2}}\exp\Big( -\frac{n \tilde{s}^2}{2\sigma^2}\Big)
 \frac{1}{(\sigma^2)^{1+\nu_0/2}}\exp\Big( -\frac{\nu_0\sigma_0^2}{2\sigma^2} \Big) \\
-&amp;\propto \frac{1}{(\sigma^2)^{1+(\nu_0+n)/2}}\exp\Big( -\frac{1}{2\sigma^2}\big( \nu_0 \sigma_0^2 + n s^2 \big)  \Big) \\
-&amp;=  \frac{1}{(\sigma^2)^{1+(\nu_0+n)/2}}\exp\Big( -\frac{\nu_0+n}{2\sigma^2}\frac{\nu_0 \sigma_0^2 + n s^2 }{\nu_0+n}  \Big)
+&amp;\propto \frac{1}{(\sigma^2)^{1+(\nu_0+n)/2}}\exp\Big( -\frac{1}{2\sigma^2}\big( \nu_0 \sigma_0^2 + n \tilde{s}^2 \big)  \Big) \\
+&amp;=  \frac{1}{(\sigma^2)^{1+(\nu_0+n)/2}}\exp\Big( -\frac{\nu_0+n}{2\sigma^2}\frac{\nu_0 \sigma_0^2 + n \tilde{s}^2 }{\nu_0+n}  \Big)
 \end{aligned}
-\]</span> which is proportional to a <span class="math inline">\(\sigma^2 \sim \chi^2(\nu_0+n,\frac{\nu_0 \sigma_0^2 + n s^2 }{\nu_0+n})\)</span> density. Note how the location parameter in the posterior <span class="math display">\[
-\frac{\nu_0 \sigma_0^2 + n s^2 }{\nu_0+n} = \frac{\nu_0}{\nu_0+n} \sigma_0^2 + \frac{n}{\nu_0+n}s^2
-\]</span> is a weighted average of prior location <span class="math inline">\(\sigma_0^2\)</span> and the data estimate <span class="math inline">\(s^2\)</span>, with more weight placed on the strongest information source (prior with <span class="math inline">\(\nu_0\)</span> imaginary sample data points versus the data with <span class="math inline">\(n\)</span> actual data points).</p>
+\]</span> which is proportional to a <span class="math inline">\(\sigma^2 \sim \chi^2(\nu_0+n,\frac{\nu_0 \sigma_0^2 + n \tilde{s}^2 }{\nu_0+n})\)</span> density. Note how the location parameter in the posterior <span class="math display">\[
+\frac{\nu_0 \sigma_0^2 + n \tilde{s}^2 }{\nu_0+n} = \frac{\nu_0}{\nu_0+n} \sigma_0^2 + \frac{n}{\nu_0+n}\tilde{s}^2
+\]</span> is a weighted average of prior location <span class="math inline">\(\sigma_0^2\)</span> and the data estimate <span class="math inline">\(\tilde{s}^2\)</span>, with more weight placed on the strongest information source (prior with <span class="math inline">\(\nu_0\)</span> imaginary sample data points versus the data with <span class="math inline">\(n\)</span> actual data points).</p>
 </div>
 </div>
 </div>

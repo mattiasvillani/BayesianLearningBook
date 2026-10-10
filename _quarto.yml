@@ -1,7 +1,9 @@
 project:
   type: website
   output-dir: docs
-  pre-render: make -s resolve
+  pre-render:
+    - make -s resolve
+    - python3 invalidate_freeze.py
 
 execute:
   freeze: auto

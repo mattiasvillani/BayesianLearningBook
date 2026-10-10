@@ -23,7 +23,7 @@ tau <- 10;           # Prior std beta~N(0,tau^2*I)
 
 #### Reading data and setting up the prior
 ```{r}
-Data<-read.table("https://raw.githubusercontent.com/mattiasvillani/BayesLearnCourse/master/Notebooks/R/SpamReduced.dat",header=TRUE) # Reduced spambase data (http://archive.ics.uci.edu/ml/datasets/Spambase/)
+Data<-read.table("../../data/SpamReduced.dat",header=TRUE) # Reduced spambase data (http://archive.ics.uci.edu/ml/datasets/Spambase/)
 covNames <- names(Data)[2:length(names(Data))]; # Read off the covariate names
 y <- as.vector(Data[,1]); 
 X <- as.matrix(Data[,2:17]);

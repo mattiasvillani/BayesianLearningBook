@@ -3,7 +3,6 @@ title: "Chapter 7 - Normal approximation: Exercise solutions"
 author: "Mattias Villani"
 format:
   html: default
-  pdf: default
 ---
 
 ```{r}

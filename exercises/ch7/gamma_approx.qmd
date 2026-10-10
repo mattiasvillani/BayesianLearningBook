@@ -28,7 +28,7 @@ logPostGamma <- function(theta, y, tau){
   alpha = exp(theta[1])
   beta_ = exp(theta[2])
   logLik = sum(dgamma(y, alpha, beta_, log = TRUE))
-  logPrior = dnorm(0, tau, log = TRUE) + dnorm(0, tau, log = TRUE)
+  logPrior = dnorm(theta[1], 0, tau, log = TRUE) + dnorm(theta[2], 0, tau, log = TRUE)
   return(logLik + logPrior)
 }
 ```

@@ -427,7 +427,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>The <strong>galaxy velocity data</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> consists of the velocities of 82 galaxies (measured in 1000km/s, after transformation). The scientific question is whether or not the velocities of the galaxies cluster around a few values, which would indicate that the galaxies are part of a few superclusters<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
 <p>The analysis here first explores the <strong>Dirichlet process</strong> as a prior directly on the distribution (cdf) of the velocities before moving on to the more interesting <strong>Dirichlet process mixture (DPM) model</strong>. The DP mixture makes it possible to learn about the number of mixture components in the data, i.e.&nbsp;to explore the possibility of superclusters of galaxies.</p>
-<div id="f902e4f4" class="cell" data-execution_count="1">
+<div id="51d5f010" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code for loading packages and plot settings.</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -445,7 +445,7 @@ window.Quarto = {
 </details>
 </div>
 <p>The data are available in the <code>galaxies</code> dataset from the <code>MASS</code> package in R, also mirrored in the Rdatasets repository. We inspect the data by plotting a histogram and a kernel density estimate using cross-validation to select the optimal bandwidth. At least three clusters are visible in the histogram, while the kernel density estimate suggest up to seven clusters.</p>
-<div id="f12b089b" class="cell" data-execution_count="2">
+<div id="7d6cf1fd" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> (<span class="st">"https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"</span></span>
@@ -485,7 +485,7 @@ window.Quarto = {
 <section id="empirical-cdf" class="level4">
 <h4 class="anchored" data-anchor-id="empirical-cdf">Empirical cdf</h4>
 <p>The empirical cumulative distribution function (cdf) for the data can be computed by</p>
-<div id="05c54450" class="cell" data-execution_count="3">
+<div id="c319afb6" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> empirical_cdf(x, xlimits):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    xs <span class="op">=</span> np.concatenate([[xlimits[<span class="dv">0</span>]], np.sort(x), [xlimits[<span class="dv">1</span>]]])</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    ps <span class="op">=</span> np.concatenate([[<span class="dv">0</span>], np.arange(<span class="dv">1</span>, <span class="bu">len</span>(x) <span class="op">+</span> <span class="dv">1</span>) <span class="op">/</span> <span class="bu">len</span>(x), [<span class="dv">1</span>]])</span>
@@ -508,7 +508,7 @@ window.Quarto = {
 </div>
 </div>
 <p>When we later combine the empirical cdf with a Dirichlet process prior to form the posterior distribution it will be convenient to have a proper distribution object for the empirical cdf. We therefore approximate it with a mixture of normals with components with tiny (<span class="math inline">\(10^{-15}\)</span>) variances, effectively making it a mixture of Dirac spikes at the data points with equal weights <span class="math inline">\(1/n\)</span>. The plot below shows that the approximation is virtually identical to the true empirical cdf.</p>
-<div id="272ed694" class="cell" data-execution_count="4">
+<div id="b677e352" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cdf_Fn(x_vals):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.mean(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        [stats.norm.cdf(x_vals, loc<span class="op">=</span>v, scale<span class="op">=</span><span class="fl">1e-10</span>) <span class="cf">for</span> v <span class="kw">in</span> velocity], axis<span class="op">=</span><span class="dv">0</span></span>
@@ -534,7 +534,7 @@ window.Quarto = {
 <section id="prior-distribution" class="level4">
 <h4 class="anchored" data-anchor-id="prior-distribution">Prior distribution</h4>
 <p>Let <span class="math inline">\(P\)</span> denote the unknown distribution for the galaxy velocities. We use a Dirichlet process for <span class="math inline">\(P\)</span>, denoted by <span class="math inline">\(P \sim \mathrm{DP}(\alpha_0P_0)\)</span>. The <span class="math inline">\(P_0\)</span> is the so called <strong>base measure</strong> and is our best prior guess (prior expected value) of <span class="math inline">\(P\)</span>. We take <span class="math inline">\(P_0\)</span> to be the <span class="math inline">\(N(30,3^2)\)</span> distribution. The scalar parameter <span class="math inline">\(\alpha_0\)</span> is the prior concentration or <strong>prior precision</strong>, which is inversely related to the variance around <span class="math inline">\(P_0\)</span>. We start with low prior concentration <span class="math inline">\(\alpha_0=1\)</span> and later explore the effect of changing <span class="math inline">\(\alpha_0\)</span>.</p>
-<div id="6aac2faa" class="cell" data-execution_count="5">
+<div id="fca3918e" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mu0_dp    <span class="op">=</span> <span class="fl">20.0</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sigma0_dp <span class="op">=</span> <span class="fl">3.0</span>   <span class="co"># P0 = Normal(20, 3)</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>alpha0    <span class="op">=</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -549,7 +549,7 @@ window.Quarto = {
 \end{align}
 \]</span></p>
 <p>The function below simulates from the Dirichlet process using the stick-breaking construction. The input <code>r_P0</code> is a callable that draws from the base measure <span class="math inline">\(P_0\)</span>, and <code>epsilon</code> is the remaining stick length when the simulation terminates.</p>
-<div id="e8530d02" class="cell" data-execution_count="6">
+<div id="ce716eac" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sim_dir_process(r_P0, alpha0, epsilon<span class="op">=</span><span class="fl">0.001</span>):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    stick_left <span class="op">=</span> <span class="fl">1.0</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    theta, omega <span class="op">=</span> [], []</span>
@@ -570,7 +570,7 @@ window.Quarto = {
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cum_omega[bin_idx]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here are a few draws from the prior for three different choices of <span class="math inline">\(\alpha_0\)</span>.</p>
-<div id="4c7ae80f" class="cell" data-execution_count="7">
+<div id="2bb2df31" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n_draws <span class="op">=</span> <span class="dv">3</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>r_P0 <span class="op">=</span> <span class="kw">lambda</span>: np.random.normal(mu0_dp, sigma0_dp)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -595,7 +595,7 @@ window.Quarto = {
 </div>
 </div>
 <p>We can simulate a large number of draws and construct <span class="math inline">\(95\%\)</span> prior pointwise credible intervals for <span class="math inline">\(P\)</span>, showing the variation in the prior. Here are the (pointwise) prior credible intervals for <span class="math inline">\(\alpha_0=1\)</span>.</p>
-<div id="11040147" class="cell" data-execution_count="8">
+<div id="72b91117" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>n_sim  <span class="op">=</span> <span class="dv">10000</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>alpha0 <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>prior_draws <span class="op">=</span> np.zeros((<span class="bu">len</span>(xGrid), n_sim))</span>
@@ -633,14 +633,14 @@ P \vert x_1,\ldots, x_n \sim \mathrm{DP}(\alpha_nP_n)
 P_n = \frac{\alpha_0}{\alpha_n}P_0 + \frac{n}{\alpha_n}F_n
 \]</span></p>
 <p>is a mixture of the prior mean and the empirical cdf. We compute the posterior by combining the two components with weights <span class="math inline">\(\alpha_0/\alpha_n\)</span> and <span class="math inline">\(n/\alpha_n\)</span>:</p>
-<div id="c47dacb7" class="cell" data-execution_count="9">
+<div id="bf5047ea" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cdf_Pn(x_vals, a0, n_obs):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    an <span class="op">=</span> a0 <span class="op">+</span> n_obs</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (a0 <span class="op">/</span> an) <span class="op">*</span> stats.norm.cdf(x_vals, mu0_dp, sigma0_dp) <span class="op">+</span> <span class="op">\</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>           (n_obs <span class="op">/</span> an) <span class="op">*</span> np.searchsorted(np.sort(velocity), x_vals) <span class="op">/</span> n_obs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can now plot the prior-to-posterior mapping. Here is the code and plot for <span class="math inline">\(\alpha_0=100\)</span>.</p>
-<div id="57d9000d" class="cell" data-execution_count="10">
+<div id="d2f7f317" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>n_sim  <span class="op">=</span> <span class="dv">5000</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>alpha0 <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -716,7 +716,7 @@ P &amp;\sim \mathrm{DP}(\alpha_0 P_0)
 \sigma^2 \sim \mathrm{Inv}-\chi^2(\nu_0, \sigma_0^2)
 \end{aligned}
 \]</span>In the Gibbs sampler presented below, we will need to compute the posterior of <span class="math inline">\(\mathbf{\theta} =(\mu,\sigma^2)\)</span> for all the observations currently allocated to a mixture component. This little helper function computes the posterior parameters <span class="math inline">\(\mu_n,\kappa_n,\sigma_n^2\)</span> and <span class="math inline">\(\nu_n\)</span> from a given data vector <code>x</code>:</p>
-<div id="722703d4" class="cell" data-execution_count="11">
+<div id="f338fdd7" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> post_normal_model(x, mu0, sigma2_0, kappa0, nu0):</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(x) <span class="op">==</span> <span class="dv">0</span>:</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> mu0, sigma2_0, kappa0, nu0</span>
@@ -732,12 +732,12 @@ P &amp;\sim \mathrm{DP}(\alpha_0 P_0)
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mu_n, sigma2_n, kappa_n, nu_n</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The Scaled inverse Chi-square distribution used as the prior on <span class="math inline">\(\sigma^2\)</span> can be simulated using the chi-squared distribution: if <span class="math inline">\(X \sim \chi^2(\nu)\)</span> then <span class="math inline">\(\nu\tau^2/X \sim \mathrm{Inv}\text{-}\chi^2(\nu, \tau^2)\)</span>.</p>
-<div id="9eac015c" class="cell" data-execution_count="12">
+<div id="cdf1a067" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> r_scaled_inv_chi2(nu, tau2):</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nu <span class="op">*</span> tau2 <span class="op">/</span> np.random.chisquare(nu)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The complete blocked Gibbs sampler for the DPM model with Gaussian components is given below. The sampler was developed in <span class="citation" data-cites="ishwaran2001gibbs">(<a href="#ref-ishwaran2001gibbs" role="doc-biblioref">Ishwaran &amp; James, 2001</a>)</span>; see also <span class="citation" data-cites="villani_bayesbook">(<a href="#ref-villani_bayesbook" role="doc-biblioref">Villani, 2026</a>)</span>. The prior precision <span class="math inline">\(\alpha_0\)</span> can be fixed, or assigned a <span class="math inline">\(\alpha_0 \sim \mathrm{Gamma}(g,h)\)</span> prior and learned from the data. If <code>alpha0 = None</code> then <span class="math inline">\(\alpha_0\)</span> is estimated.</p>
-<div id="86caccb2" class="cell" data-execution_count="13">
+<div id="1c55f2a7" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gibbs_dpm_normals(x, K, n_iter, n_burn, P0, alpha0<span class="op">=</span><span class="va">None</span>, g<span class="op">=</span><span class="dv">1</span>, h<span class="op">=</span><span class="dv">1</span>):</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    n  <span class="op">=</span> <span class="bu">len</span>(x)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    mu0, sigma2_0, kappa0, nu0 <span class="op">=</span> P0</span>
@@ -810,7 +810,7 @@ P &amp;\sim \mathrm{DP}(\alpha_0 P_0)
 <span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> mu_draws, sigma2_draws, omega_draws, K_occupied, alpha0_draws</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>After setting the prior hyperparameters and upper bound of the number of mixtures components, we run the Gibbs sampler for <code>n_burn=1000</code> iterations as burn-in and then another <code>n_iter = 10000</code> for posterior inference.</p>
-<div id="41f36fb8" class="cell" data-execution_count="14">
+<div id="f382c45e" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>P0     <span class="op">=</span> (<span class="fl">20.0</span>, <span class="fl">1.0</span><span class="op">**</span><span class="dv">2</span>, <span class="fl">0.1</span>, <span class="fl">3.0</span>)   <span class="co"># mu0, sigma2_0, kappa0, nu0</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>alpha0 <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>K      <span class="op">=</span> <span class="dv">30</span></span>
@@ -820,7 +820,7 @@ P &amp;\sim \mathrm{DP}(\alpha_0 P_0)
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0, alpha0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A helper function computes the posterior mean density by averaging mixture pdfs over a thinned set of MCMC draws, and a second helper draws the bar chart for the number of occupied components.</p>
-<div id="9053051d" class="cell" data-execution_count="15">
+<div id="6c6efb72" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_post_mean_pdf(mu_draws, sigma2_draws, omega_draws, xGrid, K, plt_iter):</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    pdf_mat <span class="op">=</span> np.zeros((<span class="bu">len</span>(plt_iter), <span class="bu">len</span>(xGrid)))</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, idx <span class="kw">in</span> <span class="bu">enumerate</span>(plt_iter):</span>
@@ -849,7 +849,7 @@ P &amp;\sim \mathrm{DP}(\alpha_0 P_0)
 <span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">'Posterior for number of components'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Plot the posterior mean of the fitted density for <span class="math inline">\(\alpha_0=1\)</span>.</p>
-<div id="b479c518" class="cell" data-execution_count="16">
+<div id="3a1dd3f4" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plt_iter     <span class="op">=</span> <span class="bu">range</span>(<span class="dv">0</span>, n_iter, <span class="dv">10</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>post_mean_pdf <span class="op">=</span> compute_post_mean_pdf(</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    mu_draws, sigma2_draws, omega_draws, xGrid, K, plt_iter)</span>
@@ -871,7 +871,7 @@ P &amp;\sim \mathrm{DP}(\alpha_0 P_0)
 </div>
 </div>
 <p>The posterior for the number of occupied mixture components has most of its mass on 5-10 components, with a mode at seven components:</p>
-<div id="f14ceac4" class="cell" data-execution_count="17">
+<div id="4db96430" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>plot_K_bar(K_occupied, ax)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
@@ -885,12 +885,12 @@ P &amp;\sim \mathrm{DP}(\alpha_0 P_0)
 </div>
 </div>
 <p>For <span class="math inline">\(\alpha_0 = 10\)</span> we get</p>
-<div id="ef15c428" class="cell" data-execution_count="18">
+<div id="e893dac3" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>alpha0 <span class="op">=</span> <span class="dv">10</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mu_draws10, sigma2_draws10, omega_draws10, K_occupied10, _ <span class="op">=</span> <span class="op">\</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0, alpha0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="baf0be31" class="cell" data-execution_count="19">
+<div id="6c9ca223" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pdf10 <span class="op">=</span> compute_post_mean_pdf(</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    mu_draws10, sigma2_draws10, omega_draws10, xGrid, K, plt_iter)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -912,12 +912,12 @@ P &amp;\sim \mathrm{DP}(\alpha_0 P_0)
 </div>
 </div>
 <p>For <span class="math inline">\(\alpha_0=100\)</span></p>
-<div id="a37f58be" class="cell" data-execution_count="20">
+<div id="b8b8329c" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>alpha0 <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>mu_draws100, sigma2_draws100, omega_draws100, K_occupied100, _ <span class="op">=</span> <span class="op">\</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0, alpha0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="8541797e" class="cell" data-execution_count="21">
+<div id="a47335cc" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pdf100 <span class="op">=</span> compute_post_mean_pdf(</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    mu_draws100, sigma2_draws100, omega_draws100, xGrid, K, plt_iter)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -939,11 +939,11 @@ P &amp;\sim \mathrm{DP}(\alpha_0 P_0)
 </div>
 </div>
 <p>and finally when <span class="math inline">\(\alpha_0\)</span> is estimated using a Gamma(1,1) prior:</p>
-<div id="96e92ed8" class="cell" data-execution_count="22">
+<div id="b7a1406f" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>mu_draws_est, sigma2_draws_est, omega_draws_est, K_occupied_est, alpha0_draws_est <span class="op">=</span> <span class="op">\</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    gibbs_dpm_normals(velocity, K, n_iter, n_burn, P0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="eb261067" class="cell" data-execution_count="23">
+<div id="9adc2012" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pdf_est <span class="op">=</span> compute_post_mean_pdf(</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    mu_draws_est, sigma2_draws_est, omega_draws_est, xGrid, K, plt_iter)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -965,7 +965,7 @@ P &amp;\sim \mathrm{DP}(\alpha_0 P_0)
 </div>
 </div>
 <p>The posterior for <span class="math inline">\(\alpha_0\)</span> is</p>
-<div id="34907f77" class="cell" data-execution_count="24">
+<div id="642d85b5" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>ax.hist(alpha0_draws_est, bins<span class="op">=</span><span class="dv">50</span>, density<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span>colors[<span class="dv">6</span>],</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>        edgecolor<span class="op">=</span>colors[<span class="dv">2</span>], alpha<span class="op">=</span><span class="fl">0.7</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>

@@ -3,6 +3,9 @@ project:
   output-dir: docs
   pre-render: make -s resolve
 
+execute:
+  freeze: auto
+
 website:
   title: "Bayesian Learning Book"
   draft-mode: unlinked

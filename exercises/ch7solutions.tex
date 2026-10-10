@@ -107,6 +107,7 @@
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
 \usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -207,6 +208,10 @@
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
 \hypersetup{
   pdftitle={Chapter 7 - Normal approximation: Exercise solutions},
   pdfauthor={Mattias Villani},
@@ -274,7 +279,7 @@ We start off by loading the data:
 distribution \(p(\boldsymbol{\theta} | \mathbf{y})\) based on numerical
 optimization, where \(\boldsymbol{\theta} = (\theta_1,\theta_2)^\top\).
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, title={Solution}, colback=white, colframe=quarto-callout-note-color-frame, breakable, toprule=.15mm, arc=.35mm, bottomtitle=1mm, left=2mm, coltitle=black, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, rightrule=.15mm, toptitle=1mm, leftrule=.75mm, opacitybacktitle=0.6]
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title={Solution}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
 
 We use the normal approximation suggested by the Bernstein-von Mises
 theorem: \[
@@ -352,7 +357,7 @@ approximate the marginal posterior for the original parameters
 \(\alpha/\beta\) and standard deviation \(\sqrt{\alpha}/\beta\) of the
 fitted Gamma distribution.
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, title={Solution}, colback=white, colframe=quarto-callout-note-color-frame, breakable, toprule=.15mm, arc=.35mm, bottomtitle=1mm, left=2mm, coltitle=black, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, rightrule=.15mm, toptitle=1mm, leftrule=.75mm, opacitybacktitle=0.6]
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title={Solution}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
 
 We use the \texttt{mvtnorm} package to simulate from the normal
 approximation and then compute the transformation for each draw for

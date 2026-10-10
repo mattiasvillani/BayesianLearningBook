@@ -1,0 +1,17 @@
+{
+  "hash": "4213c17c7342d8da4df80057309af0f8",
+  "result": {
+    "engine": "knitr",
+    "markdown": "### Exercise 3.1\n\nA dataset contains observations on measurements of pesticide for $n=24$ pike fish in a lake in southern Italy. The sample mean pesticide level is $\\bar{x} = 12.5$ with a sample standard deviation of $s=3.1$. Assume that the pesticide levels $X_1,\\ldots,X_n|\\theta,\\sigma^2 \\sim \\mathrm{N}(\\theta,\\sigma^2)$ are independent and identically distributed normal random variables with unknown mean $\\theta$ and unknown variance $\\sigma^2$.\n\nCompute the joint posterior distribution for $\\theta$ and $\\sigma^2$ using a conjugate prior distribution. Use a prior mean for $\\theta$ of $8$ and an (imaginary) prior sample size of $5$. Use $\\sigma_0^2 = 1^2$ and $\\nu_0 = 3$ degrees of freedom in your prior for $\\sigma^2$. Plot the marginal posterior distribution of $\\theta$.\n\n\n::: {#q:iid_normal_pesticide .callout-note icon=\"false\" collapse=\"true\"}\n## Solution\nThe posterior distribution is given by \n$$\n\\begin{aligned}\n\\theta | \\sigma^2 , \\boldsymbol{x} &\\sim N\\Big(\\mu_n,\\frac{\\sigma^2}{\\kappa_n}\\Big) \\\\\n\\sigma^2 | \\boldsymbol{x} &\\sim \\mathrm{Inv-}\\chi^2(\\nu_n,\\sigma_n^2)\n\\end{aligned}\n$$\nwhere \n$$\n\\begin{aligned}\n\\mu_n &= w \\bar x + (1-w)\\mu_0 \\\\\nw &= \\frac{n}{\\kappa_0+n} \\\\\n\\kappa_n &= \\kappa_0 + n \\\\\n\\nu_n &= \\nu_0 + n  \\\\\n\\nu_n\\sigma_n^2 &= \\nu_0\\sigma_0^2 + (n-1)s^2 + \\frac{\\kappa_0 n}{\\kappa_0+n}(\\bar x -\\mu_0)^2\n\\end{aligned}\n$$\nWe have\n\n::: {.cell}\n\n```{.r .cell-code}\n# data \nn = 24\nxBar = 12.5\ns2 = 3.1^2\n\n# prior\nmu0 = 8\nkappa0 = 5\nnu0 = 3\nsigma02 = 1^2\n\n# posterior\nw = n/(kappa0 + n)\nmun = w*xBar + (1-w)*mu0\nkappan = kappa0 + n\nnun = nu0 + n\nsigman2 = (nu0*sigma02 + (n-1)*s2  + \n             (kappa0*n/(kappa0 + n))*(xBar - mu0)^2 )/nun\n```\n:::\n\nSo the joint posterior is \n$$\n\\begin{aligned}\n\\theta | \\sigma^2 , \\boldsymbol{x} &\\sim N\\Big(11.724,\\frac{\\sigma^2}{29}\\Big) \\\\\n\\sigma^2 | \\boldsymbol{x} &\\sim \\mathrm{Inv-}\\chi^2(27,11.401)\n\\end{aligned}\n$$\nThe marginal posterior for $\\theta$ is \n$$\n\\theta \\vert \\boldsymbol{x} \\sim t\\Big(\\mu_n,\\frac{\\sigma_n^2}{\\kappa_n},\\nu_n\\Big) = t\\Big(11.724,\\frac{11.401}{29},27\\Big) \n$$\nPlotting the marginal posterior of $\\theta$:\n\n::: {.cell}\n\n```{.r .cell-code}\nthetaGrid = seq(7, 18, length = 1000)\nsigma2Grid = seq(0.001, 30, length = 1000)\ndtdist <- function(x, mu, sigma2, nu){\n  return((1/sqrt(sigma2))*dt(x = (x - mu)/sqrt(sigma2), df = nu))\n}\nplot(thetaGrid, dtdist(thetaGrid, mun, sigman2/kappan, nun), type = \"l\", \n     xlab = expression(theta), ylab = \"posterior density\", \n     col = \"indianred\", main = expression(theta))\n```\n\n::: {.cell-output-display}\n![](iid_normal_pesticide_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\n:::\n",
+    "supporting": [
+      "iid_normal_pesticide_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -423,7 +423,7 @@ window.Quarto = {
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  alpha <span class="ot">=</span> <span class="fu">exp</span>(theta[<span class="dv">1</span>])</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  beta_ <span class="ot">=</span> <span class="fu">exp</span>(theta[<span class="dv">2</span>])</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  logLik <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">dgamma</span>(y, alpha, beta_, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  logPrior <span class="ot">=</span> <span class="fu">dnorm</span>(<span class="dv">0</span>, tau, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">dnorm</span>(<span class="dv">0</span>, tau, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  logPrior <span class="ot">=</span> <span class="fu">dnorm</span>(theta[<span class="dv">1</span>], <span class="dv">0</span>, tau, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">dnorm</span>(theta[<span class="dv">2</span>], <span class="dv">0</span>, tau, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(logLik <span class="sc">+</span> logPrior)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -440,16 +440,16 @@ window.Quarto = {
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>postMode</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  0.695345 -2.577673</code></pre>
+<pre><code>[1]  0.6954699 -2.5774985</code></pre>
 </div>
 </div>
 <p>and covariance matrix</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>postCov</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           [,1]        [,2]
-[1,] 0.00663615 0.006636150
-[2,] 0.00663615 0.008555005</code></pre>
+<pre><code>            [,1]        [,2]
+[1,] 0.006634546 0.006634090
+[2,] 0.006634090 0.008552119</code></pre>
 </div>
 </div>
 <p>from which we can compute the approximate posterior standard deviations:</p>

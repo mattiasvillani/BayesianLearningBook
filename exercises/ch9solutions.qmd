@@ -3,7 +3,10 @@ title: "Chapter 9 - Gibbs sampling: Exercise solutions"
 author: "Mattias Villani"
 format:
   html: default
-  pdf: default
+  pdf:
+    include-in-header:
+      text: |
+        \usepackage[shortlabels]{enumitem}
 ---
 
 ```{r}

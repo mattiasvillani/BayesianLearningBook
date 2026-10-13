@@ -21,6 +21,7 @@ Affiliation of the student is when their latest error was found.
 -   Mona Sfaxi, Stockholm University
 -   Mohammed Asif, Örebro University
 -   Michael Sederlin, KTH Royal Institute of Technology
+-   Marija Ereminaite, Stockholm University
 -   Per Gösta Andersson, Stockholm University
 -   Patrik Mirzai
 -   Toni Dumitriu, Stockholm University
